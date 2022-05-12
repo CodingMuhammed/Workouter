@@ -41,6 +41,7 @@ class _SignInPageState extends State<SignInPage> {
                     labelText: 'Email',
                   ),
                 ),
+                Text('hello world'),
               ),
             ),
             Container(
