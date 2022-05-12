@@ -17,7 +17,6 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 70, 93, 105),
       appBar: AppBar(
@@ -41,9 +40,9 @@ class _SignInPageState extends State<SignInPage> {
                     labelText: 'Email',
                   ),
                 ),
-                Text('hello world'),
               ),
             ),
+            Text('hello world'),
             Container(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
