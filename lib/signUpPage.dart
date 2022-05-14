@@ -4,11 +4,19 @@ import 'package:provider/provider.dart';
 import 'package:workout_app/authentication_service.dart';
 import 'package:workout_app/screens/homePage.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
 
   @override
+  String errorMessage = '';
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 70, 93, 105),
@@ -35,6 +43,7 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
             ),
+            Text(errorMessage, style: TextStyle(color: Colors.red)),
             Container(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -54,10 +63,15 @@ class SignUpPage extends StatelessWidget {
                 children: [
                   FlatButton(
                       onPressed: () async {
+                        try {
                         await FirebaseAuth.instance
                             .createUserWithEmailAndPassword(
                                 email: emailController.text,
                                 password: passwordController.text);
+                                errorMessage = '';
+                        } on FirebaseAuthException catch (e) {
+                          errorMessage = e.message!;
+                        }                        
                         Navigator.push(
                             context,
                             MaterialPageRoute(

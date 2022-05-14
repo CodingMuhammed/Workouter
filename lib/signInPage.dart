@@ -12,10 +12,11 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
 
   @override
+  String errorMessage = '';
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 70, 93, 105),
@@ -42,7 +43,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
             ),
-            Text('hello world'),
+            Text(errorMessage, style: TextStyle(color: Colors.red)),
             Container(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -83,8 +84,9 @@ class _SignInPageState extends State<SignInPage> {
                               .signInWithEmailAndPassword(
                                   email: emailController.text,
                                   password: passwordController.text);
+                                errorMessage = '';
                         } on FirebaseAuthException catch (e) {
-                          return e.message as Future<void>;
+                          errorMessage = e.message!;
                         }
                         Navigator.push(
                             context,
