@@ -3,25 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:workout_app/workout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class HomePage extends StatelessWidget {
-  final newWorkout = Workout(null, null, null, null, null);
-  final db = FirebaseFirestore.instance;
+class HomePage extends StatefulWidget {
 
   HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final newWorkout = Workout(null, null, null, null, null);
+
+  final db = FirebaseFirestore.instance;
+
+  final _exerciseName = TextEditingController();
+
+  final _reps = TextEditingController();
+
+  final _sets = TextEditingController();
+
+  final _weight = TextEditingController();
+
+  final _rest = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    TextEditingController _exerciseName = TextEditingController();
-    TextEditingController _reps = TextEditingController();
-    TextEditingController _sets = TextEditingController();
-    TextEditingController _weight = TextEditingController();
-    TextEditingController _rest = TextEditingController();
-
-    _exerciseName = newWorkout.exerciseName as TextEditingController;
-    _reps = newWorkout.reps as TextEditingController;
-    _sets = newWorkout.sets as TextEditingController;
-    _weight = newWorkout.weight as TextEditingController;
-
     Future createAlertDialog(BuildContext context) {
       return showDialog(
           context: context,
@@ -50,11 +56,11 @@ class HomePage extends StatelessWidget {
                           .doc(uid)
                           .collection('workout')
                           .add({
-                        'exerciseName': newWorkout.exerciseName,
-                        'reps': newWorkout.reps,
-                        'sets': newWorkout.sets,
-                        'weight': newWorkout.weight,
-                        'rest': newWorkout.rest
+                        'exerciseName': _exerciseName.text,
+                        'reps': _reps.text, 
+                        'sets': _sets.text,
+                        'weight': _weight.text,
+                        'rest': _rest.text
                       });
                       Navigator.pop(context);
                     },
@@ -82,6 +88,7 @@ class HomePage extends StatelessWidget {
               textColor: Colors.white,
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
+              setState(() {});
               },
               icon: Icon(
                 Icons.person,
@@ -123,16 +130,12 @@ class HomePage extends StatelessWidget {
                               child: TextField(
                                 decoration: InputDecoration(),
                                 controller: _reps,
-                                onChanged: (value) =>
-                                    newWorkout.reps = _reps.text as int,
                               ),
                             ),
                             SizedBox(
                               width: 25,
                               child: TextField(
                                 controller: _sets,
-                                onChanged: (value) =>
-                                    newWorkout.sets = _sets.text as int,
                                 decoration: InputDecoration(),
                               ),
                             ),
@@ -140,8 +143,6 @@ class HomePage extends StatelessWidget {
                               width: 25,
                               child: TextField(
                                 controller: _weight,
-                                onChanged: (value) =>
-                                    newWorkout.weight = _sets.text as int,
                                 decoration: InputDecoration(),
                               ),
                             ),
@@ -149,8 +150,6 @@ class HomePage extends StatelessWidget {
                               width: 25,
                               child: TextField(
                                 controller: _rest,
-                                onChanged: (value) =>
-                                    newWorkout.rest = _rest.text as int,
                                 decoration: InputDecoration(),
                               ),
                             ),

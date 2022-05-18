@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:workout_app/authentication_service.dart';
 import 'package:workout_app/screens/homePage.dart';
 import 'package:workout_app/signUpPage.dart';
 
@@ -77,23 +75,22 @@ class _SignInPageState extends State<SignInPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  FlatButton(
+                  TextButton(
                       onPressed: () async {
                         try {
                           await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                                   email: emailController.text,
                                   password: passwordController.text);
-                                errorMessage = '';
+                          errorMessage = '';
                         } on FirebaseAuthException catch (e) {
                           errorMessage = e.message!;
                         }
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
+              setState(() {});
                       },
-                      child: Text('Sign In', style: TextStyle(fontSize: 20.0)))
+                      child: Text('Sign In',
+                          style:
+                              TextStyle(fontSize: 23.0, color: Colors.black))),
                 ],
               ),
             ),

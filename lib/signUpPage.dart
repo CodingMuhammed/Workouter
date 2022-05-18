@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:workout_app/authentication_service.dart';
 import 'package:workout_app/screens/homePage.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -72,15 +70,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         } on FirebaseAuthException catch (e) {
                           errorMessage = e.message!;
                         }                        
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
+                      setState(() {});
                       },
                       child: Text(
                         'Sign Up',
-                        style: TextStyle(fontSize: 19.0),
+                        style: TextStyle(fontSize: 23.0, color: Colors.black),
                       )),
+                      SizedBox(height: 30.0,)
                 ],
               ),
             ),
