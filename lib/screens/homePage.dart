@@ -13,17 +13,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final newWorkout = Workout(null, null, null, null, null);
-
   final db = FirebaseFirestore.instance;
 
   final _exerciseName = TextEditingController();
-
   final _reps = TextEditingController();
-
   final _sets = TextEditingController();
-
   final _weight = TextEditingController();
-
   final _rest = TextEditingController();
 
   @override
@@ -87,8 +82,12 @@ class _HomePageState extends State<HomePage> {
           FlatButton.icon(
               textColor: Colors.white,
               onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-              setState(() {});
+                try {
+                return await FirebaseAuth.instance.signOut();
+                } catch(e) {
+                  print(e.toString());
+                  return null;
+                }
               },
               icon: Icon(
                 Icons.person,

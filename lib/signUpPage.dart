@@ -8,11 +8,15 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final TextEditingController emailController = TextEditingController();
-
-  final TextEditingController passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
+  late bool _passwordVisible;
+  void initState() {
+    _passwordVisible = false;
+  }
+
   String errorMessage = '';
 
   Widget build(BuildContext context) {
@@ -50,7 +54,23 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(borderSide: BorderSide()),
                     labelText: 'Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        // Based on passwordVisible state choose the icon
+                        _passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: () {
+                        // Update the state i.e. toogle the state of passwordVisible variable
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                    ),
                   ),
+                  obscureText: !_passwordVisible,
                 ),
               ),
             ),
@@ -62,21 +82,27 @@ class _SignUpPageState extends State<SignUpPage> {
                   FlatButton(
                       onPressed: () async {
                         try {
-                        await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                                email: emailController.text,
-                                password: passwordController.text);
-                                errorMessage = '';
+                          await FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passwordController.text);
+                          errorMessage = '';
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
                         } on FirebaseAuthException catch (e) {
                           errorMessage = e.message!;
-                        }                        
-                      setState(() {});
+                        }
+                        setState(() {});
                       },
                       child: Text(
                         'Sign Up',
                         style: TextStyle(fontSize: 23.0, color: Colors.black),
                       )),
-                      SizedBox(height: 30.0,)
+                  SizedBox(
+                    height: 30.0,
+                  )
                 ],
               ),
             ),

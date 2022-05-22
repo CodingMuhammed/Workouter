@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "883453380645",
-    "project_id": "fir-project-df91e",
-    "storage_bucket": "fir-project-df91e.appspot.com"
+    "project_number": "813478413236",
+    "project_id": "workout-app-306d6",
+    "storage_bucket": "workout-app-306d6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:883453380645:android:3a62f9074461e641f897cc",
+        "mobilesdk_app_id": "1:813478413236:android:3e9e234539bea3d9b8a8e1",
         "android_client_info": {
           "package_name": "com.example.workout_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "883453380645-h8vokbhu8l6pv4cl5i99kjbl37kl2noj.apps.googleusercontent.com",
+          "client_id": "813478413236-aff8ujttjrr7g0qt9squvg98512dftba.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBPe-4oUsa3i3CApVFdhrotxMXMt072bGY"
+          "current_key": "AIzaSyAMNAJ_-uKSWPtTi5lGMT7Eb2q-VPBD_1Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "883453380645-h8vokbhu8l6pv4cl5i99kjbl37kl2noj.apps.googleusercontent.com",
+              "client_id": "813478413236-aff8ujttjrr7g0qt9squvg98512dftba.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

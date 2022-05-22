@@ -13,6 +13,11 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController passwordController = TextEditingController();
 
   @override
+  late bool _passwordVisible;
+  void initState() {
+    _passwordVisible = false;
+  }
+
   String errorMessage = '';
 
   Widget build(BuildContext context) {
@@ -50,7 +55,23 @@ class _SignInPageState extends State<SignInPage> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(borderSide: BorderSide()),
                     labelText: 'Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        // Based on passwordVisible state choose the icon
+                        _passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: () {
+                        // Update the state i.e. toogle the state of passwordVisible variable
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                    ),
                   ),
+                  obscureText: !_passwordVisible,
                 ),
               ),
             ),
@@ -85,8 +106,12 @@ class _SignInPageState extends State<SignInPage> {
                           errorMessage = '';
                         } on FirebaseAuthException catch (e) {
                           errorMessage = e.message!;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
                         }
-              setState(() {});
+                        setState(() {});
                       },
                       child: Text('Sign In',
                           style:

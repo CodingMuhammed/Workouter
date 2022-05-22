@@ -12,12 +12,12 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthenticationWrapper(),
+      home: SignInPage(),
     );
   }
 }
@@ -35,3 +35,19 @@ class AuthenticationWrapper extends StatelessWidget {
     return SignInPage();
   }
 }
+
+// class _Wrapper extends StatelessWidget {
+  
+//   @override
+//   Widget build(BuildContext context) {
+//     FirebaseAuth.instance
+//   .idTokenChanges()
+//   .listen((User? user) {
+//     if (user == null) {
+//       print('User is currently signed out!');
+//     } else {
+//       print('User is signed in!');
+//     }
+//   });
+//   }
+// }
