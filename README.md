@@ -1,8 +1,10 @@
 # workout_app
 
-This is my first project that I'm building without copying anyone.
+This is an app which allows you to create a workout and exercises with reps, sets, weight and rest time.
 
-and I'm just trying to build something original.
+This app also has an authentication system(login and logout).
+
+
 
 
 
