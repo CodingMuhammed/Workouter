@@ -47,7 +47,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
             Text(errorMessage, style: TextStyle(color: Colors.red)),
-            Container(
+            Container( 
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextField(

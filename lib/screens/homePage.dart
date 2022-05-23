@@ -4,7 +4,6 @@ import 'package:workout_app/workout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
-
   HomePage({Key? key}) : super(key: key);
 
   @override
@@ -52,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                           .collection('workout')
                           .add({
                         'exerciseName': _exerciseName.text,
-                        'reps': _reps.text, 
+                        'reps': _reps.text,
                         'sets': _sets.text,
                         'weight': _weight.text,
                         'rest': _rest.text
@@ -83,8 +82,8 @@ class _HomePageState extends State<HomePage> {
               textColor: Colors.white,
               onPressed: () async {
                 try {
-                return await FirebaseAuth.instance.signOut();
-                } catch(e) {
+                  return await FirebaseAuth.instance.signOut();
+                } catch (e) {
                   print(e.toString());
                   return null;
                 }
