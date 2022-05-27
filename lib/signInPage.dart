@@ -47,7 +47,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
             Text(errorMessage, style: TextStyle(color: Colors.red)),
-            Container( 
+            Container(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextField(
@@ -96,7 +96,7 @@ class _SignInPageState extends State<SignInPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
+                  FlatButton(
                       onPressed: () async {
                         try {
                           await FirebaseAuth.instance
@@ -106,16 +106,11 @@ class _SignInPageState extends State<SignInPage> {
                           errorMessage = '';
                         } on FirebaseAuthException catch (e) {
                           errorMessage = e.message!;
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
                         }
                         setState(() {});
                       },
                       child: Text('Sign In',
-                          style:
-                              TextStyle(fontSize: 23.0, color: Colors.black))),
+                          style: TextStyle(fontSize: 23.0, color: Colors.black))),
                 ],
               ),
             ),

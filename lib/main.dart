@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:workout_app/screens/homePage.dart';
 import 'package:workout_app/signInPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +13,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,32 +23,28 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({Key? key}) : super(key: key);
+// class AuthenticationWrapper extends StatelessWidget {
+//   const AuthenticationWrapper({Key? key}) : super(key: key);
 
+//   @override
+//   Widget build(BuildContext context) {
+//     final User? firebaseUser = FirebaseAuth.instance.currentUser;
+
+//     if (firebaseUser != null) {
+//       return HomePage();
+//     }
+//     return SignInPage();
+//   }
+// }
+
+class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final User? firebaseUser = FirebaseAuth.instance.currentUser;
+  final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
       return HomePage();
-    }
+    } 
     return SignInPage();
   }
 }
-
-// class _Wrapper extends StatelessWidget {
-  
-//   @override
-//   Widget build(BuildContext context) {
-//     FirebaseAuth.instance
-//   .idTokenChanges()
-//   .listen((User? user) {
-//     if (user == null) {
-//       print('User is currently signed out!');
-//     } else {
-//       print('User is signed in!');
-//     }
-//   });
-//   }
-// }

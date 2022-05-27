@@ -82,7 +82,8 @@ class _HomePageState extends State<HomePage> {
               textColor: Colors.white,
               onPressed: () async {
                 try {
-                  return await FirebaseAuth.instance.signOut();
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 } catch (e) {
                   print(e.toString());
                   return null;
