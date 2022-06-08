@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage> {
               ),
               actions: [
                 Container(
-                  // width: 100.0,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25.0),
                       gradient: LinearGradient(colors: [
@@ -84,9 +83,8 @@ class _HomePageState extends State<HomePage> {
                 try {
                   await FirebaseAuth.instance.signOut();
                   Navigator.of(context).popUntil((route) => route.isFirst);
-                } catch (e) {
-                  print(e.toString());
-                  return null;
+                } on FirebaseAuthException catch (e) {
+                  print(e.message);
                 }
               },
               icon: Icon(

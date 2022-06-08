@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:workout_app/authService.dart';
 import 'package:workout_app/screens/homePage.dart';
 import 'package:workout_app/signInPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,9 +17,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SignInPage(),
+    return MultiProvider(
+      providers: [
+        Provider<AuthService>(
+          create: (_) => AuthService(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          create: (context) =>
+              context.read<AuthService>().authStateChanges, initialData: null,
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: AuthenticationWrapper(),
+      ),
     );
   }
 }
@@ -40,7 +52,8 @@ class MyApp extends StatelessWidget {
 class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-  final firebaseUser = context.watch<User>();
+     return Provider<AuthService>(
+      create: (_) => AuthService(FirebaseAuth.instance),
 
     if (firebaseUser != null) {
       return HomePage();

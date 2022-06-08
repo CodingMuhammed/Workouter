@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_app/screens/homePage.dart';
+import 'package:provider/provider.dart';
+import 'package:workout_app/AuthService.dart';
+import 'package:workout_app/signUpPage.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -81,20 +83,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   FlatButton(
                       onPressed: () async {
-                        try {
-                          await FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
-                                  email: emailController.text,
-                                  password: passwordController.text);
-                          errorMessage = '';
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
-                        } on FirebaseAuthException catch (e) {
-                          errorMessage = e.message!;
-                        }
-                        setState(() {});
+                        context.read<AuthService>().signInMethod(
+                          email: emailController.text,
+                          password: passwordController.text,
+                          errorMessage1: emailController.text
+                            );
                       },
                       child: Text(
                         'Sign Up',

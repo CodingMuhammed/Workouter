@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_app/screens/homePage.dart';
+import 'package:provider/provider.dart';
+import 'package:workout_app/AuthService.dart';
 import 'package:workout_app/signUpPage.dart';
 
 class SignInPage extends StatefulWidget {
@@ -9,9 +10,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   @override
   late bool _passwordVisible;
   void initState() {
@@ -98,19 +98,15 @@ class _SignInPageState extends State<SignInPage> {
                 children: [
                   FlatButton(
                       onPressed: () async {
-                        try {
-                          await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: emailController.text,
-                                  password: passwordController.text);
-                          errorMessage = '';
-                        } on FirebaseAuthException catch (e) {
-                          errorMessage = e.message!;
-                        }
-                        setState(() {});
+                        context.read<AuthService>().signInMethod(
+                          email: emailController.text,
+                          password: passwordController.text,
+                          errorMessage1: emailController.text
+                            );
                       },
                       child: Text('Sign In',
-                          style: TextStyle(fontSize: 23.0, color: Colors.black))),
+                          style:
+                              TextStyle(fontSize: 23.0, color: Colors.black))),
                 ],
               ),
             ),

@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
-project(workout_app LANGUAGES CXX)
-
-set(BINARY_NAME "workout_app")
-
-cmake_policy(SET CMP0063 NEW)
-
-set(CMAKE_INSTALL_RPATH "$ORIGIN/lib")
-
+pt[roject(workout_app LANGUAGES CXX)
+w,tw,
+set(BrINARY_NAME "workout_app")
+,r,wlr
+cmake_lrpolicy(SET CMP0063 NEW)
+,rr,r[rrl,4tl4,t4lt,]
+set(CMAKE_INSTALL_RPtATH "$ORIGIN/lib")
+,ttltltltltl,,t4lt,,,
 # Configure build options.
 get_property(IS_MULTICONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(IS_MULTICONFIG)
