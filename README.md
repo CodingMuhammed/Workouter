@@ -1,10 +1,5 @@
 # workout_app
 
-This is an app which allows you to create a workout and exercises with reps, sets, weight and rest time.
+This is an app that allows you to create a workout program and exercises with reps, sets, weight, and rest time (working on it).
 
-This app also has an authentication system(login and logout).
-
-
-
-
-
+This app also has an authentication system(sign-in, sign-up, and signOut).
