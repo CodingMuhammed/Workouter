@@ -1,15 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:workout_app/AuthService.dart';
+import 'package:workout_app/screens/homePage.dart';
 import 'package:workout_app/signUpPage.dart';
 
-class SignInPage extends StatefulWidget {
+class LogInpage extends StatefulWidget {
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<LogInpage> createState() => _LogInPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _LogInPageState extends State<LogInpage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   @override
@@ -43,6 +43,7 @@ class _SignInPageState extends State<SignInPage> {
                     border: OutlineInputBorder(borderSide: BorderSide()),
                     labelText: 'Email',
                   ),
+                  autofocus: true,
                 ),
               ),
             ),
@@ -98,13 +99,14 @@ class _SignInPageState extends State<SignInPage> {
                 children: [
                   FlatButton(
                       onPressed: () async {
-                        context.read<AuthService>().signInMethod(
+                        AuthService.logInMethod(
                           email: emailController.text,
                           password: passwordController.text,
-                          errorMessage1: emailController.text
+                          errorMessage1: errorMessage
                             );
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                       },
-                      child: Text('Sign In',
+                      child: Text('LogIn',
                           style:
                               TextStyle(fontSize: 23.0, color: Colors.black))),
                 ],

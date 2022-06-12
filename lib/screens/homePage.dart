@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:workout_app/authService.dart';
 import 'package:workout_app/workout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -73,6 +74,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0.0,
         title: Text('WorkoutBeast'),
         backgroundColor: Color.fromARGB(255, 70, 93, 105),
@@ -80,12 +82,8 @@ class _HomePageState extends State<HomePage> {
           FlatButton.icon(
               textColor: Colors.white,
               onPressed: () async {
-                try {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                } on FirebaseAuthException catch (e) {
-                  print(e.message);
-                }
+                AuthService.signOutMethod();
+                Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
               },
               icon: Icon(
                 Icons.person,

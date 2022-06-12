@@ -1,15 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  final FirebaseAuth _firebaseAuth;
+  Stream<User?> get authStateChanges => FirebaseAuth.instance.authStateChanges();
 
-  AuthService(this._firebaseAuth);
-
-  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
-
-  Future<String?> signInMethod({String? email,String? password, String? errorMessage1}) async {
+  static Future<User?> logInMethod({String? email, String? password, String? errorMessage1}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email!, password: password!);
       errorMessage1 = '';
     } on FirebaseAuthException catch (e) {
@@ -17,13 +13,21 @@ class AuthService {
     }
   }
 
-   Future<String?> signUpMethod({String? email,String? password, String? errorMessage1}) async {
+   static Future<User?> signUpMethod({required String email,required String password, required String errorMessage1}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-          email: email!, password: password!);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email, password: password);
       errorMessage1 = '';
     } on FirebaseAuthException catch (e) {
       errorMessage1 = e.message!;
     }
   } 
+  static Future<User?> signOutMethod() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+        } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
+  } 
+
 }
