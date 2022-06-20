@@ -10,7 +10,7 @@ import 'package:workout_app/signUpPage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: {
-          '/':(context) => AuthenticationWrapper(),
+          '/':(context) => const AuthenticationWrapper(),
           '/login':(context) => LogInpage(),
           '/signUp':(context) => SignUpPage(),
           '/home':(context) => HomePage()
@@ -56,6 +56,8 @@ class MyApp extends StatelessWidget {
 // }
 
 class AuthenticationWrapper extends StatelessWidget {
+  const AuthenticationWrapper({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
   User? user = FirebaseAuth.instance.currentUser;

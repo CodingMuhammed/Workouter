@@ -9,6 +9,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -22,85 +23,119 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 70, 93, 105),
+      backgroundColor: const Color.fromARGB(255, 70, 93, 105),
       appBar: AppBar(
-          title: Text('WorkoutBeast'),
-          backgroundColor: Color.fromARGB(255, 70, 93, 105),
+          title: const Text('WorkoutBeast'),
+          backgroundColor: const Color.fromARGB(255, 70, 93, 105),
           elevation: 0,
           centerTitle: true),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 30.0,
-            ),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(borderSide: BorderSide()),
-                    labelText: 'Email',
-                  ),
-                  autofocus: true,
-                ),
+        child: Form(
+          key: _key,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 30.0,
               ),
-            ),
-            Text(errorMessage, style: TextStyle(color: Colors.red)),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(borderSide: BorderSide()),
-                    labelText: 'Password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        // Based on passwordVisible state choose the icon
-                        _passwordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                      onPressed: () {
-                        // Update the state i.e. toogle the state of passwordVisible variable
-                        setState(() {
-                          _passwordVisible = !_passwordVisible;
-                        });
-                      },
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(borderSide: BorderSide()),
+                      labelText: 'Email',
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty)
+                        return ('Field is required.');
+                      String pattern = r'\w+@\w+\.\w+';
+                      if (!RegExp(pattern).hasMatch(value)) {
+                        return 'Invalid E-mail address format.';
+                      }
+                      {
+                        return null;
+                      }
+                    },
+                    autofocus: true,
                   ),
-                  obscureText: !_passwordVisible,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 347.0, right: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FlatButton(
-                      onPressed: () async {
-                        AuthService.signUpMethod(
-                          email: emailController.text,
-                          password: passwordController.text,
-                          errorMessage1: errorMessage
-                            );
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                      },
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(fontSize: 23.0, color: Colors.black),
-                      )),
-                  SizedBox(
-                    height: 30.0,
-                  )
-                ],
+              Text(errorMessage, style: const TextStyle(color: Colors.red)),
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      border:
+                          const OutlineInputBorder(borderSide: BorderSide()),
+                      labelText: 'Password',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          // Based on passwordVisible state choose the icon
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        onPressed: () {
+                          // Update the state i.e. toogle the state of passwordVisible variable
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty)
+                        return ('Field is required.');
+                      String pattern =
+                          r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                      if (!RegExp(pattern).hasMatch(value)) {
+                        return 'Invalid Password format.';
+                      }
+                      {
+                        return null;
+                      }
+                    },
+                    obscureText: !_passwordVisible,
+                  ),
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 347.0, right: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FlatButton(
+                        onPressed: () async {
+                          if (_key.currentState!.validate()) {
+                            _key.currentState!.save();
+                            AuthService.signUpMethod(
+                                email: emailController.text,
+                                password: passwordController.text,
+                                errorMessage1: errorMessage);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()));
+                          }
+                          ;
+                        },
+                        child: const Text(
+                          'Sign Up',
+                          style: const TextStyle(
+                              fontSize: 23.0, color: Colors.black),
+                        )),
+                    const SizedBox(
+                      height: 30.0,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

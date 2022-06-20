@@ -5,7 +5,7 @@ import 'package:workout_app/workout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context) {
             return AlertDialog(
               backgroundColor: Colors.blueGrey,
-              title: Text('Exercise Name'),
+              title: const Text('Exercise Name'),
               content: TextField(
                 controller: _exerciseName,
               ),
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25.0),
-                      gradient: LinearGradient(colors: [
+                      gradient: const LinearGradient(colors: [
                         Color.fromARGB(255, 0, 102, 255),
                         Color.fromARGB(26, 179, 179, 147)
                       ])),
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         primary: Colors.transparent,
                         shadowColor: Colors.transparent),
-                    child: Text('Add'),
+                    child: const Text('Add'),
                   ),
                 ),
               ],
@@ -74,10 +74,11 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        // remove the back button
         automaticallyImplyLeading: false,
         elevation: 0.0,
-        title: Text('WorkoutBeast'),
-        backgroundColor: Color.fromARGB(255, 70, 93, 105),
+        title: const Text('WorkoutBeast'),
+        backgroundColor: const Color.fromARGB(255, 70, 93, 105),
         actions: <Widget>[
           FlatButton.icon(
               textColor: Colors.white,
@@ -85,13 +86,13 @@ class _HomePageState extends State<HomePage> {
                 AuthService.signOutMethod();
                 Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.person,
               ),
-              label: Text('Sign Out')),
+              label: const Text('Sign Out')),
         ],
       ),
-      backgroundColor: Color.fromARGB(255, 70, 93, 105),
+      backgroundColor: const Color.fromARGB(255, 70, 93, 105),
       body: Column(
         children: [
           SingleChildScrollView(
@@ -99,20 +100,20 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(children: [
                 Card(
-                  color: Color.fromARGB(255, 81, 108, 122),
+                  color: const Color.fromARGB(255, 81, 108, 122),
                   child: Column(
                     children: [
                       Text(_exerciseName.text),
-                      Divider(
+                      const Divider(
                         color: Colors.black26,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text('Reps'),
-                          Text('Sets'),
-                          Text('Weight'),
-                          Text('rest')
+                          const Text('Reps'),
+                          const Text('Sets'),
+                          const Text('Weight'),
+                          const Text('rest')
                         ],
                       ),
                       Padding(
@@ -123,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               width: 25,
                               child: TextField(
-                                decoration: InputDecoration(),
+                                decoration: const InputDecoration(),
                                 controller: _reps,
                               ),
                             ),
@@ -131,21 +132,21 @@ class _HomePageState extends State<HomePage> {
                               width: 25,
                               child: TextField(
                                 controller: _sets,
-                                decoration: InputDecoration(),
+                                decoration: const InputDecoration(),
                               ),
                             ),
                             SizedBox(
                               width: 25,
                               child: TextField(
                                 controller: _weight,
-                                decoration: InputDecoration(),
+                                decoration: const InputDecoration(),
                               ),
                             ),
                             SizedBox(
                               width: 25,
                               child: TextField(
                                 controller: _rest,
-                                decoration: InputDecoration(),
+                                decoration: const InputDecoration(),
                               ),
                             ),
                           ],
@@ -157,14 +158,14 @@ class _HomePageState extends State<HomePage> {
               ]),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Container(
-            margin: EdgeInsets.only(bottom: 15.0),
+            margin: const EdgeInsets.only(bottom: 15.0),
             height: 55.0,
             width: 400.0,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25.0),
-                gradient: LinearGradient(colors: [
+                gradient: const LinearGradient(colors: [
                   Color.fromARGB(255, 0, 102, 255),
                   Color.fromARGB(26, 179, 179, 147)
                 ])),
@@ -178,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   primary: Colors.transparent,
                   shadowColor: Colors.transparent),
-              child: Text('Add New Exercise'),
+              child: const Text('Add New Exercise'),
             ),
           ),
         ],
