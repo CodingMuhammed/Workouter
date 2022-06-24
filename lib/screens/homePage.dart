@@ -10,19 +10,16 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
+ 
 class _HomePageState extends State<HomePage> {
   final newWorkout = Workout(null, null, null, null, null);
-  final db = FirebaseFirestore.instance;
-
-  final _exerciseName = TextEditingController();
-  final _reps = TextEditingController();
-  final _sets = TextEditingController();
-  final _weight = TextEditingController();
-  final _rest = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key2 = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('userData');
     Future createAlertDialog(BuildContext context) {
       return showDialog(
           context: context,
@@ -30,31 +27,29 @@ class _HomePageState extends State<HomePage> {
             return AlertDialog(
               backgroundColor: Colors.blueGrey,
               title: const Text('Exercise Name'),
-              content: TextField(
-                controller: _exerciseName,
+              content: Form(
+                key: _key,
+                child: TextFormField(onChanged: (value) {
+                  newWorkout.exerciseName = value;
+                }),
               ),
               actions: [
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25.0),
                       gradient: const LinearGradient(colors: [
-                        Color.fromARGB(255, 0, 102, 255),
+                        Color.fromARGB(185, 0, 102, 255),
                         Color.fromARGB(26, 179, 179, 147)
                       ])),
                   child: ElevatedButton(
                     onPressed: () async {
-                      newWorkout.exerciseName = _exerciseName.text;
-                      final uid = (FirebaseAuth.instance.currentUser)?.uid;
-                      await db
-                          .collection('userDate')
-                          .doc(uid)
-                          .collection('workout')
-                          .add({
-                        'exerciseName': _exerciseName.text,
-                        'reps': _reps.text,
-                        'sets': _sets.text,
-                        'weight': _weight.text,
-                        'rest': _rest.text
+                      String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+                      users.doc(uid).collection('workout').add({
+                        'exerciseName': newWorkout.exerciseName,
+                        'reps': newWorkout.reps,
+                        'sets': newWorkout.sets,
+                        'weight': newWorkout.weight,
+                        'rest': newWorkout.rest
                       });
                       Navigator.pop(context);
                     },
@@ -84,7 +79,8 @@ class _HomePageState extends State<HomePage> {
               textColor: Colors.white,
               onPressed: () async {
                 AuthService.signOutMethod();
-                Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/login', (Route<dynamic> route) => false);
               },
               icon: const Icon(
                 Icons.person,
@@ -93,96 +89,98 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: const Color.fromARGB(255, 70, 93, 105),
-      body: Column(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(children: [
-                Card(
-                  color: const Color.fromARGB(255, 81, 108, 122),
-                  child: Column(
-                    children: [
-                      Text(_exerciseName.text),
-                      const Divider(
-                        color: Colors.black26,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Text('Reps'),
-                          const Text('Sets'),
-                          const Text('Weight'),
-                          const Text('rest')
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Form(
+        key: _key2,
+        child: Column(
+          children: [
+            StreamBuilder<Object>(
+                stream: null,
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(children: [
+                      Card(
+                        color: const Color.fromARGB(255, 81, 108, 122),
+                        child: Column(
                           children: [
-                            SizedBox(
-                              width: 25,
-                              child: TextField(
-                                decoration: const InputDecoration(),
-                                controller: _reps,
-                              ),
+                            Text('exercise name'),
+                            const Divider(
+                              color: Colors.black26,
                             ),
-                            SizedBox(
-                              width: 25,
-                              child: TextField(
-                                controller: _sets,
-                                decoration: const InputDecoration(),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                const Text('Reps'),
+                                const Text('Sets'),
+                                const Text('Weight'),
+                                const Text('rest')
+                              ],
                             ),
-                            SizedBox(
-                              width: 25,
-                              child: TextField(
-                                controller: _weight,
-                                decoration: const InputDecoration(),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 25,
-                              child: TextField(
-                                controller: _rest,
-                                decoration: const InputDecoration(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(
+                                    width: 25,
+                                    child: TextField(
+                                      onChanged: (value) => {newWorkout.reps},
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 25,
+                                    child: TextField(
+                                      onChanged: (value) => {newWorkout.sets},
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 25,
+                                    child: TextField(
+                                      onChanged: (value) => {newWorkout.weight},
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 25,
+                                    child: TextField(
+                                      onChanged: (value) => {newWorkout.rest},
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ]),
+                    ]),
+                  );
+                }),
+            const Spacer(),
+            Container(
+              margin: const EdgeInsets.only(bottom: 15.0),
+              height: 55.0,
+              width: 400.0,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25.0),
+                  gradient: const LinearGradient(colors: [
+                    Color.fromARGB(255, 0, 102, 255),
+                    Color.fromARGB(26, 179, 179, 147)
+                  ])),
+              child: ElevatedButton(
+                onPressed: () {
+                  createAlertDialog(context);
+                },
+                style: ElevatedButton.styleFrom(
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                    ),
+                    primary: Colors.transparent,
+                    shadowColor: Colors.transparent),
+                child: const Text('Add New Exercise'),
+              ),
             ),
-          ),
-          const Spacer(),
-          Container(
-            margin: const EdgeInsets.only(bottom: 15.0),
-            height: 55.0,
-            width: 400.0,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25.0),
-                gradient: const LinearGradient(colors: [
-                  Color.fromARGB(255, 0, 102, 255),
-                  Color.fromARGB(26, 179, 179, 147)
-                ])),
-            child: ElevatedButton(
-              onPressed: () {
-                createAlertDialog(context);
-              },
-              style: ElevatedButton.styleFrom(
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                  ),
-                  primary: Colors.transparent,
-                  shadowColor: Colors.transparent),
-              child: const Text('Add New Exercise'),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

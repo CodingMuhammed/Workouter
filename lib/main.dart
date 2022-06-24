@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:workout_app/authService.dart';
 import 'package:workout_app/screens/homePage.dart';
-import 'package:workout_app/logInPage.dart';
+import 'package:workout_app/screens/logInPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:workout_app/signUpPage.dart';
+import 'package:workout_app/screens/signUpPage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

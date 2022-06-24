@@ -12,7 +12,7 @@ class AuthService {
       errorMessage1 = e.message!;
     }
   }
-
+    // SignUp function
    static Future<User?> signUpMethod({required String email,required String password, required String errorMessage1}) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -22,6 +22,7 @@ class AuthService {
       errorMessage1 = e.message!;
     }
   } 
+    // SignIn function
   static Future<User?> signOutMethod() async {
     try {
       await FirebaseAuth.instance.signOut();

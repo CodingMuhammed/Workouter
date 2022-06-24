@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/AuthService.dart';
 import 'package:workout_app/screens/homePage.dart';
-import 'package:workout_app/signUpPage.dart';
+import 'package:workout_app/screens/signUpPage.dart';
 
 class LogInpage extends StatefulWidget {
   @override
