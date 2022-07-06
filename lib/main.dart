@@ -40,28 +40,14 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class AuthenticationWrapper extends StatelessWidget {
-//   const AuthenticationWrapper({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final User? firebaseUser = FirebaseAuth.instance.currentUser;
-
-//     if (firebaseUser != null) {
-//       return HomePage();
-//     }
-//     return SignInPage();
-//   }
-// }
-
+// page decider
 class AuthenticationWrapper extends StatelessWidget {
   const AuthenticationWrapper({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
   User? user = FirebaseAuth.instance.currentUser;
-
+    
     if (user != null) {
       return HomePage();
     } 

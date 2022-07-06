@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/authService.dart';
+import 'package:workout_app/global.dart';
 import 'package:workout_app/workout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:workout_app/global.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,7 +12,7 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
- 
+
 class _HomePageState extends State<HomePage> {
   final newWorkout = Workout(null, null, null, null, null);
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -20,52 +22,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     CollectionReference users =
         FirebaseFirestore.instance.collection('userData');
-    Future createAlertDialog(BuildContext context) {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.blueGrey,
-              title: const Text('Exercise Name'),
-              content: Form(
-                key: _key,
-                child: TextFormField(onChanged: (value) {
-                  newWorkout.exerciseName = value;
-                }),
-              ),
-              actions: [
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25.0),
-                      gradient: const LinearGradient(colors: [
-                        Color.fromARGB(185, 0, 102, 255),
-                        Color.fromARGB(26, 179, 179, 147)
-                      ])),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      String uid = FirebaseAuth.instance.currentUser!.uid.toString();
-                      users.doc(uid).collection('workout').add({
-                        'exerciseName': newWorkout.exerciseName,
-                        'reps': newWorkout.reps,
-                        'sets': newWorkout.sets,
-                        'weight': newWorkout.weight,
-                        'rest': newWorkout.rest
-                      });
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(25.0),
-                        ),
-                        primary: Colors.transparent,
-                        shadowColor: Colors.transparent),
-                    child: const Text('Add'),
-                  ),
-                ),
-              ],
-            );
-          });
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -75,20 +31,29 @@ class _HomePageState extends State<HomePage> {
         title: const Text('WorkoutBeast'),
         backgroundColor: const Color.fromARGB(255, 70, 93, 105),
         actions: <Widget>[
-          FlatButton.icon(
-              textColor: Colors.white,
-              onPressed: () async {
-                AuthService.signOutMethod();
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/login', (Route<dynamic> route) => false);
-              },
-              icon: const Icon(
-                Icons.person,
-              ),
-              label: const Text('Sign Out')),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: linearColor,
+              child: ElevatedButton.icon(
+                  onPressed: () async {
+                    AuthService.signOutMethod();
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/login', (Route<dynamic> route) => false);
+                  },
+                  style: buttonStyle,
+                  icon: const Icon(
+                    Icons.person,
+                  ),
+                  label: const Text(
+                    'Sign Out',
+                    style: TextStyle(color: Colors.white),
+                  )),
+            ),
+          ),
         ],
       ),
-      backgroundColor: const Color.fromARGB(255, 70, 93, 105),
+      backgroundColor: BackgroundColor,
       body: Form(
         key: _key2,
         child: Column(
@@ -103,50 +68,97 @@ class _HomePageState extends State<HomePage> {
                         color: const Color.fromARGB(255, 81, 108, 122),
                         child: Column(
                           children: [
-                            Text('exercise name'),
-                            const Divider(
-                              color: Colors.black26,
-                            ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                const Text('Reps'),
-                                const Text('Sets'),
-                                const Text('Weight'),
-                                const Text('rest')
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'exercise name',
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            const Divider(
+                              color: Colors.white,
+                            ),
+                            Container(
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  SizedBox(
-                                    width: 25,
-                                    child: TextField(
-                                      onChanged: (value) => {newWorkout.reps},
-                                    ),
+                                  const Text(
+                                    'Reps',
+                                    style: TextStyle(color: Colors.white),
                                   ),
-                                  SizedBox(
-                                    width: 25,
-                                    child: TextField(
-                                      onChanged: (value) => {newWorkout.sets},
-                                    ),
+                                  const Text(
+                                    'Sets',
+                                    style: TextStyle(color: Colors.white),
                                   ),
-                                  SizedBox(
-                                    width: 25,
-                                    child: TextField(
-                                      onChanged: (value) => {newWorkout.weight},
-                                    ),
+                                  const Text(
+                                    'Weight',
+                                    style: TextStyle(color: Colors.white),
                                   ),
-                                  SizedBox(
-                                    width: 25,
-                                    child: TextField(
-                                      onChanged: (value) => {newWorkout.rest},
-                                    ),
-                                  ),
+                                  const Text(
+                                    'rest',
+                                    style: TextStyle(color: Colors.white),
+                                  )
                                 ],
+                              ),
+                            ),
+                            Container(
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                      width: 25,
+                                      child: TextField(
+                                        decoration: InputDecoration(),
+                                        keyboardType: TextInputType.number,
+                                        onChanged: (value) => {
+                                          newWorkout.reps = int.parse(value)
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 25,
+                                      child: TextField(
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        onChanged: (value) => {
+                                          newWorkout.sets = int.parse(value)
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 25,
+                                      child: TextField(
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        onChanged: (value) => {
+                                          newWorkout.weight =
+                                              double.parse(value)
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 25,
+                                      child: TextField(
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        onChanged: (value) => {
+                                          newWorkout.rest = double.parse(value)
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -159,23 +171,13 @@ class _HomePageState extends State<HomePage> {
             Container(
               margin: const EdgeInsets.only(bottom: 15.0),
               height: 55.0,
-              width: 400.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25.0),
-                  gradient: const LinearGradient(colors: [
-                    Color.fromARGB(255, 0, 102, 255),
-                    Color.fromARGB(26, 179, 179, 147)
-                  ])),
+              width: double.infinity,
+              decoration: linearColor,
               child: ElevatedButton(
                 onPressed: () {
                   createAlertDialog(context);
                 },
-                style: ElevatedButton.styleFrom(
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                    ),
-                    primary: Colors.transparent,
-                    shadowColor: Colors.transparent),
+                style: buttonStyle,
                 child: const Text('Add New Exercise'),
               ),
             ),
