@@ -98,24 +98,34 @@ class _LogInPageState extends State<LogInpage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  decoration: linearColor,
+                  height: 44.0,
+                  decoration: myGradient,
                   child: ElevatedButton(
                       onPressed: () async {
                         AuthService.logInMethod(
                             email: emailController.text,
                             password: passwordController.text,
                             errorMessage1: errorMessage);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
                       },
                       style: buttonStyle,
-                      child: Text('LogIn',
-                          style:
-                              TextStyle(fontSize: 23.0, color: Colors.black))),
+                      child: const Text(
+                        'LogIn',
+                        style: TextStyle(color: Colors.white),
+                      )),
                 ),
               ),
+              // Container(
+              //     height: 44.0,
+              //     decoration: myGradient,
+              //     child: ElevatedButton(
+              //       onPressed: () {},
+              //       style: ElevatedButton.styleFrom(
+              //           primary: Colors.transparent,
+              //           shadowColor: Colors.transparent),
+              //       child: Text('LogIn'),
+              //     ),
+              //   )
             ],
           ),
         ],

@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              decoration: linearColor,
+              decoration: myGradient,
               child: ElevatedButton.icon(
                   onPressed: () async {
                     AuthService.signOutMethod();
@@ -80,6 +80,9 @@ class _HomePageState extends State<HomePage> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
+                                Divider(
+                                  color: Colors.white,
+                                )
                               ],
                             ),
                             const Divider(
@@ -119,8 +122,12 @@ class _HomePageState extends State<HomePage> {
                                     SizedBox(
                                       width: 25,
                                       child: TextField(
-                                        decoration: InputDecoration(),
+                                        textAlign: TextAlign.center,
+                                        textInputAction: TextInputAction.next,
                                         keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          hintText: 0.toString(),
+                                        ),
                                         onChanged: (value) => {
                                           newWorkout.reps = int.parse(value)
                                         },
@@ -129,6 +136,10 @@ class _HomePageState extends State<HomePage> {
                                     SizedBox(
                                       width: 25,
                                       child: TextField(
+                                        decoration: InputDecoration(
+                                          hintText: 0.toString(),
+                                        ),
+                                        textInputAction: TextInputAction.next,
                                         textAlign: TextAlign.center,
                                         keyboardType: TextInputType.number,
                                         onChanged: (value) => {
@@ -139,6 +150,10 @@ class _HomePageState extends State<HomePage> {
                                     SizedBox(
                                       width: 25,
                                       child: TextField(
+                                        decoration: InputDecoration(
+                                          hintText: 0.0.toString(),
+                                        ),
+                                        textInputAction: TextInputAction.next,
                                         textAlign: TextAlign.center,
                                         keyboardType: TextInputType.number,
                                         onChanged: (value) => {
@@ -150,6 +165,10 @@ class _HomePageState extends State<HomePage> {
                                     SizedBox(
                                       width: 25,
                                       child: TextField(
+                                        decoration: InputDecoration(
+                                          hintText: 0.0.toString(),
+                                        ),
+                                        textInputAction: TextInputAction.next,
                                         textAlign: TextAlign.center,
                                         keyboardType: TextInputType.number,
                                         onChanged: (value) => {
@@ -172,15 +191,17 @@ class _HomePageState extends State<HomePage> {
               margin: const EdgeInsets.only(bottom: 15.0),
               height: 55.0,
               width: double.infinity,
-              decoration: linearColor,
+              decoration: myGradient,
               child: ElevatedButton(
                 onPressed: () {
                   createAlertDialog(context);
                 },
-                style: buttonStyle,
-                child: const Text('Add New Exercise'),
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.transparent,
+                    shadowColor: Colors.transparent),
+                child: Text('Add New Exercise'),
               ),
-            ),
+            )
           ],
         ),
       ),

@@ -109,24 +109,24 @@ class _SignUpPageState extends State<SignUpPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    decoration: linearColor,
+                    height: 44.0,
+                    decoration: myGradient,
                     child: ElevatedButton(
-                        onPressed: () async {
-                          AuthService.signUpMethod(
-                              email: emailController.text,
-                              password: passwordController.text,
-                              errorMessage1: errorMessage);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
-                        },
-                        style: buttonStyle,
-                        child: Text('SignUp',
-                            style: TextStyle(
-                                fontSize: 23.0, color: Colors.white))),
+                      onPressed: () {
+                        AuthService.signUpMethod(
+                            email: emailController.text,
+                            password: passwordController.text,
+                            errorMessage1: errorMessage);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomePage()));
+                      },
+                      style: buttonStyle,
+                      child: Text('Sign Up'),
+                    ),
                   ),
-                ),
+                )
               ],
             ),
           ],
@@ -135,3 +135,25 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
+
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Container(
+                //     decoration: linearColor,
+                //     child: ElevatedButton(
+                //         onPressed: () async {
+                //           AuthService.signUpMethod(
+                //               email: emailController.text,
+                //               password: passwordController.text,
+                //               errorMessage1: errorMessage);
+                //           Navigator.push(
+                //               context,
+                //               MaterialPageRoute(
+                //                   builder: (context) => HomePage()));
+                //         },
+                //         style: buttonStyle,
+                //         child: Text('SignUp',
+                //             style: TextStyle(
+                //                 fontSize: 23.0, color: Colors.white))),
+                //   ),
+                // ), 
