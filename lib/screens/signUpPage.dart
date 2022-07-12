@@ -41,6 +41,7 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextFormField(
+                  textInputAction: TextInputAction.next,
                   controller: emailController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(borderSide: BorderSide()),
@@ -117,13 +118,15 @@ class _SignUpPageState extends State<SignUpPage> {
                             email: emailController.text,
                             password: passwordController.text,
                             errorMessage1: errorMessage);
-                        Navigator.pushReplacement(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => HomePage()));
                       },
                       style: buttonStyle,
-                      child: Text('Sign Up'),
+                      child: Text('Sign Up', style: TextStyle(
+                        fontSize: 23.0
+                      )),
                     ),
                   ),
                 )
@@ -135,25 +138,3 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: Container(
-                //     decoration: linearColor,
-                //     child: ElevatedButton(
-                //         onPressed: () async {
-                //           AuthService.signUpMethod(
-                //               email: emailController.text,
-                //               password: passwordController.text,
-                //               errorMessage1: errorMessage);
-                //           Navigator.push(
-                //               context,
-                //               MaterialPageRoute(
-                //                   builder: (context) => HomePage()));
-                //         },
-                //         style: buttonStyle,
-                //         child: Text('SignUp',
-                //             style: TextStyle(
-                //                 fontSize: 23.0, color: Colors.white))),
-                //   ),
-                // ), 

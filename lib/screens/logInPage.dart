@@ -111,21 +111,10 @@ class _LogInPageState extends State<LogInpage> {
                       style: buttonStyle,
                       child: const Text(
                         'LogIn',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(fontSize: 23.0, color: Colors.white),
                       )),
                 ),
               ),
-              // Container(
-              //     height: 44.0,
-              //     decoration: myGradient,
-              //     child: ElevatedButton(
-              //       onPressed: () {},
-              //       style: ElevatedButton.styleFrom(
-              //           primary: Colors.transparent,
-              //           shadowColor: Colors.transparent),
-              //       child: Text('LogIn'),
-              //     ),
-              //   )
             ],
           ),
         ],

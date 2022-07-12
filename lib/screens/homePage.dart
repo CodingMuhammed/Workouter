@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/authService.dart';
+import 'package:workout_app/createCard.dart';
 import 'package:workout_app/global.dart';
 import 'package:workout_app/workout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workout_app/global.dart';
+import 'package:workout_app/CreateAlertDialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,14 +16,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final newWorkout = Workout(null, null, null, null, null);
+  final newWorkout = Workout(0, 0, 0.0, '', 0.0);
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final GlobalKey<FormState> _key2 = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    bool firstBuild = true;
+    String uid = FirebaseAuth.instance.currentUser!.uid.toString();
     CollectionReference users =
         FirebaseFirestore.instance.collection('userData');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (firstBuild) {
+        firstBuild = false;
+        CreateAlertDialog(context);
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -58,150 +68,37 @@ class _HomePageState extends State<HomePage> {
         key: _key2,
         child: Column(
           children: [
-            StreamBuilder<Object>(
-                stream: null,
-                builder: (context, snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(children: [
-                      Card(
-                        color: const Color.fromARGB(255, 81, 108, 122),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'exercise name',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Divider(
-                                  color: Colors.white,
-                                )
-                              ],
-                            ),
-                            const Divider(
-                              color: Colors.white,
-                            ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  const Text(
-                                    'Reps',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  const Text(
-                                    'Sets',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  const Text(
-                                    'Weight',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  const Text(
-                                    'rest',
-                                    style: TextStyle(color: Colors.white),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    SizedBox(
-                                      width: 25,
-                                      child: TextField(
-                                        textAlign: TextAlign.center,
-                                        textInputAction: TextInputAction.next,
-                                        keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(
-                                          hintText: 0.toString(),
-                                        ),
-                                        onChanged: (value) => {
-                                          newWorkout.reps = int.parse(value)
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 25,
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          hintText: 0.toString(),
-                                        ),
-                                        textInputAction: TextInputAction.next,
-                                        textAlign: TextAlign.center,
-                                        keyboardType: TextInputType.number,
-                                        onChanged: (value) => {
-                                          newWorkout.sets = int.parse(value)
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 25,
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          hintText: 0.0.toString(),
-                                        ),
-                                        textInputAction: TextInputAction.next,
-                                        textAlign: TextAlign.center,
-                                        keyboardType: TextInputType.number,
-                                        onChanged: (value) => {
-                                          newWorkout.weight =
-                                              double.parse(value)
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 25,
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          hintText: 0.0.toString(),
-                                        ),
-                                        textInputAction: TextInputAction.next,
-                                        textAlign: TextAlign.center,
-                                        keyboardType: TextInputType.number,
-                                        onChanged: (value) => {
-                                          newWorkout.rest = double.parse(value)
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]),
-                  );
+            StreamBuilder<QuerySnapshot>(
+                stream: users.doc(uid).collection('Workout').snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data?.size ?? 0,
+                      itemBuilder: (context, index) {
+                        return CreateCard(context, snapshot, index);
+                      });
                 }),
-            const Spacer(),
-            Container(
-              margin: const EdgeInsets.only(bottom: 15.0),
-              height: 55.0,
-              width: double.infinity,
-              decoration: myGradient,
-              child: ElevatedButton(
-                onPressed: () {
-                  createAlertDialog(context);
-                },
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.transparent,
-                    shadowColor: Colors.transparent),
-                child: Text('Add New Exercise'),
-              ),
-            )
+            Spacer(),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 15.0),
+                  height: 55.0,
+                  decoration: myGradient,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      CreateAlertDialog(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        shadowColor: Colors.transparent),
+                    child: Text('Add New Exercise'),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
