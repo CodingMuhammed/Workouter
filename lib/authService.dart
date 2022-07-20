@@ -15,6 +15,7 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       errorMessage1 = e.message!;
     }
+    return null;
   }
 
   // SignUp function
@@ -29,6 +30,7 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       errorMessage1 = e.message!;
     }
+    return null;
   }
 
   // SignOut function
@@ -38,5 +40,6 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       print(e.message);
     }
+    return null;
   }
 }

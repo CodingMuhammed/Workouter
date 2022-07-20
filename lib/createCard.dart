@@ -1,13 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_app/authService.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:workout_app/global.dart';
-import 'package:workout_app/screens/homePage.dart';
-import 'package:workout_app/workout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workout_app/global.dart';
 
-Widget CreateCard(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, index) {
+Widget CreateCard(
+    BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, index, users) {
   final data = snapshot.requireData;
   return Padding(
     padding: const EdgeInsets.all(16.0),
@@ -24,98 +21,118 @@ Widget CreateCard(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, i
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     data.docs[index]['exerciseName'],
-                    style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Divider(
+                const Divider(
                   color: Colors.white,
                 )
               ],
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const [
+                Text(
+                  'Reps',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  'Sets',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  'Weight',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  'rest',
+                  style: TextStyle(color: Colors.white),
+                )
+              ],
+            ),
+            //
+            Slidable(
+              endActionPane: ActionPane(
+                motion: ScrollMotion(),
                 children: [
-                  const Text(
-                    'Reps',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  const Text(
-                    'Sets',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  const Text(
-                    'Weight',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  const Text(
-                    'rest',
-                    style: TextStyle(color: Colors.white),
+                  SlidableAction(
+                    onPressed: (context) {
+                      FirebaseFirestore.instance
+                          .runTransaction((Transaction myTransaction) async {
+                        myTransaction
+                            .delete(snapshot.data!.docs[index].reference);
+                      });
+                    },
+                    label: 'Delete',
+                    backgroundColor: Colors.red,
+                    icon: Icons.delete,
                   )
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: 25,
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: 0.toString(),
+              child: ListTile(
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: 25,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: 0.toString(),
+                          ),
+                          onChanged: (value) =>
+                              {newWorkout.reps = int.parse(value)},
+                        ),
                       ),
-                      onChanged: (value) =>
-                          {newWorkout.reps = int.parse(value)},
-                    ),
-                  ),
-                  SizedBox(
-                    width: 25,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 0.toString(),
+                      SizedBox(
+                        width: 25,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 0.toString(),
+                          ),
+                          textInputAction: TextInputAction.next,
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) =>
+                              {newWorkout.sets = int.parse(value)},
+                        ),
                       ),
-                      textInputAction: TextInputAction.next,
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) =>
-                          {newWorkout.sets = int.parse(value)},
-                    ),
-                  ),
-                  SizedBox(
-                    width: 25,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 0.0.toString(),
+                      SizedBox(
+                        width: 25,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 0.0.toString(),
+                          ),
+                          textInputAction: TextInputAction.next,
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) =>
+                              {newWorkout.weight = double.parse(value)},
+                        ),
                       ),
-                      textInputAction: TextInputAction.next,
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) =>
-                          {newWorkout.weight = double.parse(value)},
-                    ),
-                  ),
-                  SizedBox(
-                    width: 25,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 0.0.toString(),
+                      SizedBox(
+                        width: 25,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 0.0.toString(),
+                          ),
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) =>
+                              {newWorkout.rest = double.parse(value)},
+                        ),
                       ),
-                      textInputAction: TextInputAction.next,
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) =>
-                          {newWorkout.rest = double.parse(value)},
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
+            //
           ],
         ),
       ),

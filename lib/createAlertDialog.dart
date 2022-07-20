@@ -2,12 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workout_app/global.dart';
 
 final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
 Future CreateAlertDialog(
-  BuildContext context,
+  BuildContext context
 ) {
   return showDialog(
       context: context,
@@ -17,7 +16,9 @@ Future CreateAlertDialog(
           title: const Text('Exercise Name'),
           content: Form(
             key: _key,
-            child: TextFormField(onChanged: (value) {
+            child: TextFormField(
+              autofocus: true,
+              onChanged: (value) {
               newWorkout.exerciseName = value;
             }),
           ),

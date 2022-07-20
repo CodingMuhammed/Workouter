@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:workout_app/authService.dart';
-import 'package:workout_app/screens/homePage.dart';
+import 'package:workout_app/screens/workoutScreen.dart';
 import 'package:workout_app/screens/logInPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -29,12 +29,13 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        title: 'WorkoutBeast',
         debugShowCheckedModeBanner: false,
         routes: {
           '/':(context) => const AuthenticationWrapper(),
-          '/login':(context) => LogInpage(),
-          '/signUp':(context) => SignUpPage(),
-          '/home':(context) => HomePage()
+          '/login':(context) => const LogInpage(),
+          '/signUp':(context) => const SignUpPage(),
+          '/home':(context) => const HomePage()
         }
       ),
     );
@@ -49,8 +50,8 @@ class AuthenticationWrapper extends StatelessWidget {
   User? user = FirebaseAuth.instance.currentUser;
     
     if (user != null) {
-      return HomePage();
+      return const HomePage();
     } 
-    return LogInpage();
+    return const LogInpage();
   }
 }

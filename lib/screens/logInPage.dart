@@ -1,11 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/AuthService.dart';
 import 'package:workout_app/global.dart';
-import 'package:workout_app/screens/homePage.dart';
+import 'package:workout_app/screens/workoutScreen.dart';
 import 'package:workout_app/screens/signUpPage.dart';
 
 class LogInpage extends StatefulWidget {
+  const LogInpage({Key? key}) : super(key: key);
+
   @override
   State<LogInpage> createState() => _LogInPageState();
 }
@@ -13,68 +14,66 @@ class LogInpage extends StatefulWidget {
 class _LogInPageState extends State<LogInpage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  @override
   late bool _passwordVisible;
+  @override
   void initState() {
     _passwordVisible = false;
+    super.initState();
   }
 
   String errorMessage = '';
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: BackgroundColor,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-          title: Text('WorkoutBeast'),
-          backgroundColor: BackgroundColor,
+          title: const Text('WorkoutBeast'),
+          backgroundColor: backgroundColor,
           elevation: 0,
           centerTitle: true),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 30.0,
           ),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                textInputAction: TextInputAction.next,
-                controller: emailController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderSide: BorderSide()),
-                  labelText: 'Email',
-                ),
-                autofocus: true,
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              textInputAction: TextInputAction.next,
+              controller: emailController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(borderSide: BorderSide()),
+                labelText: 'Email',
               ),
+              autofocus: true,
             ),
           ),
-          Text(errorMessage, style: TextStyle(color: Colors.red)),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderSide: BorderSide()),
-                  labelText: 'Password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      // Based on passwordVisible state choose the icon
-                      _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                    onPressed: () {
-                      // Update the state i.e. toogle the state of passwordVisible variable
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
-                    },
+          Text(errorMessage, style: const TextStyle(color: Colors.red)),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              controller: passwordController,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(borderSide: BorderSide()),
+                labelText: 'Password',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    // Based on passwordVisible state choose the icon
+                    _passwordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: Theme.of(context).primaryColorDark,
                   ),
+                  onPressed: () {
+                    // Update the state i.e. toogle the state of passwordVisible variable
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
                 ),
-                obscureText: !_passwordVisible,
               ),
+              obscureText: !_passwordVisible,
             ),
           ),
           Row(
@@ -83,15 +82,15 @@ class _LogInPageState extends State<LogInpage> {
               TextButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUpPage()));
+                        MaterialPageRoute(builder: (context) => const SignUpPage()));
                   },
-                  child: Text(
+                  child: const Text(
                     'Create Account',
                     style: TextStyle(color: Colors.white),
                   )),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -106,7 +105,7 @@ class _LogInPageState extends State<LogInpage> {
                             email: emailController.text,
                             password: passwordController.text,
                             errorMessage1: errorMessage);
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
                       },
                       style: buttonStyle,
                       child: const Text(
