@@ -7,6 +7,17 @@ import 'package:workout_app/workout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workout_app/CreateAlertDialog.dart';
 
+late String _hint;
+late final TextEditingController control;
+late final Function onchanged;
+late FocusNode _focusNode;
+final setsController = TextEditingController();
+final weightController = TextEditingController();
+final restController = TextEditingController();
+final repsController = TextEditingController();
+final newWorkout = Workout(0, 0, 0.0, '', 0.0);
+final exerciseNameController = TextEditingController();
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -15,7 +26,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final newWorkout = Workout(0, 0, 0.0, '', 0.0);
+  @override
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        setState(() {
+          _hint = control.text;
+        });
+        control.clear();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +47,7 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (firstBuild) {
         firstBuild = false;
-        CreateAlertDialog(context);
+        CreateAlertDialog(context, exerciseNameController);
       }
     });
 
@@ -59,20 +83,20 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: backgroundColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Stack(
         children: [
-          const ExerciseStream(),
+          Column(
+            children: const [
+              ExerciseStream(),
+            ],
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          CreateAlertDialog(
-            context,
-          );
+          CreateAlertDialog(context, exerciseNameController);
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: Colors.black,
         ),
@@ -81,39 +105,48 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ExerciseStream extends StatelessWidget {
+class ExerciseStream extends HomePage {
   const ExerciseStream({Key? key}) : super(key: key);
-
-  @override
   Widget build(BuildContext context) {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection('userData');
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
     return StreamBuilder<QuerySnapshot>(
         stream: users
-            .doc(FirebaseAuth.instance.currentUser!.uid.toString())
+            .doc(FirebaseAuth.instance.currentUser?.uid.toString())
             .collection('workout')
             .orderBy('exerciseName', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          return Expanded(
-            child: ListView.builder(
-                itemCount: snapshot.requireData.size,
-                itemBuilder: (context, index) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else {
-                    if (snapshot.hasError) {
-                      return Text('Error');
-                    } else {
-                      if (snapshot.hasData) {
-                        return CreateCard(context, snapshot, index, users);
-                      } else {
-                        return Text('No Data');
-                      }
-                    }
-                  }
-                }),
-          );
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (snapshot.hasError) {
+              return const Text('Error');
+            } else {
+              if (snapshot.hasData) {
+                return Expanded(
+                  child: ListView.builder(
+                      itemCount: snapshot.requireData.size,
+                      itemBuilder: (context, index) {
+                        return CreateCard(
+                            context,
+                            snapshot,
+                            index,
+                            users,
+                            repsController,
+                            setsController,
+                            weightController,
+                            restController,
+                            _focusNode,
+                            control,
+                            onchanged,
+                            _hint);
+                      }),
+                );
+              } else {
+                return const Center(child: Text('No Data'));
+              }
+            }
+          }
         });
   }
 }

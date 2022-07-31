@@ -4,11 +4,8 @@ import 'package:workout_app/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final GlobalKey<FormState> _key = GlobalKey<FormState>();
-
-Future CreateAlertDialog(
-  BuildContext context
-) {
-  return showDialog(
+Widget? CreateAlertDialog(BuildContext context, exerciseNameController) {
+  showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -17,10 +14,10 @@ Future CreateAlertDialog(
           content: Form(
             key: _key,
             child: TextFormField(
-              autofocus: true,
-              onChanged: (value) {
-              newWorkout.exerciseName = value;
-            }),
+                controller: exerciseNameController,
+                onChanged: (value) {
+                  newWorkout.exerciseName = value;
+                }),
           ),
           actions: [
             Padding(
@@ -31,18 +28,24 @@ Future CreateAlertDialog(
                 child: ElevatedButton(
                     onPressed: () async {
                       final uid = FirebaseAuth.instance.currentUser!.uid;
-                      FirebaseFirestore.instance
-                          .collection('userData')
-                          .doc(uid)
-                          .collection('workout')
-                          .add({
-                        'exerciseName': newWorkout.exerciseName,
-                        'reps': newWorkout.reps,
-                        'sets': newWorkout.sets,
-                        'weight': newWorkout.weight,
-                        'rest': newWorkout.rest
-                      });
-                      Navigator.pop(context);
+                      if (newWorkout.exerciseName!.isNotEmpty ||
+                          newWorkout.exerciseName != null) {
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(uid)
+                            .collection('workout')
+                            .add({
+                          'exerciseName': newWorkout.exerciseName!.trim(),
+                          'reps': 0.toString(),
+                          'sets': 0.toString(),
+                          'weight': 0.0.toString(),
+                          'rest': 0.0.toString()
+                        });
+                        exerciseNameController.clear();
+                        Navigator.pop(context);
+                      } else {
+                        return null;
+                      }
                     },
                     style: buttonStyle,
                     child: const Text(
@@ -54,4 +57,5 @@ Future CreateAlertDialog(
           ],
         );
       });
+  return null;
 }

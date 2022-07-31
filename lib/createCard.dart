@@ -4,13 +4,23 @@ import 'package:workout_app/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Widget CreateCard(
-    BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, index, users) {
-  final data = snapshot.requireData;
+    BuildContext context,
+    AsyncSnapshot<QuerySnapshot> snapshot,
+    index,
+    users,
+    repsController,
+    setsController,
+    weightController,
+    restController,
+    _focusNode,
+    control,
+    onchanged,
+    _hint) {
+  final _data = snapshot.requireData;
   return Padding(
     padding: const EdgeInsets.all(16.0),
     child: Column(children: [
       Card(
-        key: Key(data.docs[index]['exerciseName']),
         color: const Color.fromARGB(255, 81, 108, 122),
         child: Column(
           children: [
@@ -20,7 +30,7 @@ Widget CreateCard(
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    data.docs[index]['exerciseName'],
+                    _data.docs[index]['exerciseName'],
                     style: const TextStyle(
                         fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
@@ -54,14 +64,13 @@ Widget CreateCard(
             //
             Slidable(
               endActionPane: ActionPane(
-                motion: ScrollMotion(),
+                motion: const ScrollMotion(),
                 children: [
                   SlidableAction(
                     onPressed: (context) {
                       FirebaseFirestore.instance
                           .runTransaction((Transaction myTransaction) async {
-                        myTransaction
-                            .delete(snapshot.data!.docs[index].reference);
+                        myTransaction.delete(_data.docs[index].reference);
                       });
                     },
                     label: 'Delete',
@@ -79,14 +88,15 @@ Widget CreateCard(
                       SizedBox(
                         width: 25,
                         child: TextField(
+                          focusNode: _focusNode,
                           textAlign: TextAlign.center,
                           textInputAction: TextInputAction.next,
+                          controller: control,
+
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: 0.toString(),
-                          ),
-                          onChanged: (value) =>
-                              {newWorkout.reps = int.parse(value)},
+                          decoration: InputDecoration(hintText: _hint),
+                          onChanged: onchanged
+                          // (value) => {newWorkout.reps = int.parse(value)},
                         ),
                       ),
                       SizedBox(
@@ -111,6 +121,7 @@ Widget CreateCard(
                           textInputAction: TextInputAction.next,
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
+                          controller: weightController,
                           onChanged: (value) =>
                               {newWorkout.weight = double.parse(value)},
                         ),
@@ -123,6 +134,7 @@ Widget CreateCard(
                           ),
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
+                          controller: restController,
                           onChanged: (value) =>
                               {newWorkout.rest = double.parse(value)},
                         ),

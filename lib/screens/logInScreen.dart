@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:workout_app/AuthService.dart';
 import 'package:workout_app/global.dart';
 import 'package:workout_app/screens/workoutScreen.dart';
-import 'package:workout_app/screens/signUpPage.dart';
+import 'package:workout_app/screens/signUpScreen.dart';
 
 class LogInpage extends StatefulWidget {
   const LogInpage({Key? key}) : super(key: key);
