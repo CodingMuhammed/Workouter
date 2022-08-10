@@ -2,10 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:workout_app/screens/workoutScreen.dart';
+import 'package:workout_app/workout.dart';
 
 final GlobalKey<FormState> _key = GlobalKey<FormState>();
-Widget? CreateAlertDialog(BuildContext context, exerciseNameController) {
-  showDialog(
+Future<void> CreateAlertDialog(
+    BuildContext context, exerciseNameController, newWorkout) {
+  return showDialog(
+      barrierDismissible: firstLoad ?? true,
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -27,9 +31,12 @@ Widget? CreateAlertDialog(BuildContext context, exerciseNameController) {
                 decoration: myGradient,
                 child: ElevatedButton(
                     onPressed: () async {
+                      print(firstLoad);
+                      newWorkout =
+                          Workout(0, 0, 0.0, exerciseNameController.text, 0.0);
                       final uid = FirebaseAuth.instance.currentUser!.uid;
-                      if (newWorkout.exerciseName!.isNotEmpty ||
-                          newWorkout.exerciseName != null) {
+                      if (exerciseNameController!.isNotEmpty ||
+                          exerciseNameController != null) {
                         FirebaseFirestore.instance
                             .collection('users')
                             .doc(uid)
@@ -57,5 +64,4 @@ Widget? CreateAlertDialog(BuildContext context, exerciseNameController) {
           ],
         );
       });
-  return null;
 }

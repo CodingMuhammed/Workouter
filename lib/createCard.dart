@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:workout_app/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Widget CreateCard(
@@ -13,9 +12,8 @@ Widget CreateCard(
     weightController,
     restController,
     _focusNode,
-    control,
-    onchanged,
-    _hint) {
+    _hint,
+    newWorkout) {
   final _data = snapshot.requireData;
   return Padding(
     padding: const EdgeInsets.all(16.0),
@@ -88,15 +86,11 @@ Widget CreateCard(
                       SizedBox(
                         width: 25,
                         child: TextField(
-                          focusNode: _focusNode,
+                          // focusNode: _focusNode,
                           textAlign: TextAlign.center,
-                          textInputAction: TextInputAction.next,
-                          controller: control,
-
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(hintText: _hint),
-                          onChanged: onchanged
-                          // (value) => {newWorkout.reps = int.parse(value)},
+                          controller: repsController,
+                          decoration: InputDecoration(hintText: _hint ?? 0.toString()),
                         ),
                       ),
                       SizedBox(
@@ -105,8 +99,8 @@ Widget CreateCard(
                           decoration: InputDecoration(
                             hintText: 0.toString(),
                           ),
-                          textInputAction: TextInputAction.next,
                           textAlign: TextAlign.center,
+                          controller: setsController,
                           keyboardType: TextInputType.number,
                           onChanged: (value) =>
                               {newWorkout.sets = int.parse(value)},
@@ -118,7 +112,6 @@ Widget CreateCard(
                           decoration: InputDecoration(
                             hintText: 0.0.toString(),
                           ),
-                          textInputAction: TextInputAction.next,
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
                           controller: weightController,
@@ -144,7 +137,6 @@ Widget CreateCard(
                 ),
               ),
             ),
-            //
           ],
         ),
       ),

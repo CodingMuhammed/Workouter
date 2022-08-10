@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           '/':(context) => const AuthenticationWrapper(),
           '/login':(context) => const LogInpage(),
           '/signUp':(context) => const SignUpPage(),
-          '/home':(context) => const HomePage()
+          '/home':(context) => HomePage()
         }
       ),
     );
@@ -50,7 +50,7 @@ class AuthenticationWrapper extends StatelessWidget {
   User? user = FirebaseAuth.instance.currentUser;
     
     if (user != null) {
-      return const HomePage();
+      return HomePage();
     } 
     return const LogInpage();
   }

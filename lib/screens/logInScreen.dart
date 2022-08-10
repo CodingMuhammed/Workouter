@@ -105,7 +105,7 @@ class _LogInPageState extends State<LogInpage> {
                             email: emailController.text,
                             password: passwordController.text,
                             errorMessage1: errorMessage);
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
                       },
                       style: buttonStyle,
                       child: const Text(

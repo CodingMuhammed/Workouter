@@ -7,19 +7,19 @@ import 'package:workout_app/workout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workout_app/CreateAlertDialog.dart';
 
-late String _hint;
-late final TextEditingController control;
-late final Function onchanged;
-late FocusNode _focusNode;
+FocusNode focusNode = FocusNode();
+bool? firstLoad;
+String? _hint;
 final setsController = TextEditingController();
 final weightController = TextEditingController();
 final restController = TextEditingController();
-final repsController = TextEditingController();
-final newWorkout = Workout(0, 0, 0.0, '', 0.0);
+TextEditingController repsController = TextEditingController();
 final exerciseNameController = TextEditingController();
+Workout? newWorkout;
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  Workout? workout;
+  HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -27,32 +27,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  @override
   void initState() {
-    super.initState();
-    _focusNode = FocusNode();
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
+    firstLoad = true;
+    print('init');
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
         setState(() {
-          _hint = control.text;
+          _hint = repsController.text;
         });
-        control.clear();
+        repsController.clear();
       }
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool firstBuild = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (firstBuild) {
-        firstBuild = false;
-        CreateAlertDialog(context, exerciseNameController);
-      }
-    });
-
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         // remove the back button
         automaticallyImplyLeading: false,
@@ -86,15 +77,13 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           Column(
-            children: const [
-              ExerciseStream(),
-            ],
+            children: const [ExerciseStream()],
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          CreateAlertDialog(context, exerciseNameController);
+          CreateAlertDialog(context, exerciseNameController, newWorkout);
         },
         child: const Icon(
           Icons.add,
@@ -105,8 +94,15 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ExerciseStream extends HomePage {
+class ExerciseStream extends StatefulWidget {
   const ExerciseStream({Key? key}) : super(key: key);
+
+  @override
+  State<ExerciseStream> createState() => _ExerciseStreamState();
+}
+
+class _ExerciseStreamState extends State<ExerciseStream> {
+  @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     return StreamBuilder<QuerySnapshot>(
@@ -116,36 +112,37 @@ class ExerciseStream extends HomePage {
             .orderBy('exerciseName', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+          if (snapshot.hasData) {
+            firstLoad = true;
+            print(firstLoad);
+            return Expanded(
+              child: ListView.builder(
+                  itemCount: snapshot.requireData.size,
+                  itemBuilder: (context, index) {
+                    return CreateCard(
+                        context,
+                        snapshot,
+                        index,
+                        users,
+                        repsController,
+                        setsController,
+                        weightController,
+                        restController,
+                        focusNode,
+                        _hint,
+                        newWorkout);
+                  }),
+            );
           } else {
-            if (snapshot.hasError) {
-              return const Text('Error');
-            } else {
-              if (snapshot.hasData) {
-                return Expanded(
-                  child: ListView.builder(
-                      itemCount: snapshot.requireData.size,
-                      itemBuilder: (context, index) {
-                        return CreateCard(
-                            context,
-                            snapshot,
-                            index,
-                            users,
-                            repsController,
-                            setsController,
-                            weightController,
-                            restController,
-                            _focusNode,
-                            control,
-                            onchanged,
-                            _hint);
-                      }),
-                );
-              } else {
-                return const Center(child: Text('No Data'));
-              }
-            }
+            if (!snapshot.hasData) firstLoad = false;
+            Future.delayed(
+                    Duration(seconds: 2),
+                    () => CreateAlertDialog(
+                        context, exerciseNameController, newWorkout))
+                .then((value) => firstLoad = true);
+            return const Center(
+                child:
+                    Text('No Data', style: TextStyle(color: backgroundColor)));
           }
         });
   }

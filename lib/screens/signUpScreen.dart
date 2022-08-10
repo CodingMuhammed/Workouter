@@ -62,6 +62,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   }
                 },
                 autofocus: true,
+                autocorrect: false,
               ),
             ),
             Text(errorMessage, style: const TextStyle(color: Colors.red)),
@@ -102,6 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   }
                 },
                 obscureText: !_passwordVisible,
+                autocorrect: false,
               ),
             ),
             const Spacer(),
@@ -122,7 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const HomePage()));
+                                builder: (context) => HomePage()));
                       },
                       style: buttonStyle,
                       child: const Text('Sign Up', style: TextStyle(
