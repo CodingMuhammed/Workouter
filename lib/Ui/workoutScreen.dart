@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_app/authService.dart';
-import 'package:workout_app/createCard.dart';
-import 'package:workout_app/global.dart';
-import 'package:workout_app/workout.dart';
+import 'package:workout_app/Bloc/authService.dart';
+import 'package:workout_app/Ui/createCard.dart';
+import 'package:workout_app/Ui/global.dart';
+import 'package:workout_app/Ui/exercise.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workout_app/CreateAlertDialog.dart';
 
@@ -15,10 +15,10 @@ final weightController = TextEditingController();
 final restController = TextEditingController();
 TextEditingController repsController = TextEditingController();
 final exerciseNameController = TextEditingController();
-Workout? newWorkout;
+Exercise? exerciseData;
 
 class HomePage extends StatefulWidget {
-  Workout? workout;
+  Exercise? exercise;
   HomePage({Key? key}) : super(key: key);
 
   @override
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          CreateAlertDialog(context, exerciseNameController, newWorkout);
+          CreateAlertDialog(context, exerciseNameController, exerciseData);
         },
         child: const Icon(
           Icons.add,
@@ -130,7 +130,7 @@ class _ExerciseStreamState extends State<ExerciseStream> {
                         restController,
                         focusNode,
                         _hint,
-                        newWorkout);
+                        exerciseData);
                   }),
             );
           } else {
@@ -138,7 +138,7 @@ class _ExerciseStreamState extends State<ExerciseStream> {
             Future.delayed(
                     Duration(seconds: 2),
                     () => CreateAlertDialog(
-                        context, exerciseNameController, newWorkout))
+                        context, exerciseNameController, exerciseData))
                 .then((value) => firstLoad = true);
             return const Center(
                 child:

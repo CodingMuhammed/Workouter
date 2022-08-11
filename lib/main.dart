@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:workout_app/authService.dart';
-import 'package:workout_app/screens/workoutScreen.dart';
-import 'package:workout_app/screens/logInScreen.dart';
+import 'package:workout_app/Bloc/authService.dart';
+import 'package:workout_app/Ui/logInScreen.dart';
+import 'package:workout_app/Ui/workoutScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:workout_app/screens/signUpScreen.dart';
+import 'package:workout_app/SignUpScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           '/':(context) => const AuthenticationWrapper(),
-          '/login':(context) => const LogInpage(),
-          '/signUp':(context) => const SignUpPage(),
+          '/login':(context) => const LogInScreen(),
+          '/signUp':(context) => const SignUpScreen(),
           '/home':(context) => HomePage()
         }
       ),
@@ -52,6 +52,6 @@ class AuthenticationWrapper extends StatelessWidget {
     if (user != null) {
       return HomePage();
     } 
-    return const LogInpage();
+    return const LogInScreen();
   }
 }

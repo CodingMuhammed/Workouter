@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_app/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workout_app/screens/workoutScreen.dart';
-import 'package:workout_app/workout.dart';
+import 'package:workout_app/Ui/global.dart';
+import 'workoutScreen.dart';
+import 'package:workout_app/Ui/exercise.dart';
 
 final GlobalKey<FormState> _key = GlobalKey<FormState>();
 Future<void> CreateAlertDialog(
-    BuildContext context, exerciseNameController, newWorkout) {
+    BuildContext context, exerciseNameController, exerciseData) {
   return showDialog(
       barrierDismissible: firstLoad ?? true,
       context: context,
@@ -20,7 +20,7 @@ Future<void> CreateAlertDialog(
             child: TextFormField(
                 controller: exerciseNameController,
                 onChanged: (value) {
-                  newWorkout.exerciseName = value;
+                  exerciseData!.exerciseName = value;
                 }),
           ),
           actions: [
@@ -31,18 +31,15 @@ Future<void> CreateAlertDialog(
                 decoration: myGradient,
                 child: ElevatedButton(
                     onPressed: () async {
-                      print(firstLoad);
-                      newWorkout =
-                          Workout(0, 0, 0.0, exerciseNameController.text, 0.0);
                       final uid = FirebaseAuth.instance.currentUser!.uid;
-                      if (exerciseNameController!.isNotEmpty ||
-                          exerciseNameController != null) {
+                      if (exerciseData.exerciseName.isNotEmpty ||
+                          exerciseData.exerciseName != null) {
                         FirebaseFirestore.instance
                             .collection('users')
                             .doc(uid)
                             .collection('workout')
                             .add({
-                          'exerciseName': newWorkout.exerciseName!.trim(),
+                          'exerciseName': exerciseData.exerciseName!.trim(),
                           'reps': 0.toString(),
                           'sets': 0.toString(),
                           'weight': 0.0.toString(),

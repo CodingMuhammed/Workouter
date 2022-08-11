@@ -13,7 +13,7 @@ Widget CreateCard(
     restController,
     _focusNode,
     _hint,
-    newWorkout) {
+    exerciseData) {
   final _data = snapshot.requireData;
   return Padding(
     padding: const EdgeInsets.all(16.0),
@@ -103,7 +103,7 @@ Widget CreateCard(
                           controller: setsController,
                           keyboardType: TextInputType.number,
                           onChanged: (value) =>
-                              {newWorkout.sets = int.parse(value)},
+                              {exerciseData.sets = int.parse(value)},
                         ),
                       ),
                       SizedBox(
@@ -116,7 +116,7 @@ Widget CreateCard(
                           keyboardType: TextInputType.number,
                           controller: weightController,
                           onChanged: (value) =>
-                              {newWorkout.weight = double.parse(value)},
+                              {exerciseData.weight = double.parse(value)},
                         ),
                       ),
                       SizedBox(
@@ -129,7 +129,7 @@ Widget CreateCard(
                           keyboardType: TextInputType.number,
                           controller: restController,
                           onChanged: (value) =>
-                              {newWorkout.rest = double.parse(value)},
+                              {exerciseData.rest = double.parse(value)},
                         ),
                       ),
                     ],

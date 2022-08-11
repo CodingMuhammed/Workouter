@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:workout_app/AuthService.dart';
-import 'package:workout_app/global.dart';
-import 'package:workout_app/screens/workoutScreen.dart';
+import 'package:workout_app/Ui/global.dart';
+import 'package:workout_app/Ui/workoutScreen.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
