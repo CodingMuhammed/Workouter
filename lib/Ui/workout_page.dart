@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_app/Bloc/authService.dart';
-import 'package:workout_app/Ui/createCard.dart';
+import 'package:workout_app/Ui/exercise_dialog.dart';
+import 'package:workout_app/authentication/authService.dart';
+import 'package:workout_app/Ui/exercise_card.dart';
 import 'package:workout_app/Ui/global.dart';
-import 'package:workout_app/Ui/exercise.dart';
+import 'package:workout_app/Models/exercise.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workout_app/CreateAlertDialog.dart';
 
 FocusNode focusNode = FocusNode();
 bool? firstLoad;
@@ -17,15 +17,15 @@ TextEditingController repsController = TextEditingController();
 final exerciseNameController = TextEditingController();
 Exercise? exerciseData;
 
-class HomePage extends StatefulWidget {
+class WorkoutPage extends StatefulWidget {
   Exercise? exercise;
-  HomePage({Key? key}) : super(key: key);
+  WorkoutPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<WorkoutPage> createState() => _WorkoutPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _WorkoutPageState extends State<WorkoutPage> {
   @override
   void initState() {
     firstLoad = true;
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          CreateAlertDialog(context, exerciseNameController, exerciseData);
+          ExerciseDialog(context, exerciseNameController, exerciseData);
         },
         child: const Icon(
           Icons.add,
@@ -114,12 +114,11 @@ class _ExerciseStreamState extends State<ExerciseStream> {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
             firstLoad = true;
-            print(firstLoad);
             return Expanded(
               child: ListView.builder(
                   itemCount: snapshot.requireData.size,
                   itemBuilder: (context, index) {
-                    return CreateCard(
+                    return ExerciseCard(
                         context,
                         snapshot,
                         index,
@@ -136,8 +135,8 @@ class _ExerciseStreamState extends State<ExerciseStream> {
           } else {
             if (!snapshot.hasData) firstLoad = false;
             Future.delayed(
-                    Duration(seconds: 2),
-                    () => CreateAlertDialog(
+                    const Duration(seconds: 2),
+                    () => ExerciseDialog(
                         context, exerciseNameController, exerciseData))
                 .then((value) => firstLoad = true);
             return const Center(

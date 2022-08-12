@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:workout_app/Bloc/authService.dart';
-import 'package:workout_app/Ui/logInScreen.dart';
-import 'package:workout_app/Ui/workoutScreen.dart';
+import 'package:workout_app/authentication/authService.dart';
+import 'package:workout_app/authentication/login_page.dart';
+import 'package:workout_app/Ui/workout_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:workout_app/SignUpScreen.dart';
+import 'package:workout_app/authentication/signup_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           '/':(context) => const AuthenticationWrapper(),
-          '/login':(context) => const LogInScreen(),
-          '/signUp':(context) => const SignUpScreen(),
-          '/home':(context) => HomePage()
+          '/login':(context) => const LogInPage(),
+          '/signUp':(context) => const SignUpPage(),
+          '/home':(context) => WorkoutPage()
         }
       ),
     );
@@ -50,8 +50,8 @@ class AuthenticationWrapper extends StatelessWidget {
   User? user = FirebaseAuth.instance.currentUser;
     
     if (user != null) {
-      return HomePage();
+      return WorkoutPage();
     } 
-    return const LogInScreen();
+    return const LogInPage();
   }
 }

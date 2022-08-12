@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:workout_app/AuthService.dart';
 import 'package:workout_app/Ui/global.dart';
-import 'package:workout_app/Ui/workoutScreen.dart';
-import 'package:workout_app/SignUpScreen.dart';
+import 'package:workout_app/Ui/workout_page.dart';
+import 'package:workout_app/authentication/authService.dart';
+import 'package:workout_app/authentication/signup_page.dart';
 
-class LogInScreen extends StatefulWidget {
-  const LogInScreen({Key? key}) : super(key: key);
+class LogInPage extends StatefulWidget {
+  const LogInPage({Key? key}) : super(key: key);
 
   @override
-  State<LogInScreen> createState() => _LogInScreenState();
+  State<LogInPage> createState() => _LogInPageState();
 }
 
-class _LogInScreenState extends State<LogInScreen> {
+class _LogInPageState extends State<LogInPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   late bool _passwordVisible;
@@ -82,7 +82,7 @@ class _LogInScreenState extends State<LogInScreen> {
               TextButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                        MaterialPageRoute(builder: (context) => const SignUpPage()));
                   },
                   child: const Text(
                     'Create Account',
@@ -105,7 +105,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             email: emailController.text,
                             password: passwordController.text,
                             errorMessage1: errorMessage);
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WorkoutPage()));
                       },
                       style: buttonStyle,
                       child: const Text(

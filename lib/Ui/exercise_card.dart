@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:workout_app/Ui/confirmination_dialog.dart';
 
-Widget CreateCard(
+Widget ExerciseCard(
     BuildContext context,
     AsyncSnapshot<QuerySnapshot> snapshot,
     index,
@@ -66,10 +67,7 @@ Widget CreateCard(
                 children: [
                   SlidableAction(
                     onPressed: (context) {
-                      FirebaseFirestore.instance
-                          .runTransaction((Transaction myTransaction) async {
-                        myTransaction.delete(_data.docs[index].reference);
-                      });
+                      ConfirminationDialog(context, _data, index, snapshot);
                     },
                     label: 'Delete',
                     backgroundColor: Colors.red,
@@ -86,11 +84,14 @@ Widget CreateCard(
                       SizedBox(
                         width: 25,
                         child: TextField(
-                          // focusNode: _focusNode,
+                          onSubmitted: (value) {
+                            value = _data.docs[index]['reps'];
+                          },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
                           controller: repsController,
-                          decoration: InputDecoration(hintText: _hint ?? 0.toString()),
+                          decoration: InputDecoration(
+                              hintText: _data.docs[index]['reps'] ?? 0),
                         ),
                       ),
                       SizedBox(

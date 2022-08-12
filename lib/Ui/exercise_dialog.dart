@@ -2,11 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workout_app/Ui/global.dart';
-import 'workoutScreen.dart';
-import 'package:workout_app/Ui/exercise.dart';
+import 'package:workout_app/Ui/workout_page.dart';
 
 final GlobalKey<FormState> _key = GlobalKey<FormState>();
-Future<void> CreateAlertDialog(
+Future<void> ExerciseDialog(
     BuildContext context, exerciseNameController, exerciseData) {
   return showDialog(
       barrierDismissible: firstLoad ?? true,
@@ -18,10 +17,8 @@ Future<void> CreateAlertDialog(
           content: Form(
             key: _key,
             child: TextFormField(
-                controller: exerciseNameController,
-                onChanged: (value) {
-                  exerciseData!.exerciseName = value;
-                }),
+              controller: exerciseNameController,
+            ),
           ),
           actions: [
             Padding(
@@ -32,14 +29,14 @@ Future<void> CreateAlertDialog(
                 child: ElevatedButton(
                     onPressed: () async {
                       final uid = FirebaseAuth.instance.currentUser!.uid;
-                      if (exerciseData.exerciseName.isNotEmpty ||
-                          exerciseData.exerciseName != null) {
+                      if (exerciseNameController.text != '' ||
+                          exerciseNameController.text != null) {
                         FirebaseFirestore.instance
                             .collection('users')
                             .doc(uid)
                             .collection('workout')
                             .add({
-                          'exerciseName': exerciseData.exerciseName!.trim(),
+                          'exerciseName': exerciseNameController.text,
                           'reps': 0.toString(),
                           'sets': 0.toString(),
                           'weight': 0.0.toString(),

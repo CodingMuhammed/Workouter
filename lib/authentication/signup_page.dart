@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:workout_app/AuthService.dart';
 import 'package:workout_app/Ui/global.dart';
-import 'package:workout_app/Ui/workoutScreen.dart';
+import 'package:workout_app/Ui/workout_page.dart';
+import 'package:workout_app/authentication/authService.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -124,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomePage()));
+                                builder: (context) => WorkoutPage()));
                       },
                       style: buttonStyle,
                       child: const Text('Sign Up', style: TextStyle(
