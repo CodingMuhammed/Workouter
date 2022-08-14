@@ -1,21 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workout_app/Ui/exercise_dialog.dart';
+import 'package:workout_app/Ui/signout_dialog.dart';
 import 'package:workout_app/authentication/authService.dart';
 import 'package:workout_app/Ui/exercise_card.dart';
 import 'package:workout_app/Ui/global.dart';
 import 'package:workout_app/Models/exercise.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-FocusNode focusNode = FocusNode();
 bool? firstLoad;
-String? _hint;
-final setsController = TextEditingController();
-final weightController = TextEditingController();
-final restController = TextEditingController();
-TextEditingController repsController = TextEditingController();
-final exerciseNameController = TextEditingController();
-Exercise? exerciseData;
 
 class WorkoutPage extends StatefulWidget {
   Exercise? exercise;
@@ -28,7 +21,7 @@ class WorkoutPage extends StatefulWidget {
 class _WorkoutPageState extends State<WorkoutPage> {
   @override
   void initState() {
-    firstLoad = true;
+    firstLoad = false;
     print('init');
     super.initState();
   }
@@ -49,9 +42,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
               decoration: myGradient,
               child: ElevatedButton.icon(
                   onPressed: () async {
-                    AuthService.signOutMethod();
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/login', (Route<dynamic> route) => false);
+                    SignoutDialog(context);
                   },
                   style: buttonStyle,
                   icon: const Icon(
@@ -71,7 +62,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ExerciseDialog(context, exerciseNameController, exerciseData);
+          ExerciseDialog(context);
         },
         child: const Icon(
           Icons.add,
@@ -107,17 +98,9 @@ class _ExerciseStreamState extends State<ExerciseStream> {
                   itemCount: snapshot.requireData.size,
                   itemBuilder: (context, index) {
                     return ExerciseCard(
-                      context,
                       snapshot,
                       index,
-                      users,
-                      repsController,
-                      setsController,
-                      weightController,
-                      restController,
-                      focusNode,
-                      _hint,
-                      exerciseData,
+                      null
                     );
                   }),
             );
@@ -126,7 +109,7 @@ class _ExerciseStreamState extends State<ExerciseStream> {
             Future.delayed(
                     const Duration(seconds: 2),
                     () => ExerciseDialog(
-                        context, exerciseNameController, exerciseData))
+                        context))
                 .then((value) => firstLoad = true);
             return const Center(
                 child:

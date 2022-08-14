@@ -4,10 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workout_app/Ui/global.dart';
 import 'package:workout_app/Ui/workout_page.dart';
 
+TextEditingController? exerciseNameController = TextEditingController();
 final uid = FirebaseAuth.instance.currentUser!.uid;
 final GlobalKey<FormState> _key = GlobalKey<FormState>();
 Future<void> ExerciseDialog(
-    BuildContext context, exerciseNameController, exerciseData) {
+    BuildContext context) {
   return showDialog(
       barrierDismissible: firstLoad ?? true,
       context: context,
@@ -29,23 +30,23 @@ Future<void> ExerciseDialog(
                 decoration: myGradient,
                 child: ElevatedButton(
                     onPressed: () async {
-                      if (exerciseNameController.text != '' ||
-                          exerciseNameController.text != null) {
+                      if (exerciseNameController!.text != '' ||
+                          exerciseNameController!.text != null) {
                         FirebaseFirestore.instance
                             .collection('users')
                             .doc(uid)
                             .collection('workout')
                             .add({
-                          'exerciseName': exerciseNameController.text,
+                          'exerciseName': exerciseNameController!.text,
                           'reps': 0.toString(),
                           'sets': 0.toString(),
                           'weight': 0.0.toString(),
                           'rest': 0.0.toString()
                         });
-                        exerciseNameController.clear();
+                        exerciseNameController!.clear();
                         Navigator.pop(context);
                       } else {
-                        return null;
+                        return;
                       }
                     },
                     style: buttonStyle,

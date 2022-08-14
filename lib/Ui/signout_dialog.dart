@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:workout_app/authentication/authService.dart';
 
-Future<void> ConfirminationDialog(
-    BuildContext context, _data, index, snapshot) {
+Future<void> SignoutDialog(BuildContext context) {
   return showDialog(
       context: context,
       builder: (context) {
@@ -16,11 +16,9 @@ Future<void> ConfirminationDialog(
             OutlinedButton(
               child: const Text('Yes', style: TextStyle(color: Colors.white)),
               onPressed: () {
-                FirebaseFirestore.instance
-                    .runTransaction((Transaction myTransaction) async {
-                  myTransaction.delete(_data.docs[index].reference);
-                });
-                Navigator.pop(context);
+                AuthService.signOutMethod();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/login', (Route<dynamic> route) => false);
               },
               style: OutlinedButton.styleFrom(backgroundColor: Colors.blue),
             ),
