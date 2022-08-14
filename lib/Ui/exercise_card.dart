@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workout_app/Ui/confirmination_dialog.dart';
 
+final uid = FirebaseAuth.instance.currentUser!.uid;
 Widget ExerciseCard(
     BuildContext context,
     AsyncSnapshot<QuerySnapshot> snapshot,
@@ -15,11 +17,18 @@ Widget ExerciseCard(
     _focusNode,
     _hint,
     exerciseData) {
+  Future<String> get_data(DocumentReference ref) async {
+    DocumentSnapshot docSnap = await ref.get();
+    var doc_id2 = docSnap.reference.id;
+    return doc_id2;
+  }
+
   final _data = snapshot.requireData;
   return Padding(
     padding: const EdgeInsets.all(16.0),
     child: Column(children: [
       Card(
+        elevation: 8,
         color: const Color.fromARGB(255, 81, 108, 122),
         child: Column(
           children: [
@@ -84,14 +93,38 @@ Widget ExerciseCard(
                       SizedBox(
                         width: 25,
                         child: TextField(
-                          onSubmitted: (value) {
-                            value = _data.docs[index]['reps'];
+                          onSubmitted: (value) async {
+                            print('submitted');
+                            DocumentReference ref = FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(uid)
+                                .collection("workout")
+                                .doc();
+                            // String documentID = await get_data(ref).toString();
+                            // print(documentID);
+                            // FirebaseFirestore.instance
+                            //     .collection('users')
+                            //     .doc(uid)
+                            //     .collection('workout')
+                            //     .doc(documentID)
+                            //     .update({'reps': repsController.text});
+                            final documentId =
+                                snapshot.data!.docs[index].reference.id;
+                            FirebaseFirestore.instance.runTransaction(
+                                (Transaction myTransaction) async {
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(uid)
+                                  .collection('workout')
+                                  .doc(documentId)
+                                  .update({'reps': repsController.text});
+                            });
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
                           controller: repsController,
                           decoration: InputDecoration(
-                              hintText: _data.docs[index]['reps'] ?? 0),
+                              hintText: _data.docs[index]['reps'].toString()),
                         ),
                       ),
                       SizedBox(

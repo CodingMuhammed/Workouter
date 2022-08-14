@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workout_app/Ui/global.dart';
 import 'package:workout_app/Ui/workout_page.dart';
 
+final uid = FirebaseAuth.instance.currentUser!.uid;
 final GlobalKey<FormState> _key = GlobalKey<FormState>();
 Future<void> ExerciseDialog(
     BuildContext context, exerciseNameController, exerciseData) {
@@ -28,7 +29,6 @@ Future<void> ExerciseDialog(
                 decoration: myGradient,
                 child: ElevatedButton(
                     onPressed: () async {
-                      final uid = FirebaseAuth.instance.currentUser!.uid;
                       if (exerciseNameController.text != '' ||
                           exerciseNameController.text != null) {
                         FirebaseFirestore.instance

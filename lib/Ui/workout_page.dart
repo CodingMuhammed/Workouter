@@ -30,14 +30,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
   void initState() {
     firstLoad = true;
     print('init');
-    focusNode.addListener(() {
-      if (focusNode.hasFocus) {
-        setState(() {
-          _hint = repsController.text;
-        });
-        repsController.clear();
-      }
-    });
     super.initState();
   }
 
@@ -74,12 +66,8 @@ class _WorkoutPageState extends State<WorkoutPage> {
         ],
       ),
       backgroundColor: backgroundColor,
-      body: Stack(
-        children: [
-          Column(
-            children: const [ExerciseStream()],
-          ),
-        ],
+      body: Column(
+        children: const [ExerciseStream()],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -119,17 +107,18 @@ class _ExerciseStreamState extends State<ExerciseStream> {
                   itemCount: snapshot.requireData.size,
                   itemBuilder: (context, index) {
                     return ExerciseCard(
-                        context,
-                        snapshot,
-                        index,
-                        users,
-                        repsController,
-                        setsController,
-                        weightController,
-                        restController,
-                        focusNode,
-                        _hint,
-                        exerciseData);
+                      context,
+                      snapshot,
+                      index,
+                      users,
+                      repsController,
+                      setsController,
+                      weightController,
+                      restController,
+                      focusNode,
+                      _hint,
+                      exerciseData,
+                    );
                   }),
             );
           } else {
