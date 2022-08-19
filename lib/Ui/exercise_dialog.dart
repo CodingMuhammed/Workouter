@@ -1,14 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workout_app/Ui/global.dart';
-import 'package:workout_app/Ui/workout_page.dart';
+import 'package:Workouter/Ui/global.dart';
+import 'package:Workouter/Ui/workout_page.dart';
 
-TextEditingController? exerciseNameController = TextEditingController();
-final uid = FirebaseAuth.instance.currentUser!.uid;
-final GlobalKey<FormState> _key = GlobalKey<FormState>();
-Future<void> ExerciseDialog(
-    BuildContext context) {
+TextEditingController exerciseNameController = TextEditingController();
+final uid = FirebaseAuth.instance.currentUser?.uid;
+Future<void> ExerciseDialog(BuildContext context) {
   return showDialog(
       barrierDismissible: firstLoad ?? true,
       context: context,
@@ -16,11 +14,8 @@ Future<void> ExerciseDialog(
         return AlertDialog(
           backgroundColor: Colors.blueGrey,
           title: const Text('Exercise Name'),
-          content: Form(
-            key: _key,
-            child: TextFormField(
-              controller: exerciseNameController,
-            ),
+          content: TextField(
+            controller: exerciseNameController,
           ),
           actions: [
             Padding(
@@ -30,20 +25,19 @@ Future<void> ExerciseDialog(
                 decoration: myGradient,
                 child: ElevatedButton(
                     onPressed: () async {
-                      if (exerciseNameController!.text != '' ||
-                          exerciseNameController!.text != null) {
+                      if (exerciseNameController.text.isNotEmpty) {
                         FirebaseFirestore.instance
                             .collection('users')
                             .doc(uid)
                             .collection('workout')
                             .add({
-                          'exerciseName': exerciseNameController!.text,
+                          'exerciseName': exerciseNameController.text,
                           'reps': 0.toString(),
                           'sets': 0.toString(),
                           'weight': 0.0.toString(),
                           'rest': 0.0.toString()
                         });
-                        exerciseNameController!.clear();
+                        exerciseNameController.clear();
                         Navigator.pop(context);
                       } else {
                         return;

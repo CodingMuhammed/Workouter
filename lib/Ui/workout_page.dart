@@ -1,18 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workout_app/Ui/exercise_dialog.dart';
-import 'package:workout_app/Ui/signout_dialog.dart';
-import 'package:workout_app/authentication/authService.dart';
-import 'package:workout_app/Ui/exercise_card.dart';
-import 'package:workout_app/Ui/global.dart';
-import 'package:workout_app/Models/exercise.dart';
+import 'package:Workouter/Ui/exercise_dialog.dart';
+import 'package:Workouter/Ui/signout_dialog.dart';
+import 'package:Workouter/Ui/exercise_card.dart';
+import 'package:Workouter/Ui/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 bool? firstLoad;
 
 class WorkoutPage extends StatefulWidget {
-  Exercise? exercise;
-  WorkoutPage({Key? key}) : super(key: key);
+  const WorkoutPage({Key? key}) : super(key: key);
 
   @override
   State<WorkoutPage> createState() => _WorkoutPageState();
@@ -33,7 +30,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
         // remove the back button
         automaticallyImplyLeading: false,
         elevation: 0.0,
-        title: const Text('WorkoutBeast'),
+        title: const Text('Workouter'),
         backgroundColor: backgroundColor,
         actions: <Widget>[
           Padding(
@@ -91,29 +88,47 @@ class _ExerciseStreamState extends State<ExerciseStream> {
             .orderBy('exerciseName', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            if (snapshot.hasError) {
+              return Center(child: Text('Error'));
+            } else {
+              if (snapshot.data!.size == 0) {
+                firstLoad = false;
+                Future.delayed(Duration.zero, () => ExerciseDialog(context))
+                    .then((_) => firstLoad = true);
+                return SizedBox(height: 0.0);
+              } else {
+                firstLoad = true;
+                return Expanded(
+                  child: ListView.builder(
+                      itemCount: snapshot.data!.size,
+                      itemBuilder: (context, index) {
+                        return ExerciseCard(snapshot, index, null);
+                      }),
+                );
+              }
+            }
+          }
           if (snapshot.hasData) {
             firstLoad = true;
             return Expanded(
               child: ListView.builder(
-                  itemCount: snapshot.requireData.size,
+                  itemCount: snapshot.data!.size,
                   itemBuilder: (context, index) {
-                    return ExerciseCard(
-                      snapshot,
-                      index,
-                      null
-                    );
+                    return ExerciseCard(snapshot, index, null);
                   }),
             );
           } else {
-            if (!snapshot.hasData) firstLoad = false;
-            Future.delayed(
-                    const Duration(seconds: 2),
-                    () => ExerciseDialog(
-                        context))
-                .then((value) => firstLoad = true);
-            return const Center(
-                child:
-                    Text('No Data', style: TextStyle(color: backgroundColor)));
+            if (!snapshot.hasData) {
+              Future.delayed(
+                      const Duration(seconds: 0), () => ExerciseDialog(context))
+                  .then((_) => firstLoad = true);
+              return const Center(
+                  child: Text('No Data',
+                      style: TextStyle(color: backgroundColor)));
+            }
           }
         });
   }

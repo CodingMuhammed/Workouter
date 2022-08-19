@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:workout_app/Ui/global.dart';
-import 'package:workout_app/Ui/workout_page.dart';
-import 'package:workout_app/authentication/authService.dart';
-import 'package:workout_app/authentication/signup_page.dart';
+import 'package:Workouter/Ui/global.dart';
+import 'package:Workouter/authentication/authService.dart';
+import 'package:Workouter/authentication/signup_page.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -12,111 +11,119 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  late bool _passwordVisible;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _loginFormKey = GlobalKey<FormState>();
+  String _errorMessage = '';
+
   @override
   void initState() {
-    _passwordVisible = false;
+    _emailController.clear();
     super.initState();
   }
-
-  String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
       appBar: AppBar(
-          title: const Text('WorkoutBeast'),
+          title: const Text('Workouter'),
           backgroundColor: backgroundColor,
           elevation: 0,
           centerTitle: true),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 30.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              textInputAction: TextInputAction.next,
-              controller: emailController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(borderSide: BorderSide()),
-                labelText: 'Email',
-              ),
-              autofocus: true,
+      body: Form(
+        key: _loginFormKey,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 30.0,
             ),
-          ),
-          Text(errorMessage, style: const TextStyle(color: Colors.red)),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(borderSide: BorderSide()),
-                labelText: 'Password',
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    // Based on passwordVisible state choose the icon
-                    _passwordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: Theme.of(context).primaryColorDark,
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              child: TextField(
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 18.0),
+                textInputAction: TextInputAction.next,
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.mail),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide()),
+                  hintText: 'Email',
+                ),
+                autofocus: true,
+              ),
+            ),
+            const SizedBox(height: 7.5),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              child: TextField(
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 18.0),
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 15),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide()),
+                  hintText: 'Password',
+                  prefixIcon: Icon(Icons.lock),
+                ),
+              ),
+            ),
+            Center(
+                child: Text(
+              _errorMessage,
+              style: const TextStyle(color: Colors.red),
+            )),
+            const SizedBox(height: 7.5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpPage()));
+                    },
+                    child: const Text(
+                      'Create Account',
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ],
+            ),
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 44.0,
+                    decoration: myGradient,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          AuthService.logInMethod(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                            errorMessage: _errorMessage,
+                            context: context
+                          );
+                        },
+                        style: buttonStyle,
+                        child: const Text(
+                          'LogIn',
+                          style: TextStyle(fontSize: 23.0, color: Colors.white),
+                        )),
                   ),
-                  onPressed: () {
-                    // Update the state i.e. toogle the state of passwordVisible variable
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
                 ),
-              ),
-              obscureText: !_passwordVisible,
+              ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const SignUpPage()));
-                  },
-                  child: const Text(
-                    'Create Account',
-                    style: TextStyle(color: Colors.white),
-                  )),
-            ],
-          ),
-          const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 44.0,
-                  decoration: myGradient,
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        AuthService.logInMethod(
-                            email: emailController.text,
-                            password: passwordController.text,
-                            errorMessage1: errorMessage);
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WorkoutPage()));
-                      },
-                      style: buttonStyle,
-                      child: const Text(
-                        'LogIn',
-                        style: TextStyle(fontSize: 23.0, color: Colors.white),
-                      )),
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

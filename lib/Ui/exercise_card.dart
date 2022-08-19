@@ -2,39 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workout_app/Models/exercise.dart';
-import 'package:workout_app/Ui/delete_dialog.dart';
-
-final uid = FirebaseAuth.instance.currentUser!.uid;
+import 'package:Workouter/Models/exercise.dart';
+import 'package:Workouter/Ui/delete_dialog.dart';
 
 class ExerciseCard extends StatefulWidget {
   Exercise? exerciseData;
   final snapshot;
   final index;
-  ExerciseCard(this.snapshot, this.index, exerciseData);
+  ExerciseCard(this.snapshot, this.index, exerciseData, {Key? key})
+      : super(key: key);
 
   @override
   State<ExerciseCard> createState() => _ExerciseCardState();
 }
 
-late TextEditingController _setsController;
-late TextEditingController _weightController;
-late TextEditingController _restController;
-late TextEditingController _repsController;
+final uid = FirebaseAuth.instance.currentUser?.uid;
+TextEditingController setsController = TextEditingController();
+TextEditingController repsController = TextEditingController();
+TextEditingController weightController = TextEditingController();
+TextEditingController restController = TextEditingController();
 
 class _ExerciseCardState extends State<ExerciseCard> {
   @override
-  void initState() {
-    _repsController = TextEditingController();
-    _setsController = TextEditingController();
-    _weightController = TextEditingController();
-    _restController = TextEditingController();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final _data = widget.snapshot.requireData;
+    final _data = widget.snapshot.data;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(children: [
@@ -54,9 +46,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                           fontSize: 20.0, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const Divider(
-                    color: Colors.white,
-                  )
+                  const Divider(thickness: 1.0),
                 ],
               ),
               Row(
@@ -80,7 +70,6 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   )
                 ],
               ),
-              //
               Slidable(
                 endActionPane: ActionPane(
                   motion: const ScrollMotion(),
@@ -97,77 +86,96 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   ],
                 ),
                 child: ListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          width: 25,
-                          child: TextField(
-                            onSubmitted: (value) async {
-                              final documentId = _data!.reference.id;
-                              FirebaseFirestore.instance.runTransaction(
-                                  (Transaction myTransaction) async {
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(uid)
-                                    .collection('workout')
-                                    .doc(documentId)
-                                    .update({'reps': _repsController.text});
-                              });
-                            },
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            controller: _repsController,
-                            decoration: InputDecoration(
-                                hintText: _data.docs[widget.index]['reps']
-                                    .toString()),
-                          ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.145,
+                        child: TextField(
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          cursorColor: Colors.white,
+                          onSubmitted: (value) async {
+                            final documentId =
+                                _data.docs[widget.index].reference.id;
+                            FirebaseFirestore.instance.runTransaction(
+                                (Transaction myTransaction) async {
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(uid)
+                                  .collection('workout')
+                                  .doc(documentId)
+                                  .update({'reps': repsController.text});
+                            });
+                          },
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          controller: repsController,
+                          decoration: InputDecoration(
+                              focusedBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                              ),
+                              hintText:
+                                  _data.docs[widget.index]['reps'].toString()),
+                          onChanged: (value) =>
+                              {widget.exerciseData!.reps = int.parse(value)},
                         ),
-                        SizedBox(
-                          width: 25,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 0.toString(),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.145,
+                        child: TextField(
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          cursorColor: Colors.white,
+                          decoration: InputDecoration(
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
                             ),
-                            textAlign: TextAlign.center,
-                            controller: _setsController,
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) =>
-                                {widget.exerciseData!.sets = int.parse(value)},
+                            hintText: 0.toString(),
                           ),
+                          textAlign: TextAlign.center,
+                          controller: setsController,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) =>
+                              {widget.exerciseData!.sets = int.parse(value)},
                         ),
-                        SizedBox(
-                          width: 25,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 0.0.toString(),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.145,
+                        child: TextField(
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          cursorColor: Colors.white,
+                          decoration: InputDecoration(
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
                             ),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            controller: _weightController,
-                            onChanged: (value) => {
-                              widget.exerciseData!.weight = double.parse(value)
-                            },
+                            hintText: 0.0.toString(),
                           ),
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          controller: weightController,
+                          onChanged: (value) => {
+                            widget.exerciseData!.weight = double.parse(value)
+                          },
                         ),
-                        SizedBox(
-                          width: 25,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 0.0.toString(),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.145,
+                        child: TextField(
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          cursorColor: Colors.white,
+                          decoration: InputDecoration(
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
                             ),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            controller: _restController,
-                            onChanged: (value) => {
-                              widget.exerciseData!.rest = double.parse(value)
-                            },
+                            hintText: 0.0.toString(),
                           ),
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          controller: restController,
+                          onChanged: (value) =>
+                              {widget.exerciseData!.rest = double.parse(value)},
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workout_app/authentication/authService.dart';
+import 'package:Workouter/authentication/authService.dart';
 
 Future<void> SignoutDialog(BuildContext context) {
   return showDialog(
@@ -9,7 +8,7 @@ Future<void> SignoutDialog(BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.blueGrey,
           title: const Text(
-            'Do you want to delete the exercise',
+            'Are you sure?',
             style: TextStyle(color: Colors.white),
           ),
           actions: [

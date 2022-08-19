@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:workout_app/Ui/global.dart';
-import 'package:workout_app/Ui/workout_page.dart';
-import 'package:workout_app/authentication/authService.dart';
+import 'package:Workouter/Ui/global.dart';
+import 'package:Workouter/authentication/authService.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -11,101 +10,92 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _passwordController2 = TextEditingController();
+  final _signupFormKey = GlobalKey<FormState>();
+  String _errorMessage = '';
 
-  late bool _passwordVisible;
   @override
   void initState() {
-    _passwordVisible = false;
+    _emailController.clear();
     super.initState();
   }
-
-  String errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
       appBar: AppBar(
-          title: const Text('WorkoutBeast'),
+          title: const Text('Workouter'),
           backgroundColor: backgroundColor,
           elevation: 0,
           centerTitle: true),
       body: Form(
-        key: _key,
+        key: _signupFormKey,
         child: Column(
           children: [
             const SizedBox(
               height: 30.0,
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextFormField(
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              child: TextField(
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 18.0),
                 textInputAction: TextInputAction.next,
-                controller: emailController,
+                controller: _emailController,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(borderSide: BorderSide()),
-                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.mail),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(color: Colors.black)),
+                  hintText: 'Email',
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return ('Field is required.');
-                  }
-                  String pattern = r'\w+@\w+\.\w+';
-                  if (!RegExp(pattern).hasMatch(value)) {
-                    return 'Invalid E-mail address format.';
-                  }
-                  {
-                    return null;
-                  }
-                },
                 autofocus: true,
-                autocorrect: false,
               ),
             ),
-            Text(errorMessage, style: const TextStyle(color: Colors.red)),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextFormField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(borderSide: BorderSide()),
-                  labelText: 'Password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      // Based on passwordVisible state choose the icon
-                      _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                    onPressed: () {
-                      // Update the state i.e. toogle the state of passwordVisible variable
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
-                    },
-                  ),
+            const SizedBox(height: 7.5),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              child: TextField(
+                textInputAction: TextInputAction.next,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 18.0),
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide()),
+                  hintText: 'Password',
+                  prefixIcon: Icon(Icons.lock),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return ('Field is required.');
-                  }
-                  String pattern =
-                      r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-                  if (!RegExp(pattern).hasMatch(value)) {
-                    return 'Invalid Password format.';
-                  }
-                  {
-                    return null;
-                  }
-                },
-                obscureText: !_passwordVisible,
-                autocorrect: false,
+                obscureText: true,
               ),
             ),
+            const SizedBox(height: 15.0),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              child: TextField(
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 18.0),
+                controller: _passwordController2,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.lock),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide()),
+                  hintText: 'Confirm Password',
+                ),
+                obscureText: true,
+              ),
+            ),
+            Center(
+                child: Text(
+              _errorMessage,
+              style: const TextStyle(color: Colors.red),
+            )),
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -118,21 +108,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         AuthService.signUpMethod(
-                            email: emailController.text,
-                            password: passwordController.text,
-                            errorMessage1: errorMessage);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WorkoutPage()));
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                          errorMessage: _errorMessage,
+                          context: context
+                        );
                       },
                       style: buttonStyle,
-                      child: const Text('Sign Up', style: TextStyle(
-                        fontSize: 23.0
-                      )),
+                      child: const Text('Sign Up',
+                          style: TextStyle(fontSize: 23.0)),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ],

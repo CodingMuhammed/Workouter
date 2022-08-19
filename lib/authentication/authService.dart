@@ -1,19 +1,21 @@
+import 'package:Workouter/Ui/workout_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthService {
-  Stream<User?> get authStateChanges =>
-      FirebaseAuth.instance.authStateChanges();
   // Sign Up Function
   static Future<User?> logInMethod(
       {required String email,
       required String password,
-      String? errorMessage1}) async {
+      errorMessage,
+      context}) async {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      errorMessage1 = '';
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const WorkoutPage()));
     } on FirebaseAuthException catch (e) {
-      errorMessage1 = e.message!;
+      errorMessage = e.message;
     }
     return null;
   }
@@ -22,13 +24,15 @@ class AuthService {
   static Future<User?> signUpMethod(
       {required String email,
       required String password,
-      String? errorMessage1}) async {
+      String? errorMessage,
+      context}) async {
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
-      errorMessage1 = '';
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const WorkoutPage()));
     } on FirebaseAuthException catch (e) {
-      errorMessage1 = e.message!;
+      errorMessage = e.message;
     }
     return null;
   }

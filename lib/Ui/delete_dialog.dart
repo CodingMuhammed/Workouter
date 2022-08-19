@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> DeleteDialog(
-    BuildContext context, _data, index, snapshot) {
+Future<void> DeleteDialog(BuildContext context, _data, index, snapshot) {
   return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.blueGrey,
           title: const Text(
-            'Do you want to delete sign out',
+            'Are you sure?',
             style: TextStyle(color: Colors.white),
           ),
           actions: [
