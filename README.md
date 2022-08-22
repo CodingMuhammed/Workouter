@@ -8,4 +8,4 @@ Create workouts and keep track of your exercises, reps, sets, weights, and rest 
 
 # Authors
 
-[@CodingMuhammed](https://github.com/CodingMuhammed)
+[@MuhammedHazem](https://github.com/MuhammedHazem)
