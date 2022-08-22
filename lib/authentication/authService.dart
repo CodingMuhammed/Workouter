@@ -1,38 +1,41 @@
 import 'package:Workouter/Ui/workout_page.dart';
+import 'package:Workouter/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthService {
-  // Sign Up Function
+  // Login Function
   static Future<User?> logInMethod(
-      {required String email,
-      required String password,
-      errorMessage,
-      context}) async {
+      {required String email, required String password, context}) async {
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const WorkoutPage()));
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((_) => Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => WorkoutPage())));
     } on FirebaseAuthException catch (e) {
-      errorMessage = e.message;
+      SnackBar snackBar2 = SnackBar(
+        content: Text(e.message.toString()),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar2);
     }
     return null;
   }
 
-  // SignUp function
-  static Future<User?> signUpMethod(
-      {required String email,
-      required String password,
-      String? errorMessage,
-      context}) async {
+  // Sign up function
+  static Future<User?> signupMethod(
+      {required String email, password, confirm, context}) async {
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const WorkoutPage()));
+      password == confirm
+          ? await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: password)
+              .then((_) => Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => WorkoutPage())))
+          : null;
     } on FirebaseAuthException catch (e) {
-      errorMessage = e.message;
+      SnackBar snackBar1 = SnackBar(
+        content: Text(e.message.toString()),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar1);
     }
     return null;
   }

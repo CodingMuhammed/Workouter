@@ -27,18 +27,31 @@ class _LogInPageState extends State<LogInPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
-      appBar: AppBar(
-          title: const Text('Workouter'),
-          backgroundColor: backgroundColor,
-          elevation: 0,
-          centerTitle: true),
+      // appBar: AppBar(
+      //     title: const Text('Workouter'),
+      //     backgroundColor: backgroundColor,
+      //     centerTitle: true),
       body: Form(
         key: _loginFormKey,
         child: Column(
           children: [
             const SizedBox(
-              height: 30.0,
+              height: 80.0,
             ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Text('Login',
+                      style: TextStyle(
+                          fontSize: 32.5,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 25),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
@@ -47,9 +60,13 @@ class _LogInPageState extends State<LogInPage> {
                 textInputAction: TextInputAction.next,
                 controller: _emailController,
                 decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(10),
                   prefixIcon: Icon(Icons.mail),
-                  border: OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(color: Colors.black)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
                       borderSide: BorderSide()),
                   hintText: 'Email',
                 ),
@@ -64,9 +81,12 @@ class _LogInPageState extends State<LogInPage> {
                     fontWeight: FontWeight.bold, fontSize: 18.0),
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.only(top: 15),
-                  border: OutlineInputBorder(
+                  contentPadding: EdgeInsets.all(10),
+                  focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(color: Colors.black)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
                       borderSide: BorderSide()),
                   hintText: 'Password',
                   prefixIcon: Icon(Icons.lock),
@@ -78,40 +98,40 @@ class _LogInPageState extends State<LogInPage> {
               _errorMessage,
               style: const TextStyle(color: Colors.red),
             )),
-            const SizedBox(height: 7.5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignUpPage()));
-                    },
-                    child: const Text(
-                      'Create Account',
-                      style: TextStyle(color: Colors.white),
-                    )),
-              ],
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SignUpPage()));
+                      },
+                      child: const Text(
+                        'Create Account',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ],
+              ),
             ),
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Container(
                     height: 44.0,
                     decoration: myGradient,
                     child: ElevatedButton(
                         onPressed: () async {
                           AuthService.logInMethod(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                            errorMessage: _errorMessage,
-                            context: context
-                          );
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              context: context);
                         },
                         style: buttonStyle,
                         child: const Text(

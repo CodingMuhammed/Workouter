@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> DeleteDialog(BuildContext context, _data, index, snapshot) {
+Future<void> DeleteDialog(BuildContext context, data, index, snapshot) {
   return showDialog(
       context: context,
       builder: (context) {
@@ -13,22 +13,22 @@ Future<void> DeleteDialog(BuildContext context, _data, index, snapshot) {
           ),
           actions: [
             OutlinedButton(
-              child: const Text('Yes', style: TextStyle(color: Colors.white)),
               onPressed: () {
                 FirebaseFirestore.instance
                     .runTransaction((Transaction myTransaction) async {
-                  myTransaction.delete(_data.docs[index].reference);
+                  myTransaction.delete(data.docs[index].reference);
                 });
                 Navigator.pop(context);
               },
               style: OutlinedButton.styleFrom(backgroundColor: Colors.blue),
+              child: const Text('Yes', style: TextStyle(color: Colors.white)),
             ),
             OutlinedButton(
-              child: const Text('No', style: TextStyle(color: Colors.white)),
               onPressed: () {
                 Navigator.pop(context);
               },
               style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text('No', style: TextStyle(color: Colors.white)),
             ),
           ],
         );

@@ -13,20 +13,20 @@ Future<void> SignoutDialog(BuildContext context) {
           ),
           actions: [
             OutlinedButton(
-              child: const Text('Yes', style: TextStyle(color: Colors.white)),
               onPressed: () {
                 AuthService.signOutMethod();
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     '/login', (Route<dynamic> route) => false);
               },
               style: OutlinedButton.styleFrom(backgroundColor: Colors.blue),
+              child: const Text('Yes', style: TextStyle(color: Colors.white)),
             ),
             OutlinedButton(
-              child: const Text('No', style: TextStyle(color: Colors.white)),
               onPressed: () {
                 Navigator.pop(context);
               },
               style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text('No', style: TextStyle(color: Colors.white)),
             ),
           ],
         );

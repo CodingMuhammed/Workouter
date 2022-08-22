@@ -1,3 +1,4 @@
+import 'package:Workouter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:Workouter/Ui/global.dart';
 import 'package:Workouter/authentication/authService.dart';
@@ -14,7 +15,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final _passwordController = TextEditingController();
   final _passwordController2 = TextEditingController();
   final _signupFormKey = GlobalKey<FormState>();
-  String _errorMessage = '';
 
   @override
   void initState() {
@@ -27,30 +27,43 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
-      appBar: AppBar(
-          title: const Text('Workouter'),
-          backgroundColor: backgroundColor,
-          elevation: 0,
-          centerTitle: true),
+      appBar: AppBar(backgroundColor: backgroundColor),
       body: Form(
         key: _signupFormKey,
         child: Column(
           children: [
             const SizedBox(
-              height: 30.0,
+              height: 24.0,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Text('Sign up',
+                      style: TextStyle(
+                          fontSize: 32.5,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 25),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18.0),
+                style: const TextStyle(fontWeight: FontWeight.bold),
                 textInputAction: TextInputAction.next,
                 controller: _emailController,
                 decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(10),
                   prefixIcon: Icon(Icons.mail),
-                  border: OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide(color: Colors.black)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide()),
                   hintText: 'Email',
                 ),
                 autofocus: true,
@@ -61,10 +74,13 @@ class _SignUpPageState extends State<SignUpPage> {
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
                 textInputAction: TextInputAction.next,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18.0),
+                style: const TextStyle(fontWeight: FontWeight.bold),
                 controller: _passwordController,
                 decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(10),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderSide: BorderSide(color: Colors.black)),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide()),
@@ -78,41 +94,38 @@ class _SignUpPageState extends State<SignUpPage> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18.0),
+                style: const TextStyle(fontWeight: FontWeight.bold),
                 controller: _passwordController2,
                 decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.lock),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: BorderSide()),
-                  hintText: 'Confirm Password',
-                ),
+                    contentPadding: EdgeInsets.all(10),
+                    prefixIcon: Icon(Icons.lock),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide(color: Colors.black)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide()),
+                    hintText: 'Confirm Password'),
                 obscureText: true,
               ),
             ),
-            Center(
-                child: Text(
-              _errorMessage,
-              style: const TextStyle(color: Colors.red),
-            )),
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Container(
                     height: 44.0,
                     decoration: myGradient,
                     child: ElevatedButton(
                       onPressed: () {
-                        AuthService.signUpMethod(
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                          errorMessage: _errorMessage,
-                          context: context
-                        );
+                        AuthService.signupMethod(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                            confirm: _passwordController2.text,
+                            context: context);
+                        const AuthenticationWrapper();
                       },
                       style: buttonStyle,
                       child: const Text('Sign Up',

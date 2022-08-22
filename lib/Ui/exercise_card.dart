@@ -17,16 +17,25 @@ class ExerciseCard extends StatefulWidget {
 }
 
 final uid = FirebaseAuth.instance.currentUser?.uid;
-TextEditingController setsController = TextEditingController();
-TextEditingController repsController = TextEditingController();
-TextEditingController weightController = TextEditingController();
-TextEditingController restController = TextEditingController();
+late TextEditingController _setsController;
+late TextEditingController _repsController;
+late TextEditingController _weightController;
+late TextEditingController _restController;
 
 class _ExerciseCardState extends State<ExerciseCard> {
   @override
+  void initState() {
+    _repsController = TextEditingController();
+    _setsController = TextEditingController();
+    _weightController = TextEditingController();
+    _restController = TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _data = widget.snapshot.data;
+    final data = widget.snapshot.data;
+    final documentId = data.docs[widget.index].reference.id;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(children: [
@@ -41,7 +50,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      _data.docs[widget.index]['exerciseName'],
+                      data.docs[widget.index]['exerciseName'],
                       style: const TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.bold),
                     ),
@@ -77,7 +86,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                     SlidableAction(
                       onPressed: (context) {
                         DeleteDialog(
-                            context, _data, widget.index, widget.snapshot);
+                            context, data, widget.index, widget.snapshot);
                       },
                       label: 'Delete',
                       backgroundColor: Colors.red,
@@ -95,8 +104,6 @@ class _ExerciseCardState extends State<ExerciseCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            final documentId =
-                                _data.docs[widget.index].reference.id;
                             FirebaseFirestore.instance.runTransaction(
                                 (Transaction myTransaction) async {
                               FirebaseFirestore.instance
@@ -104,20 +111,18 @@ class _ExerciseCardState extends State<ExerciseCard> {
                                   .doc(uid)
                                   .collection('workout')
                                   .doc(documentId)
-                                  .update({'reps': repsController.text});
+                                  .update({'reps': value});
                             });
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
-                          controller: repsController,
+                          controller: _repsController,
                           decoration: InputDecoration(
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
                               hintText:
-                                  _data.docs[widget.index]['reps'].toString()),
-                          onChanged: (value) =>
-                              {widget.exerciseData!.reps = int.parse(value)},
+                                  data.docs[widget.index]['reps'].toString()),
                         ),
                       ),
                       SizedBox(
@@ -125,36 +130,26 @@ class _ExerciseCardState extends State<ExerciseCard> {
                         child: TextField(
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
-                          decoration: InputDecoration(
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            hintText: 0.toString(),
-                          ),
-                          textAlign: TextAlign.center,
-                          controller: setsController,
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) =>
-                              {widget.exerciseData!.sets = int.parse(value)},
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.145,
-                        child: TextField(
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                          cursorColor: Colors.white,
-                          decoration: InputDecoration(
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            hintText: 0.0.toString(),
-                          ),
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.number,
-                          controller: weightController,
-                          onChanged: (value) => {
-                            widget.exerciseData!.weight = double.parse(value)
+                          onSubmitted: (value) async {
+                            FirebaseFirestore.instance.runTransaction(
+                                (Transaction myTransaction) async {
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(uid)
+                                  .collection('workout')
+                                  .doc(documentId)
+                                  .update({'sets': value});
+                            });
                           },
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          controller: _setsController,
+                          decoration: InputDecoration(
+                              focusedBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                              ),
+                              hintText:
+                                  data.docs[widget.index]['sets'].toString()),
                         ),
                       ),
                       SizedBox(
@@ -162,17 +157,53 @@ class _ExerciseCardState extends State<ExerciseCard> {
                         child: TextField(
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
-                          decoration: InputDecoration(
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            hintText: 0.0.toString(),
-                          ),
+                          onSubmitted: (value) async {
+                            FirebaseFirestore.instance.runTransaction(
+                                (Transaction myTransaction) async {
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(uid)
+                                  .collection('workout')
+                                  .doc(documentId)
+                                  .update({'weight': value});
+                            });
+                          },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
-                          controller: restController,
-                          onChanged: (value) =>
-                              {widget.exerciseData!.rest = double.parse(value)},
+                          controller: _weightController,
+                          decoration: InputDecoration(
+                              focusedBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                              ),
+                              hintText: data.docs[widget.index]['weight']
+                                  .toString()),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.145,
+                        child: TextField(
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          cursorColor: Colors.white,
+                          onSubmitted: (value) async {
+                            FirebaseFirestore.instance.runTransaction(
+                                (Transaction myTransaction) async {
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(uid)
+                                  .collection('workout')
+                                  .doc(documentId)
+                                  .update({'rest': value});
+                            });
+                          },
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          controller: _restController,
+                          decoration: InputDecoration(
+                              focusedBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                              ),
+                              hintText:
+                                  data.docs[widget.index]['rest'].toString()),
                         ),
                       ),
                     ],
