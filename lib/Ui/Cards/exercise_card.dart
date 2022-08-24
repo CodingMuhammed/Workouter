@@ -1,9 +1,9 @@
+import 'package:Workouter/Ui/dialog_instance.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Workouter/Models/exercise.dart';
-import 'package:Workouter/Ui/delete_dialog.dart';
 
 class ExerciseCard extends StatefulWidget {
   Exercise? exerciseData;
@@ -16,6 +16,7 @@ class ExerciseCard extends StatefulWidget {
   State<ExerciseCard> createState() => _ExerciseCardState();
 }
 
+String deleteExerciseText = 'Delete exercise';
 final uid = FirebaseAuth.instance.currentUser?.uid;
 late TextEditingController _setsController;
 late TextEditingController _repsController;
@@ -36,6 +37,14 @@ class _ExerciseCardState extends State<ExerciseCard> {
   Widget build(BuildContext context) {
     final data = widget.snapshot.data;
     final documentId = data.docs[widget.index].reference.id;
+    void deleteExerciseFunction() {
+      FirebaseFirestore.instance
+          .runTransaction((Transaction myTransaction) async {
+        myTransaction.delete(data.docs[widget.index].reference);
+      });
+      Navigator.pop(context);
+    }
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(children: [
@@ -85,8 +94,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        DeleteDialog(
-                            context, data, widget.index, widget.snapshot);
+                        DialogInstance(context, deleteExerciseFunction, deleteExerciseText);
                       },
                       label: 'Delete',
                       backgroundColor: Colors.red,
@@ -175,8 +183,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText: data.docs[widget.index]['weight']
-                                  .toString()),
+                              hintText:
+                                  data.docs[widget.index]['weight'].toString()),
                         ),
                       ),
                       SizedBox(

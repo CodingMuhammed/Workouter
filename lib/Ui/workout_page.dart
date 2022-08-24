@@ -1,7 +1,7 @@
+import 'package:Workouter/authentication/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:Workouter/main.dart';
-import 'package:Workouter/Ui/signout_dialog.dart';
+import 'package:Workouter/Ui/dialog_instance.dart';
 import 'package:Workouter/Ui/global.dart';
 
 class WorkoutPage extends StatefulWidget {
@@ -12,10 +12,17 @@ class WorkoutPage extends StatefulWidget {
 }
 
 User user = FirebaseAuth.instance.currentUser!;
+String signoutText = 'SignOut';
 
 class _WorkoutPageState extends State<WorkoutPage> {
   @override
   Widget build(BuildContext context) {
+    void signOutFunction() {
+      AuthService.signOutMethod();
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+    }
+
     FloatingActionButton(
       onPressed: () {},
       child: const Icon(
@@ -24,12 +31,10 @@ class _WorkoutPageState extends State<WorkoutPage> {
       ),
     );
     return Scaffold(
-      backgroundColor: backgroundColor, 
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(user.email!, style: TextStyle(
-          fontSize: 12
-        )),
+        title: Text(user.email!, style: const TextStyle(fontSize: 12)),
         backgroundColor: backgroundColor,
         actions: <Widget>[
           Padding(
@@ -38,7 +43,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
               decoration: myGradient,
               child: ElevatedButton.icon(
                   onPressed: () async {
-                    SignoutDialog(context);
+                    DialogInstance(context, signOutFunction, signoutText);
                   },
                   style: buttonStyle,
                   icon: const Icon(

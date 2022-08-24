@@ -1,5 +1,4 @@
 import 'package:Workouter/Ui/workout_page.dart';
-import 'package:Workouter/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +10,7 @@ class AuthService {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
           .then((_) => Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => WorkoutPage())));
+              context, MaterialPageRoute(builder: (context) => const WorkoutPage())));
     } on FirebaseAuthException catch (e) {
       SnackBar snackBar2 = SnackBar(
         content: Text(e.message.toString()),
@@ -29,7 +28,7 @@ class AuthService {
           ? await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password)
               .then((_) => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => WorkoutPage())))
+                  MaterialPageRoute(builder: (context) => const WorkoutPage())))
           : null;
     } on FirebaseAuthException catch (e) {
       SnackBar snackBar1 = SnackBar(
