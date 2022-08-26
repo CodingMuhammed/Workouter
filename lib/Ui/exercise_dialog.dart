@@ -32,7 +32,7 @@ Future<void> ExerciseDialog(BuildContext context) {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: 44.0,
+                height: 45.0,
                 decoration: myGradient,
                 child: ElevatedButton(
                     onPressed: () async {
