@@ -21,18 +21,18 @@ Future<void> ExerciseDialog(BuildContext context) {
           actions: [
             ExpansionTile(
               leading: const Icon(fitnessCenter),
-              title: Text('Strength'),
+              title: const Text('Strength'),
               children: [
                 ListTile(
                   onTap: () {},
-                  title: Text('CardioVascular'),
+                  title: const Text('Cardiovascular'),
                 )
               ],
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: 45.0,
+                height: 44.0,
                 decoration: myGradient,
                 child: ElevatedButton(
                     onPressed: () async {
@@ -51,7 +51,10 @@ Future<void> ExerciseDialog(BuildContext context) {
                         exerciseNameController.clear();
                         Navigator.pop(context);
                       } else {
-                        return;
+                        SnackBar snackBar = const SnackBar(
+                          content: Text("Text field can't be empty"),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                     },
                     style: buttonStyle,

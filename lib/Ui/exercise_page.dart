@@ -61,7 +61,7 @@ class _ExercisePageState extends State<ExercisePage> {
       ),
       backgroundColor: backgroundColor,
       body: Column(
-        children: [ExerciseStream()],
+        children: const [ExerciseStream()],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

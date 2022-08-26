@@ -54,7 +54,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ExercisePage()));
+              context, MaterialPageRoute(builder: (context) => const ExercisePage()));
         },
         child: const Icon(
           Icons.add,
