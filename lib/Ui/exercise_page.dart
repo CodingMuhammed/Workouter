@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 bool? firstLoad;
 
+
 class ExercisePage extends StatefulWidget {
   const ExercisePage({Key? key}) : super(key: key);
 
@@ -16,7 +17,7 @@ class ExercisePage extends StatefulWidget {
   State<ExercisePage> createState() => _ExercisePageState();
 }
 
-String signoutText = 'Signuut';
+String signoutText = 'Signout';
 
 class _ExercisePageState extends State<ExercisePage> {
   @override
@@ -60,7 +61,7 @@ class _ExercisePageState extends State<ExercisePage> {
       ),
       backgroundColor: backgroundColor,
       body: Column(
-        children: const [ExerciseStream()],
+        children: [ExerciseStream()],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -82,6 +83,8 @@ class ExerciseStream extends StatefulWidget {
   State<ExerciseStream> createState() => _ExerciseStreamState();
 }
 
+
+
 class _ExerciseStreamState extends State<ExerciseStream> {
   @override
   Widget build(BuildContext context) {
@@ -101,7 +104,10 @@ class _ExerciseStreamState extends State<ExerciseStream> {
             } else {
               if (snapshot.data!.size == 0) {
                 firstLoad = false;
-                Future.delayed(Duration.zero, () => ExerciseDialog(context))
+                Future.delayed(
+                        Duration.zero,
+                        () => ExerciseDialog(
+                            context))
                     .then((_) => firstLoad = true);
                 return const SizedBox(height: 0.0);
               } else {

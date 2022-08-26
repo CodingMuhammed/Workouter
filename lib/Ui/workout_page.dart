@@ -1,3 +1,4 @@
+import 'package:Workouter/Ui/exercise_page.dart';
 import 'package:Workouter/authentication/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class WorkoutPage extends StatefulWidget {
 }
 
 User user = FirebaseAuth.instance.currentUser!;
-String signoutText = 'SignOut';
+String signoutText = 'Signout';
 
 class _WorkoutPageState extends State<WorkoutPage> {
   @override
@@ -23,18 +24,11 @@ class _WorkoutPageState extends State<WorkoutPage> {
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     }
 
-    FloatingActionButton(
-      onPressed: () {},
-      child: const Icon(
-        Icons.add,
-        color: Colors.black,
-      ),
-    );
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(user.email!, style: const TextStyle(fontSize: 12)),
+        title: Text(user.email!, style: const TextStyle(fontSize: 14)),
         backgroundColor: backgroundColor,
         actions: <Widget>[
           Padding(
@@ -50,15 +44,22 @@ class _WorkoutPageState extends State<WorkoutPage> {
                     Icons.person,
                   ),
                   label: const Text(
-                    'Sign out',
+                    'Signout',
                     style: TextStyle(color: Colors.white),
                   )),
             ),
           ),
         ],
       ),
-      body: Column(
-        children: const [Text('hello')],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ExercisePage()));
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
       ),
     );
   }

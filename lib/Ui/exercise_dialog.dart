@@ -6,6 +6,7 @@ import 'package:Workouter/Ui/exercise_page.dart';
 
 TextEditingController exerciseNameController = TextEditingController();
 final uid = FirebaseAuth.instance.currentUser?.uid;
+const IconData fitnessCenter = IconData(0xe28d, fontFamily: 'MaterialIcons');
 Future<void> ExerciseDialog(BuildContext context) {
   return showDialog(
       barrierDismissible: firstLoad ?? true,
@@ -13,11 +14,21 @@ Future<void> ExerciseDialog(BuildContext context) {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.blueGrey,
-          title: const Text('Exercise Name'),
+          title: const Text('Add Exercise'),
           content: TextField(
             controller: exerciseNameController,
           ),
           actions: [
+            ExpansionTile(
+              leading: const Icon(fitnessCenter),
+              title: Text('Strength'),
+              children: [
+                ListTile(
+                  onTap: () {},
+                  title: Text('CardioVascular'),
+                )
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -45,7 +56,7 @@ Future<void> ExerciseDialog(BuildContext context) {
                     },
                     style: buttonStyle,
                     child: const Text(
-                      'Add',
+                      'ADD',
                       style: TextStyle(color: Colors.white),
                     )),
               ),

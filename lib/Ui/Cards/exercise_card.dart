@@ -94,7 +94,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        DialogInstance(context, deleteExerciseFunction, deleteExerciseText);
+                        DialogInstance(context, deleteExerciseFunction,
+                            deleteExerciseText);
                       },
                       label: 'Delete',
                       backgroundColor: Colors.red,
