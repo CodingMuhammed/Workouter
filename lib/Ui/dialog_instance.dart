@@ -28,7 +28,7 @@ Future<void> DialogInstance(BuildContext context, function, String name) {
                   child:
                       const Text('Yes', style: TextStyle(color: Colors.white)),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 OutlinedButton(
                   onPressed: () {
                     Navigator.pop(context);
