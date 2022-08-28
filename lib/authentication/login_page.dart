@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:Workouter/Ui/global.dart';
-import 'package:Workouter/authentication/authService.dart';
-import 'package:Workouter/authentication/signup_page.dart';
+import 'package:workouter/Ui/Gradient_elevated_button.dart';
+import 'package:workouter/Ui/global.dart';
+import 'package:workouter/authentication/authService.dart';
+import 'package:workouter/authentication/signup_page.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _LogInPageState extends State<LogInPage> {
         child: Column(
           children: [
             const SizedBox(
-              height: 80.0,
+              height: 100.0,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
@@ -51,7 +52,7 @@ class _LogInPageState extends State<LogInPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 32.5),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
@@ -121,25 +122,17 @@ class _LogInPageState extends State<LogInPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Container(
-                    height: 44.0,
-                    decoration: myGradient,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          AuthService.logInMethod(
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                              context: context);
-                        },
-                        style: buttonStyle,
-                        child: const Text(
-                          'LogIn',
-                          style: TextStyle(fontSize: 23.0, color: Colors.white),
-                        )),
-                  ),
-                ),
+                GradientElevatedButton(
+                    onPressed: () {
+                      AuthService.loginMethod(
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                          context: context);
+                    },
+                    child: const Text(
+                      'LogIn',
+                      style: TextStyle(fontSize: 23.0, color: Colors.white),
+                    ))
               ],
             ),
           ],

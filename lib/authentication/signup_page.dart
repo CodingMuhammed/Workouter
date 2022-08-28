@@ -1,7 +1,8 @@
-import 'package:Workouter/main.dart';
+import 'package:workouter/Ui/gradient_elevated_button.dart';
+import 'package:workouter/main.dart';
 import 'package:flutter/material.dart';
-import 'package:Workouter/Ui/global.dart';
-import 'package:Workouter/authentication/authService.dart';
+import 'package:workouter/Ui/global.dart';
+import 'package:workouter/authentication/authService.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -113,26 +114,17 @@ class _SignUpPageState extends State<SignUpPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Container(
-                    height: 44.0,
-                    decoration: myGradient,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        AuthService.signupMethod(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                            confirm: _passwordController2.text,
-                            context: context);
-                        const AuthenticationWrapper();
-                      },
-                      style: buttonStyle,
-                      child: const Text('Sign Up',
-                          style: TextStyle(fontSize: 23.0)),
-                    ),
-                  ),
-                ),
+                GradientElevatedButton(
+                    onPressed: () {
+                      AuthService.signupMethod(
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                          context: context);
+                    },
+                    child: const Text(
+                      'LogIn',
+                      style: TextStyle(fontSize: 23.0, color: Colors.white),
+                    ))
               ],
             ),
           ],

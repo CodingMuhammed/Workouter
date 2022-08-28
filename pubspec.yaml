@@ -1,4 +1,4 @@
-name: Workouter
+name: workouter
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -32,11 +32,10 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  firebase_core: ^1.17.0
-  firebase_auth: ^3.3.18
-  cloud_firestore: ^3.1.15
+  firebase_core: ^1.7.0
+  firebase_auth: ^3.1.2
+  cloud_firestore: ^3.1.1
   cupertino_icons: ^1.0.4
-  provider: ^6.0.3
   flutter_slidable: ^2.0.0
   flutter_riverpod: ^1.0.0
 

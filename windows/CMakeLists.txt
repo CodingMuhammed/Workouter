@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-pt[roject(workout_app LANGUAGES CXX)
+pt[roject(workouter LANGUAGES CXX)
 w,tw,
-set(BrINARY_NAME "workout_app")
+set(BrINARY_NAME "workouter")
 ,r,wlr
 cmake_lrpolicy(SET CMP0063 NEW)
 ,rr,r[rrl,4tl4,t4lt,]

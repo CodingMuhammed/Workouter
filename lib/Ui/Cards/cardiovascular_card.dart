@@ -1,19 +1,19 @@
-import 'package:Workouter/Ui/dialog_instance.dart';
+import 'package:workouter/Ui/dialog_instance.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:Workouter/Models/exercise.dart';
+import 'package:workouter/Models/exercise.dart';
 
-class CardioVascularCard extends StatefulWidget {
+class CardiovascularCard extends StatefulWidget {
   Exercise? exerciseData;
   final snapshot;
   final index;
-  CardioVascularCard(this.snapshot, this.index, exerciseData, {Key? key})
+  CardiovascularCard(this.snapshot, this.index, exerciseData, {Key? key})
       : super(key: key);
 
   @override
-  State<CardioVascularCard> createState() => _CardioVascularCardState();
+  State<CardiovascularCard> createState() => _CardiovascularCardState();
 }
 
 String deleteExerciseText = 'Delete exercise';
@@ -23,7 +23,7 @@ late TextEditingController _repsController;
 late TextEditingController _weightController;
 late TextEditingController _restController;
 
-class _CardioVascularCardState extends State<CardioVascularCard> {
+class _CardiovascularCardState extends State<CardiovascularCard> {
   @override
   void initState() {
     _repsController = TextEditingController();
@@ -36,13 +36,12 @@ class _CardioVascularCardState extends State<CardioVascularCard> {
   @override
   Widget build(BuildContext context) {
     final data = widget.snapshot.data;
-    final documentId = data.docs[widget.index].reference.id;
+    final exerciseId = data.docs[widget.index].reference.id;
     void deleteExerciseFunction() {
       FirebaseFirestore.instance
           .runTransaction((Transaction myTransaction) async {
         myTransaction.delete(data.docs[widget.index].reference);
       });
-      Navigator.pop(context);
     }
 
     return Padding(
@@ -118,7 +117,7 @@ class _CardioVascularCardState extends State<CardioVascularCard> {
                                   .collection('users')
                                   .doc(uid)
                                   .collection('workout')
-                                  .doc(documentId)
+                                  .doc(exerciseId)
                                   .update({'reps': value});
                             });
                           },
@@ -145,7 +144,7 @@ class _CardioVascularCardState extends State<CardioVascularCard> {
                                   .collection('users')
                                   .doc(uid)
                                   .collection('workout')
-                                  .doc(documentId)
+                                  .doc(exerciseId)
                                   .update({'sets': value});
                             });
                           },
@@ -172,7 +171,7 @@ class _CardioVascularCardState extends State<CardioVascularCard> {
                                   .collection('users')
                                   .doc(uid)
                                   .collection('workout')
-                                  .doc(documentId)
+                                  .doc(exerciseId)
                                   .update({'weight': value});
                             });
                           },
@@ -199,7 +198,7 @@ class _CardioVascularCardState extends State<CardioVascularCard> {
                                   .collection('users')
                                   .doc(uid)
                                   .collection('workout')
-                                  .doc(documentId)
+                                  .doc(exerciseId)
                                   .update({'rest': value});
                             });
                           },
