@@ -1,7 +1,7 @@
 <!--<manifest xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    package="com.example.workout_app">-->
+<!--    package="com.muhammed.workouter">-->
 <!--    <application-->
-<!--        android:label="Workouter"-->
+<!--        android:label="workouter"-->
 <!--        android:icon="@mipmap/ic_launcher">-->
 <!--        <activity-->
 <!--            android:name=".MainActivity"-->
@@ -41,10 +41,10 @@
 <!--</manifest>-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.workout_app">
+    package="com.muhammed.workouter">
    <application>
         <!-- android:usesCleartextTraffic="true" -->
-        android:label="workoutR"
+        android:label="workouter"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

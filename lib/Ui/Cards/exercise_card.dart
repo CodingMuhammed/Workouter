@@ -1,9 +1,9 @@
-import 'package:Workouter/Ui/dialog_instance.dart';
+import 'package:workouter/Ui/dialog_instance.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:Workouter/Models/exercise.dart';
+import 'package:workouter/Models/exercise.dart';
 
 class ExerciseCard extends StatefulWidget {
   Exercise? exerciseData;
@@ -36,8 +36,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
   @override
   Widget build(BuildContext context) {
     final data = widget.snapshot.data;
-    final documentId = data.docs[widget.index].reference.id;
-    void deleteExerciseFunction() {
+    final exerciseId = data.docs[widget.index].reference.id;
+    void deleteExercise() {
       FirebaseFirestore.instance
           .runTransaction((Transaction myTransaction) async {
         myTransaction.delete(data.docs[widget.index].reference);
@@ -94,7 +94,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        DialogInstance(context, deleteExerciseFunction,
+                        DialogInstance(context, deleteExercise,
                             deleteExerciseText);
                       },
                       label: 'Delete',
@@ -118,8 +118,8 @@ class _ExerciseCardState extends State<ExerciseCard> {
                               FirebaseFirestore.instance
                                   .collection('users')
                                   .doc(uid)
-                                  .collection('workout')
-                                  .doc(documentId)
+                                  .collection('workouts')
+                                  .doc(exerciseId)
                                   .update({'reps': value});
                             });
                           },
@@ -146,7 +146,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                                   .collection('users')
                                   .doc(uid)
                                   .collection('workout')
-                                  .doc(documentId)
+                                  .doc(exerciseId)
                                   .update({'sets': value});
                             });
                           },
@@ -173,7 +173,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                                   .collection('users')
                                   .doc(uid)
                                   .collection('workout')
-                                  .doc(documentId)
+                                  .doc(exerciseId)
                                   .update({'weight': value});
                             });
                           },
@@ -200,7 +200,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                                   .collection('users')
                                   .doc(uid)
                                   .collection('workout')
-                                  .doc(documentId)
+                                  .doc(exerciseId)
                                   .update({'rest': value});
                             });
                           },

@@ -1,9 +1,10 @@
-import 'package:Workouter/Ui/exercise_page.dart';
-import 'package:Workouter/authentication/authService.dart';
+import 'package:workouter/Ui/exercise_page.dart';
+import 'package:workouter/Ui/gradient_elevated_button.dart';
+import 'package:workouter/authentication/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:Workouter/Ui/dialog_instance.dart';
-import 'package:Workouter/Ui/global.dart';
+import 'package:workouter/Ui/dialog_instance.dart';
+import 'package:workouter/Ui/global.dart';
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({Key? key}) : super(key: key);
@@ -18,8 +19,8 @@ String signoutText = 'Signout';
 class _WorkoutPageState extends State<WorkoutPage> {
   @override
   Widget build(BuildContext context) {
-    void signOutFunction() {
-      AuthService.signOutMethod();
+    void signoutFunction() {
+      AuthService.signoutMethod();
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     }
@@ -33,28 +34,18 @@ class _WorkoutPageState extends State<WorkoutPage> {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: myGradient,
-              child: ElevatedButton.icon(
-                  onPressed: () async {
-                    DialogInstance(context, signOutFunction, signoutText);
-                  },
-                  style: buttonStyle,
-                  icon: const Icon(
-                    Icons.person,
-                  ),
-                  label: const Text(
-                    'Signout',
-                    style: TextStyle(color: Colors.white),
-                  )),
-            ),
-          ),
+            child: GradientElevatedButton(
+                onPressed: () {
+                  DialogInstance(context, signoutFunction, signoutText);
+                },
+                child: const Text('Signout')),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const ExercisePage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ExercisePage()));
         },
         child: const Icon(
           Icons.add,

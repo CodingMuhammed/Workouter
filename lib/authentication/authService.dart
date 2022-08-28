@@ -1,10 +1,10 @@
-import 'package:Workouter/Ui/workout_page.dart';
+import 'package:workouter/Ui/workout_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthService {
   // Login Function
-  static Future<User?> logInMethod(
+  static Future<User?> loginMethod(
       {required String email, required String password, context}) async {
     try {
       await FirebaseAuth.instance
@@ -40,7 +40,7 @@ class AuthService {
   }
 
   // SignOut function
-  static Future<User?> signOutMethod() async {
+  static Future<User?> signoutMethod() async {
     try {
       await FirebaseAuth.instance.signOut();
     } on FirebaseAuthException catch (e) {

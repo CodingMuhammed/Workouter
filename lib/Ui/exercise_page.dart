@@ -1,14 +1,15 @@
-import 'package:Workouter/Ui/exercise_dialog.dart';
-import 'package:Workouter/authentication/authService.dart';
+import 'package:workouter/Ui/Gradient_elevated_button.dart';
+import 'package:workouter/Ui/exercise_dialog.dart';
+import 'package:workouter/authentication/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:Workouter/Ui/dialog_instance.dart';
-import 'package:Workouter/Ui/Cards/exercise_card.dart';
-import 'package:Workouter/Ui/global.dart';
+import 'package:workouter/Ui/dialog_instance.dart';
+import 'package:workouter/Ui/Cards/exercise_card.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:workouter/Ui/global.dart';
 
 bool? firstLoad;
-
 
 class ExercisePage extends StatefulWidget {
   const ExercisePage({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _ExercisePageState extends State<ExercisePage> {
   @override
   Widget build(BuildContext context) {
     void signoutFunction() {
-      AuthService.signOutMethod();
+      AuthService.signoutMethod();
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     }
@@ -41,22 +42,12 @@ class _ExercisePageState extends State<ExercisePage> {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: myGradient,
-              child: ElevatedButton.icon(
-                  onPressed: () async {
-                    DialogInstance(context, signoutFunction, signoutText);
-                  },
-                  style: buttonStyle,
-                  icon: const Icon(
-                    Icons.person,
-                  ),
-                  label: const Text(
-                    'Sign out',
-                    style: TextStyle(color: Colors.white),
-                  )),
-            ),
-          ),
+            child: GradientElevatedButton(
+                onPressed: () {
+                  DialogInstance(context, signoutFunction, signoutText);
+                },
+                child: const Text('Signout')),
+          )
         ],
       ),
       backgroundColor: backgroundColor,
@@ -83,8 +74,6 @@ class ExerciseStream extends StatefulWidget {
   State<ExerciseStream> createState() => _ExerciseStreamState();
 }
 
-
-
 class _ExerciseStreamState extends State<ExerciseStream> {
   @override
   Widget build(BuildContext context) {
@@ -104,10 +93,7 @@ class _ExerciseStreamState extends State<ExerciseStream> {
             } else {
               if (snapshot.data!.size == 0) {
                 firstLoad = false;
-                Future.delayed(
-                        Duration.zero,
-                        () => ExerciseDialog(
-                            context))
+                Future.delayed(Duration.zero, () => ExerciseDialog(context))
                     .then((_) => firstLoad = true);
                 return const SizedBox(height: 0.0);
               } else {

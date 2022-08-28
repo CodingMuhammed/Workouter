@@ -1,10 +1,10 @@
-import 'package:Workouter/Ui/workout_page.dart';
+import 'package:workouter/Ui/workout_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:Workouter/authentication/login_page.dart';
-import 'package:Workouter/Ui/exercise_page.dart';
+import 'package:workouter/authentication/login_page.dart';
+import 'package:workouter/Ui/exercise_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:Workouter/authentication/signup_page.dart';
+import 'package:workouter/authentication/signup_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,11 +18,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Workouter',
+        title: 'workouter',
         debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => const AuthenticationWrapper(),
-          'workout':(context) => const WorkoutPage(),
+          '/workout': (context) => const WorkoutPage(),
           '/login': (context) => const LogInPage(),
           '/signup': (context) => const SignUpPage(),
           '/home': (context) => const ExercisePage()
