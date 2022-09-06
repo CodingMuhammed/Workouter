@@ -1,42 +1,32 @@
-import 'package:workouter/Ui/dialog_instance.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workouter/Models/exercise.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:workouter/widgets/dialog_instance.dart';
 
-class CardiovascularCard extends StatefulWidget {
-  Exercise? exerciseData;
-  final snapshot;
-  final index;
-  CardiovascularCard(this.snapshot, this.index, exerciseData, {Key? key})
-      : super(key: key);
+class StrengthCard extends StatefulWidget {
+  AsyncSnapshot<QuerySnapshot> snapshot;
+  int index;
+
+  StrengthCard(this.snapshot, this.index, {Key? key}) : super(key: key);
 
   @override
-  State<CardiovascularCard> createState() => _CardiovascularCardState();
+  State<StrengthCard> createState() => _StrengthCardState();
 }
 
 String deleteExerciseText = 'Delete exercise';
-final uid = FirebaseAuth.instance.currentUser?.uid;
-late TextEditingController _setsController;
-late TextEditingController _repsController;
-late TextEditingController _weightController;
-late TextEditingController _restController;
+TextEditingController _setsController = TextEditingController();
+TextEditingController _repsController = TextEditingController();
+TextEditingController _weightController = TextEditingController();
+TextEditingController _restController = TextEditingController();
 
-class _CardiovascularCardState extends State<CardiovascularCard> {
-  @override
-  void initState() {
-    _repsController = TextEditingController();
-    _setsController = TextEditingController();
-    _weightController = TextEditingController();
-    _restController = TextEditingController();
-    super.initState();
-  }
+class _StrengthCardState extends State<StrengthCard> {
 
   @override
   Widget build(BuildContext context) {
     final data = widget.snapshot.data;
-    final exerciseId = data.docs[widget.index].reference.id;
+    final exerciseId = data!.docs[widget.index].reference.id;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     void deleteExerciseFunction() {
       FirebaseFirestore.instance
           .runTransaction((Transaction myTransaction) async {
@@ -93,7 +83,8 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        DialogInstance(context, deleteExerciseFunction, deleteExerciseText);
+                        DialogInstance(context, deleteExerciseFunction,
+                            deleteExerciseText);
                       },
                       label: 'Delete',
                       backgroundColor: Colors.red,
@@ -116,7 +107,7 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                               FirebaseFirestore.instance
                                   .collection('users')
                                   .doc(uid)
-                                  .collection('workout')
+                                  .collection('workouts')
                                   .doc(exerciseId)
                                   .update({'reps': value});
                             });

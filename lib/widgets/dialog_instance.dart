@@ -35,7 +35,7 @@ Future<void> DialogInstance(BuildContext context, function, String name) {
                   },
                   style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
                   child:
-                      const Text('No', style: TextStyle(color: Colors.white)),
+                      const Text('Cancel', style: TextStyle(color: Colors.white)),
                 ),
               ],
             )

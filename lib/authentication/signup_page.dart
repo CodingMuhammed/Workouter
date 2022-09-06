@@ -1,5 +1,4 @@
-import 'package:workouter/Ui/gradient_elevated_button.dart';
-import 'package:workouter/main.dart';
+import 'package:workouter/widgets/gradient_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/Ui/global.dart';
 import 'package:workouter/authentication/authService.dart';
@@ -14,13 +13,20 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _passwordController2 = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _signupFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     _emailController.clear();
     super.initState();
+  }
+
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,7 +73,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderSide: BorderSide()),
                   hintText: 'Email',
                 ),
-                autofocus: true,
               ),
             ),
             const SizedBox(height: 7.5),
@@ -96,7 +101,7 @@ class _SignUpPageState extends State<SignUpPage> {
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
                 style: const TextStyle(fontWeight: FontWeight.bold),
-                controller: _passwordController2,
+                controller: _confirmPasswordController,
                 decoration: const InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     prefixIcon: Icon(Icons.lock),
@@ -116,13 +121,13 @@ class _SignUpPageState extends State<SignUpPage> {
               children: [
                 GradientElevatedButton(
                     onPressed: () {
-                      AuthService.signupMethod(
+                      AuthService.signUpMethod(
                           email: _emailController.text,
                           password: _passwordController.text,
                           context: context);
                     },
                     child: const Text(
-                      'LogIn',
+                      'Sign up',
                       style: TextStyle(fontSize: 23.0, color: Colors.white),
                     ))
               ],

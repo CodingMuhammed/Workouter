@@ -1,48 +1,35 @@
-import 'package:workouter/Ui/dialog_instance.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workouter/Models/exercise.dart';
+import 'package:workouter/widgets/dialog_instance.dart';
 
-class ExerciseCard extends StatefulWidget {
-  Exercise? exerciseData;
-  final snapshot;
-  final index;
-  ExerciseCard(this.snapshot, this.index, exerciseData, {Key? key})
-      : super(key: key);
+class CardiovascularCard extends StatefulWidget {
+  AsyncSnapshot<QuerySnapshot> snapshot;
+  int index;
+  CardiovascularCard(this.snapshot, this.index, {Key? key}) : super(key: key);
 
   @override
-  State<ExerciseCard> createState() => _ExerciseCardState();
+  State<CardiovascularCard> createState() => _CardiovascularCardState();
 }
 
 String deleteExerciseText = 'Delete exercise';
 final uid = FirebaseAuth.instance.currentUser?.uid;
-late TextEditingController _setsController;
-late TextEditingController _repsController;
-late TextEditingController _weightController;
-late TextEditingController _restController;
+TextEditingController _calorieController = TextEditingController();
+TextEditingController _timeController = TextEditingController();
 
-class _ExerciseCardState extends State<ExerciseCard> {
-  @override
-  void initState() {
-    _repsController = TextEditingController();
-    _setsController = TextEditingController();
-    _weightController = TextEditingController();
-    _restController = TextEditingController();
-    super.initState();
-  }
-
+class _CardiovascularCardState extends State<CardiovascularCard> {
   @override
   Widget build(BuildContext context) {
+    String deleteExerciseText = 'Delete exercise';
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     final data = widget.snapshot.data;
-    final exerciseId = data.docs[widget.index].reference.id;
-    void deleteExercise() {
+    final exerciseId = data!.docs[widget.index].reference.id;
+    void deleteExerciseFunction() {
       FirebaseFirestore.instance
           .runTransaction((Transaction myTransaction) async {
         myTransaction.delete(data.docs[widget.index].reference);
       });
-      Navigator.pop(context);
     }
 
     return Padding(
@@ -71,21 +58,13 @@ class _ExerciseCardState extends State<ExerciseCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: const [
                   Text(
-                    'Reps',
+                    'Calories',
                     style: TextStyle(color: Colors.white),
                   ),
                   Text(
-                    'Sets',
+                    'Time',
                     style: TextStyle(color: Colors.white),
                   ),
-                  Text(
-                    'Weight',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    'rest',
-                    style: TextStyle(color: Colors.white),
-                  )
                 ],
               ),
               Slidable(
@@ -94,7 +73,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        DialogInstance(context, deleteExercise,
+                        DialogInstance(context, deleteExerciseFunction,
                             deleteExerciseText);
                       },
                       label: 'Delete',
@@ -118,20 +97,20 @@ class _ExerciseCardState extends State<ExerciseCard> {
                               FirebaseFirestore.instance
                                   .collection('users')
                                   .doc(uid)
-                                  .collection('workouts')
+                                  .collection('workout')
                                   .doc(exerciseId)
-                                  .update({'reps': value});
+                                  .update({'caloriesBurnt': value});
                             });
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
-                          controller: _repsController,
+                          controller: _calorieController,
                           decoration: InputDecoration(
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText:
-                                  data.docs[widget.index]['reps'].toString()),
+                              hintText: data.docs[widget.index]['caloriesBurnt']
+                                  .toString()),
                         ),
                       ),
                       SizedBox(
@@ -147,72 +126,18 @@ class _ExerciseCardState extends State<ExerciseCard> {
                                   .doc(uid)
                                   .collection('workout')
                                   .doc(exerciseId)
-                                  .update({'sets': value});
+                                  .update({'time': value});
                             });
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
-                          controller: _setsController,
+                          controller: _timeController,
                           decoration: InputDecoration(
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
                               hintText:
-                                  data.docs[widget.index]['sets'].toString()),
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.145,
-                        child: TextField(
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                          cursorColor: Colors.white,
-                          onSubmitted: (value) async {
-                            FirebaseFirestore.instance.runTransaction(
-                                (Transaction myTransaction) async {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(uid)
-                                  .collection('workout')
-                                  .doc(exerciseId)
-                                  .update({'weight': value});
-                            });
-                          },
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.number,
-                          controller: _weightController,
-                          decoration: InputDecoration(
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              hintText:
-                                  data.docs[widget.index]['weight'].toString()),
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.145,
-                        child: TextField(
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                          cursorColor: Colors.white,
-                          onSubmitted: (value) async {
-                            FirebaseFirestore.instance.runTransaction(
-                                (Transaction myTransaction) async {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(uid)
-                                  .collection('workout')
-                                  .doc(exerciseId)
-                                  .update({'rest': value});
-                            });
-                          },
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.number,
-                          controller: _restController,
-                          decoration: InputDecoration(
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              hintText:
-                                  data.docs[widget.index]['rest'].toString()),
+                                  data.docs[widget.index]['time'].toString()),
                         ),
                       ),
                     ],

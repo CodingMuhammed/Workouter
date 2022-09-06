@@ -1,8 +1,8 @@
-import 'package:workouter/Ui/workout_page.dart';
+import 'package:workouter/Ui/workout/workout_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:workouter/authentication/login_page.dart';
-import 'package:workouter/Ui/exercise_page.dart';
+import 'package:workouter/Ui/exercise/exercise_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:workouter/authentication/signup_page.dart';
 
