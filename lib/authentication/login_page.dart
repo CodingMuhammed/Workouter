@@ -1,8 +1,8 @@
+import 'package:workouter/authentication/signup_page.dart';
+import 'package:workouter/widgets/gradient_elevated_button.dart';
 import 'package:flutter/material.dart';
-import 'package:workouter/Ui/Gradient_elevated_button.dart';
 import 'package:workouter/Ui/global.dart';
 import 'package:workouter/authentication/authService.dart';
-import 'package:workouter/authentication/signup_page.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -15,7 +15,6 @@ class _LogInPageState extends State<LogInPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _loginFormKey = GlobalKey<FormState>();
-  String _errorMessage = '';
 
   @override
   void initState() {
@@ -24,14 +23,17 @@ class _LogInPageState extends State<LogInPage> {
   }
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
-      // appBar: AppBar(
-      //     title: const Text('Workouter'),
-      //     backgroundColor: backgroundColor,
-      //     centerTitle: true),
       body: Form(
         key: _loginFormKey,
         child: Column(
@@ -71,7 +73,6 @@ class _LogInPageState extends State<LogInPage> {
                       borderSide: BorderSide()),
                   hintText: 'Email',
                 ),
-                autofocus: true,
               ),
             ),
             const SizedBox(height: 7.5),
@@ -94,11 +95,6 @@ class _LogInPageState extends State<LogInPage> {
                 ),
               ),
             ),
-            Center(
-                child: Text(
-              _errorMessage,
-              style: const TextStyle(color: Colors.red),
-            )),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: Row(
@@ -124,7 +120,7 @@ class _LogInPageState extends State<LogInPage> {
               children: [
                 GradientElevatedButton(
                     onPressed: () {
-                      AuthService.loginMethod(
+                      AuthService.signInMethod(
                           email: _emailController.text,
                           password: _passwordController.text,
                           context: context);

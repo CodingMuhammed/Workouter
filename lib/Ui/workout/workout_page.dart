@@ -1,9 +1,9 @@
-import 'package:workouter/Ui/exercise_page.dart';
-import 'package:workouter/Ui/gradient_elevated_button.dart';
+import 'package:workouter/Ui/exercise/exercise_page.dart';
+import 'package:workouter/widgets/gradient_elevated_button.dart';
 import 'package:workouter/authentication/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workouter/Ui/dialog_instance.dart';
+import 'package:workouter/widgets/dialog_instance.dart';
 import 'package:workouter/Ui/global.dart';
 
 class WorkoutPage extends StatefulWidget {
@@ -14,13 +14,13 @@ class WorkoutPage extends StatefulWidget {
 }
 
 User user = FirebaseAuth.instance.currentUser!;
-String signoutText = 'Signout';
+String signoutText = 'Sign out';
 
 class _WorkoutPageState extends State<WorkoutPage> {
   @override
   Widget build(BuildContext context) {
-    void signoutFunction() {
-      AuthService.signoutMethod();
+    void signOutFunction() {
+      AuthService.signOutMethod();
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     }
@@ -36,9 +36,9 @@ class _WorkoutPageState extends State<WorkoutPage> {
             padding: const EdgeInsets.all(8.0),
             child: GradientElevatedButton(
                 onPressed: () {
-                  DialogInstance(context, signoutFunction, signoutText);
+                  DialogInstance(context, signOutFunction, signoutText);
                 },
-                child: const Text('Signout')),
+                child: const Text('Sign out')),
           )
         ],
       ),

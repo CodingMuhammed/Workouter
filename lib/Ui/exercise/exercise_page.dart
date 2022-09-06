@@ -1,13 +1,14 @@
-import 'package:workouter/Ui/Gradient_elevated_button.dart';
-import 'package:workouter/Ui/exercise_dialog.dart';
+import 'package:workouter/Ui/exercise/cardiovascular_card.dart';
+import 'package:workouter/Ui/exercise/exercise_card.dart';
+import 'package:workouter/Ui/exercise/exercise_type_dialog.dart';
 import 'package:workouter/authentication/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workouter/Ui/dialog_instance.dart';
-import 'package:workouter/Ui/Cards/exercise_card.dart';
+import 'package:workouter/widgets/dialog_instance.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workouter/Ui/global.dart';
+import 'package:workouter/widgets/gradient_elevated_button.dart';
 
 bool? firstLoad;
 
@@ -18,7 +19,7 @@ class ExercisePage extends StatefulWidget {
   State<ExercisePage> createState() => _ExercisePageState();
 }
 
-String signoutText = 'Signout';
+String signoutText = 'Sign out';
 
 class _ExercisePageState extends State<ExercisePage> {
   @override
@@ -30,8 +31,8 @@ class _ExercisePageState extends State<ExercisePage> {
 
   @override
   Widget build(BuildContext context) {
-    void signoutFunction() {
-      AuthService.signoutMethod();
+    void signOutFunction() {
+      AuthService.signOutMethod();
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     }
@@ -44,9 +45,9 @@ class _ExercisePageState extends State<ExercisePage> {
             padding: const EdgeInsets.all(8.0),
             child: GradientElevatedButton(
                 onPressed: () {
-                  DialogInstance(context, signoutFunction, signoutText);
+                  DialogInstance(context, signOutFunction, signoutText);
                 },
-                child: const Text('Signout')),
+                child: const Text('Sign out')),
           )
         ],
       ),
@@ -56,7 +57,7 @@ class _ExercisePageState extends State<ExercisePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ExerciseDialog(context);
+          ExerciseTypeDialog(context);
         },
         child: const Icon(
           Icons.add,
@@ -85,6 +86,10 @@ class _ExerciseStreamState extends State<ExerciseStream> {
             .orderBy('exerciseName', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          List<Map<String, dynamic>?>? documentData = snapshot.data?.docs
+              .map((e) => e.data() as Map<String, dynamic>?)
+              .toList();
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else {
@@ -93,16 +98,17 @@ class _ExerciseStreamState extends State<ExerciseStream> {
             } else {
               if (snapshot.data!.size == 0) {
                 firstLoad = false;
-                Future.delayed(Duration.zero, () => ExerciseDialog(context))
+                Future.delayed(Duration.zero, () => ExerciseTypeDialog(context))
                     .then((_) => firstLoad = true);
                 return const SizedBox(height: 0.0);
               } else {
                 firstLoad = true;
+                print('documentData = $documentData');
                 return Expanded(
                   child: ListView.builder(
                       itemCount: snapshot.data!.size,
                       itemBuilder: (context, index) {
-                        return ExerciseCard(snapshot, index, null);
+                        return ExerciseCard(snapshot, index);
                       }),
                 );
               }
