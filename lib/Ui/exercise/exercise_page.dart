@@ -19,7 +19,8 @@ class ExercisePage extends StatefulWidget {
   State<ExercisePage> createState() => _ExercisePageState();
 }
 
-String signoutText = 'Sign out';
+String signOutText = 'Sign out';
+String signOutDescription = 'you want to sign out?';
 
 class _ExercisePageState extends State<ExercisePage> {
   @override
@@ -31,7 +32,7 @@ class _ExercisePageState extends State<ExercisePage> {
 
   @override
   Widget build(BuildContext context) {
-    void signOutFunction() {
+    void _signOutFunction() {
       AuthService.signOutMethod();
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
@@ -45,7 +46,8 @@ class _ExercisePageState extends State<ExercisePage> {
             padding: const EdgeInsets.all(8.0),
             child: GradientElevatedButton(
                 onPressed: () {
-                  DialogInstance(context, signOutFunction, signoutText);
+                  DialogInstance(context, _signOutFunction, signOutText,
+                      signOutDescription);
                 },
                 child: const Text('Sign out')),
           )
@@ -56,6 +58,7 @@ class _ExercisePageState extends State<ExercisePage> {
         children: const [ExerciseStream()],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.cyan,
         onPressed: () {
           ExerciseTypeDialog(context);
         },
@@ -86,10 +89,6 @@ class _ExerciseStreamState extends State<ExerciseStream> {
             .orderBy('exerciseName', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          List<Map<String, dynamic>?>? documentData = snapshot.data?.docs
-              .map((e) => e.data() as Map<String, dynamic>?)
-              .toList();
-
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else {
@@ -103,7 +102,6 @@ class _ExerciseStreamState extends State<ExerciseStream> {
                 return const SizedBox(height: 0.0);
               } else {
                 firstLoad = true;
-                print('documentData = $documentData');
                 return Expanded(
                   child: ListView.builder(
                       itemCount: snapshot.data!.size,

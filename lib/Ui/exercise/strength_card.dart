@@ -24,6 +24,7 @@ class _StrengthCardState extends State<StrengthCard> {
 
   @override
   Widget build(BuildContext context) {
+    String deleteExerciseDescription = 'you want to delete this exercise?';
     final data = widget.snapshot.data;
     final exerciseId = data!.docs[widget.index].reference.id;
     final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -84,7 +85,7 @@ class _StrengthCardState extends State<StrengthCard> {
                     SlidableAction(
                       onPressed: (context) {
                         DialogInstance(context, deleteExerciseFunction,
-                            deleteExerciseText);
+                            deleteExerciseText, deleteExerciseDescription);
                       },
                       label: 'Delete',
                       backgroundColor: Colors.red,

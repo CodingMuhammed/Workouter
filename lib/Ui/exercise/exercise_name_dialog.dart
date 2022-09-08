@@ -14,57 +14,63 @@ Future<void> ExerciseNameDialog(
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.blueGrey,
-          title: Text(exerciseType),
+          title: const Center(
+              child: Text('Exercise Name',
+                  style: TextStyle(color: Colors.white))),
           content: TextField(
             controller: exerciseNameController,
           ),
           actions: [
-            GradientElevatedButton(
-                onPressed: () async {
-                  if (exerciseType == strength &&
-                      exerciseNameController.text.isNotEmpty) {
-                    print(exerciseType);
-                    await FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(uid)
-                        .collection('workout')
-                        .add({
-                      'exerciseName': exerciseNameController.text,
-                      'reps': 0.toString(),
-                      'sets': 0.toString(),
-                      'weight': 0.0.toString(),
-                      'rest': 0.0.toString(),
-                      'exerciseType': exerciseType
-                    });
-                    exerciseNameController.clear();
-                    Navigator.pop(context);
-                  } else {
-                    if (exerciseType == cardiovascualar &&
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: GradientElevatedButton(
+                width: MediaQuery.of(context).size.width * 0.7,
+                  onPressed: () async {
+                    if (exerciseType == strength &&
                         exerciseNameController.text.isNotEmpty) {
+                      print(exerciseType);
                       await FirebaseFirestore.instance
                           .collection('users')
                           .doc(uid)
                           .collection('workout')
                           .add({
                         'exerciseName': exerciseNameController.text,
-                        'caloriesBurnt': 0,
-                        'time': 0.0,
+                        'reps': 0.toString(),
+                        'sets': 0.toString(),
+                        'weight': 0.0.toString(),
+                        'rest': 0.0.toString(),
                         'exerciseType': exerciseType
                       });
                       exerciseNameController.clear();
                       Navigator.pop(context);
                     } else {
-                      SnackBar _snackBar = const SnackBar(
-                        content: Text("Text field can't be empty"),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(_snackBar);
+                      if (exerciseType == cardiovascualar &&
+                          exerciseNameController.text.isNotEmpty) {
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(uid)
+                            .collection('workout')
+                            .add({
+                          'exerciseName': exerciseNameController.text,
+                          'caloriesBurnt': 0,
+                          'time': 0.0,
+                          'exerciseType': exerciseType
+                        });
+                        exerciseNameController.clear();
+                        Navigator.pop(context);
+                      } else {
+                        SnackBar _snackBar = const SnackBar(
+                          content: Text("Text field can't be empty"),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(_snackBar);
+                      }
                     }
-                  }
-                },
-                child: const Text(
-                  'ADD',
-                  style: TextStyle(color: Colors.white),
-                ))
+                  },
+                  child: const Text(
+                    'ADD',
+                    style: TextStyle(color: Colors.white),
+                  )),
+            )
           ],
         );
       });
