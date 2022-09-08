@@ -9,34 +9,35 @@ class AuthService {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((_) => Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const WorkoutPage())));
+          .then((_) => Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const WorkoutPage())));
     } on FirebaseAuthException catch (e) {
-      SnackBar _snackBar = SnackBar(
+      SnackBar snackBar = SnackBar(
         content: Text(e.message.toString()),
       );
-      ScaffoldMessenger.of(context).showSnackBar(_snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-    return null;
   }
 
   // Sign up function
   static Future<User?> signUpMethod(
-      {required String email, password, confirm, context}) async {
-    try {
-      password == confirm
-          ? await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(email: email, password: password)
-              .then((_) => Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const WorkoutPage())))
-          : null;
-    } on FirebaseAuthException catch (e) {
-      SnackBar _snackBar = SnackBar(
-        content: Text(e.message.toString()),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(_snackBar);
+      {required String email,
+      required String password,
+      required String confirm,
+      context}) async {
+    if (password == confirm) {
+      try {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((_) => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const WorkoutPage())));
+      } on FirebaseAuthException catch (e) {
+        SnackBar snackBar = SnackBar(
+          content: Text(e.message.toString()),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
-    return null;
   }
 
   // SignOut function
@@ -46,6 +47,5 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       print(e.message);
     }
-    return null;
   }
 }

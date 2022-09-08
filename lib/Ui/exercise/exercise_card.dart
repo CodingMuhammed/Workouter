@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:workouter/Ui/exercise/exercise_type_dialog.dart';
 
 class ExerciseCard extends StatefulWidget {
-  AsyncSnapshot<QuerySnapshot> snapshot;
-  int index;
-  ExerciseCard(this.snapshot, this.index, {Key? key}) : super(key: key);
+  final AsyncSnapshot<QuerySnapshot> snapshot;
+  final int index;
+  const ExerciseCard(this.snapshot, this.index, {Key? key}) : super(key: key);
 
   @override
   State<ExerciseCard> createState() => _ExerciseCardState();
