@@ -1,3 +1,4 @@
+import 'package:workouter/authentication/login_page.dart';
 import 'package:workouter/widgets/gradient_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/Ui/global.dart';
@@ -22,6 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
     super.initState();
   }
 
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -34,20 +36,19 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
-      appBar: AppBar(backgroundColor: backgroundColor),
       body: Form(
         key: _signupFormKey,
         child: Column(
           children: [
             const SizedBox(
-              height: 24.0,
+              height: 100.0,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
-                  Text('Sign up',
+                  Text('Sign Up',
                       style: TextStyle(
                           fontSize: 32.5,
                           fontWeight: FontWeight.bold,
@@ -75,7 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 7.5),
+            const SizedBox(height: 10),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
@@ -96,7 +97,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 obscureText: true,
               ),
             ),
-            const SizedBox(height: 15.0),
+            const SizedBox(height: 10),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
@@ -115,21 +116,56 @@ class _SignUpPageState extends State<SignUpPage> {
                 obscureText: true,
               ),
             ),
-            const Spacer(),
+            const SizedBox(height: 20),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GradientElevatedButton(
+                    width: MediaQuery.of(context).size.width * 0.95,
                     onPressed: () {
                       AuthService.signUpMethod(
                           email: _emailController.text,
                           password: _passwordController.text,
+                          confirm: _confirmPasswordController.text,
                           context: context);
                     },
                     child: const Text(
-                      'Sign up',
+                      'Sign Up',
                       style: TextStyle(fontSize: 23.0, color: Colors.white),
-                    ))
+                    )),
+              ],
+            ),
+            const SizedBox(height: 20.0),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    child: const Divider(
+                      thickness: 2,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Text('Already have an account? ',
+                    style: TextStyle(color: Colors.white)),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => const LogInPage())));
+                    },
+                    child: const Text(
+                      'Sign In',
+                      style: TextStyle(color: Colors.blue),
+                    )),
+                Expanded(
+                  child: Container(
+                    child: const Divider(
+                      thickness: 2,
+                    ),
+                  ),
+                )
               ],
             ),
           ],

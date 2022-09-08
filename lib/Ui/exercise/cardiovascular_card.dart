@@ -17,6 +17,7 @@ String deleteExerciseText = 'Delete exercise';
 final uid = FirebaseAuth.instance.currentUser?.uid;
 TextEditingController _calorieController = TextEditingController();
 TextEditingController _timeController = TextEditingController();
+String deleteExerciseDescription = 'you want to delete this exercise?';
 
 class _CardiovascularCardState extends State<CardiovascularCard> {
   @override
@@ -74,7 +75,7 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                     SlidableAction(
                       onPressed: (context) {
                         DialogInstance(context, deleteExerciseFunction,
-                            deleteExerciseText);
+                            deleteExerciseText, deleteExerciseDescription);
                       },
                       label: 'Delete',
                       backgroundColor: Colors.red,

@@ -14,7 +14,8 @@ class WorkoutPage extends StatefulWidget {
 }
 
 User user = FirebaseAuth.instance.currentUser!;
-String signoutText = 'Sign out';
+String signOutText = 'Sign Out';
+const signOutDescription = 'you want to sign out?';
 
 class _WorkoutPageState extends State<WorkoutPage> {
   @override
@@ -36,13 +37,15 @@ class _WorkoutPageState extends State<WorkoutPage> {
             padding: const EdgeInsets.all(8.0),
             child: GradientElevatedButton(
                 onPressed: () {
-                  DialogInstance(context, signOutFunction, signoutText);
+                  DialogInstance(context, signOutFunction, signOutText,
+                      signOutDescription);
                 },
                 child: const Text('Sign out')),
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.cyan,
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const ExercisePage()));

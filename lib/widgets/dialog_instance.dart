@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Future<void> DialogInstance(BuildContext context, function, String name) {
+Future<void> DialogInstance(BuildContext context, void Function()? function,
+    String name, String description) {
   return showDialog(
       context: context,
       builder: (context) {
@@ -11,34 +12,44 @@ Future<void> DialogInstance(BuildContext context, function, String name) {
             style: const TextStyle(color: Colors.white),
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: const [Text('Are you sure?')],
-              ),
-            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                OutlinedButton(
-                  onPressed: () {
-                    function;
-                  },
-                  style: OutlinedButton.styleFrom(backgroundColor: Colors.blue),
-                  child:
-                      const Text('Yes', style: TextStyle(color: Colors.white)),
-                ),
-                const SizedBox(width: 5),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
-                  child:
-                      const Text('Cancel', style: TextStyle(color: Colors.white)),
+                const SizedBox(width: 16.0),
+                Text(
+                  'Are you sure $description',
+                  style: const TextStyle(color: Colors.white),
+                )
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      function;
+                    },
+                    style:
+                        OutlinedButton.styleFrom(backgroundColor: Colors.red),
+                    child: const Text('Yes',
+                        style: TextStyle(color: Colors.white)),
+                  ),
                 ),
               ],
-            )
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
           ],
         );
       });

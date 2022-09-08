@@ -46,7 +46,7 @@ class _LogInPageState extends State<LogInPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
-                  Text('Login',
+                  Text('Sign In',
                       style: TextStyle(
                           fontSize: 32.5,
                           fontWeight: FontWeight.bold,
@@ -69,13 +69,13 @@ class _LogInPageState extends State<LogInPage> {
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide(color: Colors.black)),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide()),
                   hintText: 'Email',
                 ),
               ),
             ),
-            const SizedBox(height: 7.5),
+            const SizedBox(height: 10),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
@@ -88,37 +88,19 @@ class _LogInPageState extends State<LogInPage> {
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide(color: Colors.black)),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide()),
                   hintText: 'Password',
                   prefixIcon: Icon(Icons.lock),
                 ),
               ),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.95,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignUpPage()));
-                      },
-                      child: const Text(
-                        'Create Account',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ],
-              ),
-            ),
-            const Spacer(),
+            const SizedBox(height: 20),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GradientElevatedButton(
+                    width: MediaQuery.of(context).size.width * 0.95,
                     onPressed: () {
                       AuthService.signInMethod(
                           email: _emailController.text,
@@ -126,9 +108,42 @@ class _LogInPageState extends State<LogInPage> {
                           context: context);
                     },
                     child: const Text(
-                      'LogIn',
+                      'Sign In',
                       style: TextStyle(fontSize: 23.0, color: Colors.white),
-                    ))
+                    )),
+              ],
+            ),
+            const SizedBox(height: 20.0),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    child: const Divider(
+                      thickness: 2,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Text('Dont have an account? ',
+                    style: TextStyle(color: Colors.white)),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpPage()));
+                    },
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(color: Colors.blue),
+                    )),
+                Expanded(
+                  child: Container(
+                    child: const Divider(
+                      thickness: 2,
+                    ),
+                  ),
+                )
               ],
             ),
           ],
