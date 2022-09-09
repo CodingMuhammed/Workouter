@@ -59,10 +59,10 @@ Future<void> ExerciseNameDialog(
                         exerciseNameController.clear();
                         Navigator.pop(context);
                       } else {
-                        SnackBar _snackBar = const SnackBar(
+                        SnackBar snackBar = const SnackBar(
                           content: Text("Text field can't be empty"),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(_snackBar);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                     }
                   },

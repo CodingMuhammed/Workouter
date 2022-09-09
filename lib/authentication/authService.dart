@@ -17,6 +17,7 @@ class AuthService {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+    return null;
   }
 
   // Sign up function
@@ -38,6 +39,7 @@ class AuthService {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
+    return null;
   }
 
   // SignOut function
@@ -47,5 +49,6 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       print(e.message);
     }
+    return null;
   }
 }
