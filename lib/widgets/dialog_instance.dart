@@ -27,7 +27,7 @@ Future<void> DialogInstance(BuildContext context, void Function()? function,
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {
-                      function;
+                      function!();
                     },
                     style:
                         OutlinedButton.styleFrom(backgroundColor: Colors.red),

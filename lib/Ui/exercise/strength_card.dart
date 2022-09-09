@@ -14,6 +14,7 @@ class StrengthCard extends StatefulWidget {
   State<StrengthCard> createState() => _StrengthCardState();
 }
 
+
 String deleteExerciseText = 'Delete exercise';
 TextEditingController _setsController = TextEditingController();
 TextEditingController _repsController = TextEditingController();
@@ -28,7 +29,7 @@ class _StrengthCardState extends State<StrengthCard> {
     final data = widget.snapshot.data;
     final exerciseId = data!.docs[widget.index].reference.id;
     final uid = FirebaseAuth.instance.currentUser?.uid;
-    void deleteExerciseFunction() {
+    void _deleteExerciseFunction() {
       FirebaseFirestore.instance
           .runTransaction((Transaction myTransaction) async {
         myTransaction.delete(data.docs[widget.index].reference);
@@ -84,7 +85,7 @@ class _StrengthCardState extends State<StrengthCard> {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        DialogInstance(context, deleteExerciseFunction,
+                        DialogInstance(context, _deleteExerciseFunction,
                             deleteExerciseText, deleteExerciseDescription);
                       },
                       label: 'Delete',

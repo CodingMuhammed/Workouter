@@ -1,4 +1,3 @@
-import 'package:workouter/Ui/exercise/cardiovascular_card.dart';
 import 'package:workouter/Ui/exercise/exercise_card.dart';
 import 'package:workouter/Ui/exercise/exercise_type_dialog.dart';
 import 'package:workouter/authentication/authService.dart';
