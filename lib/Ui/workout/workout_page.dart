@@ -45,7 +45,6 @@ class _WorkoutPageState extends State<WorkoutPage> {
           )
         ],
       ),
-      
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan,
         onPressed: () {
