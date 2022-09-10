@@ -14,18 +14,16 @@ class StrengthCard extends StatefulWidget {
   State<StrengthCard> createState() => _StrengthCardState();
 }
 
-
-String deleteExerciseText = 'Delete exercise';
+const deleteExerciseText = 'Delete exercise';
+const deleteExerciseDescription = 'you want to delete this exercise?';
 TextEditingController _setsController = TextEditingController();
 TextEditingController _repsController = TextEditingController();
 TextEditingController _weightController = TextEditingController();
 TextEditingController _restController = TextEditingController();
 
 class _StrengthCardState extends State<StrengthCard> {
-
   @override
   Widget build(BuildContext context) {
-    String deleteExerciseDescription = 'you want to delete this exercise?';
     final data = widget.snapshot.data;
     final exerciseId = data!.docs[widget.index].reference.id;
     final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -52,11 +50,17 @@ class _StrengthCardState extends State<StrengthCard> {
                     child: Text(
                       data.docs[widget.index]['exerciseName'],
                       style: const TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                   ),
                   const Divider(thickness: 1.0),
                 ],
+              ),
+              Divider(
+                thickness: 1,
+                color: Colors.white.withOpacity(0.2),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

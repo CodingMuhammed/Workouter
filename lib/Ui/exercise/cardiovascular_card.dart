@@ -31,6 +31,7 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
           .runTransaction((Transaction myTransaction) async {
         myTransaction.delete(data.docs[widget.index].reference);
       });
+      Navigator.pop(context);
     }
 
     return Padding(
@@ -46,14 +47,17 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      data.docs[widget.index]['exerciseName'],
-                      style: const TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
-                    ),
+                    child: Text(data.docs[widget.index]['exerciseName'],
+                        style: const TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
                   ),
-                  const Divider(thickness: 1.0),
                 ],
+              ),
+              Divider(
+                thickness: 1,
+                color: Colors.white.withOpacity(0.2),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -90,7 +94,8 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.145,
                         child: TextField(
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.blue),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
                             FirebaseFirestore.instance.runTransaction(
@@ -117,7 +122,8 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.145,
                         child: TextField(
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.cyan),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
                             FirebaseFirestore.instance.runTransaction(

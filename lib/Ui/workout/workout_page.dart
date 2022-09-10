@@ -28,6 +28,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(user.email!, style: const TextStyle(fontSize: 14)),
@@ -44,6 +45,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
           )
         ],
       ),
+      
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan,
         onPressed: () {
