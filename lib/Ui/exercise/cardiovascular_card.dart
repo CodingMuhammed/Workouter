@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:workouter/Models/cardiovascular_exercise.dart';
 import 'package:workouter/widgets/dialog_instance.dart';
 
 class CardiovascularCard extends StatefulWidget {
   AsyncSnapshot<QuerySnapshot> snapshot;
   int index;
-  CardiovascularCard(this.snapshot, this.index, {Key? key}) : super(key: key);
+  CardiovascularExercise? cardiovascularExercise;
+  CardiovascularCard(this.snapshot, this.index, this.cardiovascularExercise,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<CardiovascularCard> createState() => _CardiovascularCardState();
@@ -23,13 +27,11 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
   @override
   Widget build(BuildContext context) {
     String deleteExerciseText = 'Delete exercise';
-    final uid = FirebaseAuth.instance.currentUser?.uid;
     final data = widget.snapshot.data;
-    final exerciseId = data!.docs[widget.index].reference.id;
     void deleteExerciseFunction() {
       FirebaseFirestore.instance
           .runTransaction((Transaction myTransaction) async {
-        myTransaction.delete(data.docs[widget.index].reference);
+        myTransaction.delete(data!.docs[widget.index].reference);
       });
       Navigator.pop(context);
     }
@@ -47,7 +49,7 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(data.docs[widget.index]['exerciseName'],
+                    child: Text(widget.cardiovascularExercise!.name,
                         style: const TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
@@ -98,15 +100,17 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                               fontWeight: FontWeight.bold, color: Colors.blue),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            FirebaseFirestore.instance.runTransaction(
-                                (Transaction myTransaction) async {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(uid)
-                                  .collection('workout')
-                                  .doc(exerciseId)
-                                  .update({'caloriesBurnt': value});
-                            });
+                            widget.cardiovascularExercise!.caloriesBurnt =
+                                int.parse(value);
+                            // FirebaseFirestore.instance.runTransaction(
+                            //     (Transaction myTransaction) async {
+                            //   FirebaseFirestore.instance
+                            //       .collection('users')
+                            //       .doc(uid)
+                            //       .collection('workouts')
+                            //       .doc(exerciseId)
+                            //       .update({'calories_burnt': value});
+                            // });
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
@@ -115,7 +119,8 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText: data.docs[widget.index]['caloriesBurnt']
+                              hintText: widget
+                                  .cardiovascularExercise!.caloriesBurnt
                                   .toString()),
                         ),
                       ),
@@ -126,15 +131,8 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                               fontWeight: FontWeight.bold, color: Colors.cyan),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            FirebaseFirestore.instance.runTransaction(
-                                (Transaction myTransaction) async {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(uid)
-                                  .collection('workout')
-                                  .doc(exerciseId)
-                                  .update({'time': value});
-                            });
+                            widget.cardiovascularExercise!.time =
+                                double.parse(value);
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
@@ -143,8 +141,9 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText:
-                                  data.docs[widget.index]['time'].toString()),
+                              hintText: widget
+                                  .cardiovascularExercise!.caloriesBurnt
+                                  .toString()),
                         ),
                       ),
                     ],

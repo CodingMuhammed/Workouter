@@ -1,14 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/Ui/exercise/exercise_name_dialog.dart';
-import 'package:workouter/Ui/exercise/exercise_page.dart';
 
 TextEditingController exerciseNameController = TextEditingController();
 final uid = FirebaseAuth.instance.currentUser?.uid;
 String? exerciseType;
 String? strength = 'Strength';
 String? cardiovascualar = 'Cardiovascular';
-Future<void> ExerciseTypeDialog(BuildContext context) {
+Future<void> ExerciseTypeDialog(BuildContext context, firstLoad) {
   return showDialog(
       barrierDismissible: firstLoad ?? true,
       context: context,
@@ -26,7 +25,7 @@ Future<void> ExerciseTypeDialog(BuildContext context) {
                 Future.delayed(
                     Duration.zero,
                     () => ExerciseNameDialog(
-                        context, exerciseType!, strength, cardiovascualar));
+                        context, exerciseType!, strength, cardiovascualar, firstLoad));
               },
               title: Text(
                 strength!,
@@ -41,7 +40,7 @@ Future<void> ExerciseTypeDialog(BuildContext context) {
                 Future.delayed(
                     Duration.zero,
                     () => ExerciseNameDialog(
-                        context, exerciseType!, strength, cardiovascualar));
+                        context, exerciseType!, strength, cardiovascualar, firstLoad));
               },
               title: Text(
                 cardiovascualar!,

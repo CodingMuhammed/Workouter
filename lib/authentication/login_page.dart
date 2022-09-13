@@ -135,8 +135,8 @@ class _LogInPageState extends State<LogInPage> {
                       'Sign Up',
                       style: TextStyle(color: Colors.blue),
                     )),
-                Expanded(
-                  child: const Divider(
+                const Expanded(
+                  child: Divider(
                     thickness: 2,
                   ),
                 )

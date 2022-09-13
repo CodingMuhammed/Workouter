@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           '/workout': (context) => const WorkoutPage(),
           '/login': (context) => const LogInPage(),
           '/signup': (context) => const SignUpPage(),
-          '/home': (context) => const ExercisePage()
+          '/home': (context) => ExercisePage(null, null)
         });
   }
 }
