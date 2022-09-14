@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workouter/Models/cardiovascular_exercise.dart';
+import 'package:workouter/Models/exercise.dart';
 import 'package:workouter/widgets/dialog_instance.dart';
 
 class CardiovascularCard extends StatefulWidget {
-  AsyncSnapshot<QuerySnapshot> snapshot;
-  int index;
-  CardiovascularExercise? cardiovascularExercise;
-  CardiovascularCard(this.snapshot, this.index, this.cardiovascularExercise,
-      {Key? key})
-      : super(key: key);
+  Exercise? exercise;
+  CardiovascularCard(this.exercise, {Key? key}) : super(key: key);
 
   @override
   State<CardiovascularCard> createState() => _CardiovascularCardState();
@@ -26,13 +22,13 @@ String deleteExerciseDescription = 'you want to delete this exercise?';
 class _CardiovascularCardState extends State<CardiovascularCard> {
   @override
   Widget build(BuildContext context) {
-    String deleteExerciseText = 'Delete exercise';
-    final data = widget.snapshot.data;
-    void deleteExerciseFunction() {
+    void deleteExercise() {
       FirebaseFirestore.instance
-          .runTransaction((Transaction myTransaction) async {
-        myTransaction.delete(data!.docs[widget.index].reference);
-      });
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(widget.exercise!.id)
+          .delete();
       Navigator.pop(context);
     }
 
@@ -49,7 +45,7 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(widget.cardiovascularExercise!.name,
+                    child: Text(widget.exercise!.name,
                         style: const TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
@@ -80,7 +76,7 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        DialogInstance(context, deleteExerciseFunction,
+                        DialogInstance(context, deleteExercise,
                             deleteExerciseText, deleteExerciseDescription);
                       },
                       label: 'Delete',
@@ -100,8 +96,7 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                               fontWeight: FontWeight.bold, color: Colors.blue),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            widget.cardiovascularExercise!.caloriesBurnt =
-                                int.parse(value);
+                            widget.exercise!.caloriesBurnt = int.parse(value);
                             // FirebaseFirestore.instance.runTransaction(
                             //     (Transaction myTransaction) async {
                             //   FirebaseFirestore.instance
@@ -119,9 +114,8 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText: widget
-                                  .cardiovascularExercise!.caloriesBurnt
-                                  .toString()),
+                              hintText:
+                                  widget.exercise!.caloriesBurnt.toString()),
                         ),
                       ),
                       SizedBox(
@@ -131,8 +125,7 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                               fontWeight: FontWeight.bold, color: Colors.cyan),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            widget.cardiovascularExercise!.time =
-                                double.parse(value);
+                            widget.exercise!.time = double.parse(value);
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
@@ -141,9 +134,8 @@ class _CardiovascularCardState extends State<CardiovascularCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText: widget
-                                  .cardiovascularExercise!.caloriesBurnt
-                                  .toString()),
+                              hintText:
+                                  widget.exercise!.caloriesBurnt.toString()),
                         ),
                       ),
                     ],

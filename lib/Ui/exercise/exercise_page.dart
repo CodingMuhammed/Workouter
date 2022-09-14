@@ -1,9 +1,8 @@
-import 'package:workouter/Models/strength_exercise.dart';
-import 'package:workouter/Models/cardiovascular_exercise.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:workouter/Models/exercise.dart';
 import 'package:workouter/Ui/exercise/exercise_card.dart';
 import 'package:workouter/Ui/exercise/exercise_type_dialog.dart';
 import 'package:workouter/authentication/authService.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/widgets/dialog_instance.dart';
 
@@ -12,26 +11,36 @@ import 'package:workouter/Ui/global.dart';
 import 'package:workouter/widgets/gradient_elevated_button.dart';
 
 class ExercisePage extends StatefulWidget {
-  ExercisePage(this.cardiovascularExercise, this.strengthExercise, {Key? key})
-      : super(key: key);
+  ExercisePage(this.exercise, {Key? key}) : super(key: key);
 
-  CardiovascularExercise? cardiovascularExercise;
-  StrengthExercise? strengthExercise;
-
+  Exercise? exercise;
   @override
   State<ExercisePage> createState() => _ExercisePageState();
 }
 
 String signOutText = 'Sign out';
 String signOutDescription = 'you want to sign out?';
+bool firstLoad = false;
 
 class _ExercisePageState extends State<ExercisePage> {
-  late bool firstLoad;
   @override
   void initState() {
-    firstLoad = false;
-    print('init');
+    _preFillExerciseData;
+
     super.initState();
+  }
+
+  void _preFillExerciseData() {
+    if (widget.exercise == null) {
+      firstLoad = false;
+      String id = '';
+
+      widget.exercise = Exercise(0, 0, 0.0, '', 0.0, '');
+      widget.exercise!.id = id;
+    } else {
+      firstLoad = true;
+      // TODO: addExercises(widget.exercise);
+    }
   }
 
   @override
@@ -59,15 +68,12 @@ class _ExercisePageState extends State<ExercisePage> {
       ),
       backgroundColor: backgroundColor,
       body: Column(
-        children: [
-          ExerciseInformation(firstLoad, widget.cardiovascularExercise,
-              widget.strengthExercise, null)
-        ],
+        children: [ExerciseInformation(null, firstLoad, null)],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan,
         onPressed: () {
-          ExerciseTypeDialog(context, firstLoad);
+          ExerciseTypeDialog(context, firstLoad, widget.exercise);
         },
         child: const Icon(
           Icons.add,
@@ -79,33 +85,26 @@ class _ExercisePageState extends State<ExercisePage> {
 }
 
 class ExerciseInformation extends StatefulWidget {
-  ExerciseInformation(this.firstLoad, this.cardiovascularExercise,
-      this.strengthExercise, this.id,
-      {Key? key})
+  ExerciseInformation(this.exercise, this.firstLoad, this.id, {Key? key})
       : super(key: key);
+  Exercise? exercise;
   final String? id;
-  bool? firstLoad;
-  CardiovascularExercise? cardiovascularExercise;
-  StrengthExercise? strengthExercise;
+  bool firstLoad;
 
   @override
   State<ExerciseInformation> createState() => _ExerciseInformationState();
 }
 
 List exerciseList = [];
+final uid = FirebaseAuth.instance.currentUser.toString();
 
 class _ExerciseInformationState extends State<ExerciseInformation> {
   @override
   Widget build(BuildContext context) {
-    final exerciseRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('workouts')
-        .orderBy('name', descending: true)
-        .snapshots();
-    return StreamBuilder<QuerySnapshot>(
-        stream: exerciseRef,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    return FutureBuilder(
+        future: getExerciseTemplates(uid),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Exercise>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else {
@@ -115,21 +114,18 @@ class _ExerciseInformationState extends State<ExerciseInformation> {
               if (!snapshot.hasData) {
                 widget.firstLoad = false;
                 Future.delayed(Duration.zero,
-                        () => ExerciseTypeDialog(context, widget.firstLoad))
+                        () => ExerciseTypeDialog(context, widget.firstLoad, widget.exercise))
                     .then((_) => widget.firstLoad = true);
                 return const SizedBox(height: 0.0);
               } else {
+                exerciseList = snapshot.data!;
                 widget.firstLoad = true;
                 return Expanded(
                   child: ListView.builder(
-                      itemCount: snapshot.data!.size,
+                      itemCount: exerciseList.length,
                       itemBuilder: (context, index) {
                         return ExerciseCard(
-                            snapshot,
-                            index,
-                            widget.firstLoad,
-                            widget.cardiovascularExercise,
-                            widget.strengthExercise);
+                            widget.firstLoad, widget.exercise, exerciseList);
                       }),
                 );
               }
@@ -139,17 +135,30 @@ class _ExerciseInformationState extends State<ExerciseInformation> {
   }
 }
 
-// Future<Exercise> getSpecificExercise(String id, uid) async {
-//   final data = FirebaseFirestore.instance
-//       .collection('users')
-//       .doc(uid)
-//       .collection('exercises')
-//       .doc(id)
-//       .withConverter<Exercise>(
-//         fromFirestore: (snapshot, _) => Exercise.fromJson(snapshot.data()!),
-//         toFirestore: (exercise, _) => exercise.toJson(),
-//       );
-//   Exercise exercise = await data.get().then((value) => value.data()!);
-//   exercise.id = data.id;
-//   return exercise;
-// }
+Future<List<Exercise>> getExerciseTemplates(uid) async {
+  final ref = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .collection("workouts")
+      .orderBy('name', descending: true)
+      .get();
+  List<Exercise> exerciseTemplates = [];
+
+  for (int i = 0; i < ref.docs.length; i++) {
+    final data = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('workouts')
+        .doc(ref.docs[i].id)
+        .withConverter<Exercise>(
+          fromFirestore: (snapshot, _) => Exercise.fromJson(snapshot.data()!),
+          toFirestore: (exercise, _) => exercise.toJson(),
+        );
+    Exercise exercise = await data.get().then((value) => value.data()!);
+    exercise.id = data.id;
+    if (!exerciseTemplates.contains(exercise)) {
+      exerciseTemplates.add(exercise);
+    }
+  }
+  return exerciseTemplates;
+}

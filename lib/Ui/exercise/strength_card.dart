@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:workouter/Models/strength_exercise.dart';
+import 'package:workouter/Models/exercise.dart';
 import 'package:workouter/widgets/dialog_instance.dart';
 
 class StrengthCard extends StatefulWidget {
-  AsyncSnapshot<QuerySnapshot> snapshot;
-  int index;
-  StrengthExercise? strengthExercise;
+  Exercise? exercise;
 
-  StrengthCard(this.snapshot, this.index, this.strengthExercise, {Key? key})
-      : super(key: key);
+  StrengthCard(this.exercise, {Key? key}) : super(key: key);
 
   @override
   State<StrengthCard> createState() => _StrengthCardState();
@@ -18,6 +16,7 @@ class StrengthCard extends StatefulWidget {
 
 const deleteExerciseText = 'Delete exercise';
 const deleteExerciseDescription = 'you want to delete this exercise?';
+final uid = FirebaseAuth.instance.currentUser?.uid;
 TextEditingController _setsController = TextEditingController();
 TextEditingController _repsController = TextEditingController();
 TextEditingController _weightController = TextEditingController();
@@ -26,12 +25,14 @@ TextEditingController _restController = TextEditingController();
 class _StrengthCardState extends State<StrengthCard> {
   @override
   Widget build(BuildContext context) {
-    final data = widget.snapshot.data;
-    void _deleteExerciseFunction() {
+    void deleteExercise() {
       FirebaseFirestore.instance
-          .runTransaction((Transaction myTransaction) async {
-        myTransaction.delete(data!.docs[widget.index].reference);
-      });
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(widget.exercise!.id)
+          .delete();
+      Navigator.pop(context);
     }
 
     return Padding(
@@ -48,7 +49,7 @@ class _StrengthCardState extends State<StrengthCard> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      widget.strengthExercise!.name,
+                      widget.exercise!.name,
                       style: const TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -89,7 +90,7 @@ class _StrengthCardState extends State<StrengthCard> {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        DialogInstance(context, _deleteExerciseFunction,
+                        DialogInstance(context, deleteExercise,
                             deleteExerciseText, deleteExerciseDescription);
                       },
                       label: 'Delete',
@@ -108,7 +109,7 @@ class _StrengthCardState extends State<StrengthCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            widget.strengthExercise!.reps = int.parse(value);
+                            widget.exercise!.reps = int.parse(value);
                             // FirebaseFirestore.instance.runTransaction(
                             //     (Transaction myTransaction) async {
                             //   FirebaseFirestore.instance
@@ -126,8 +127,7 @@ class _StrengthCardState extends State<StrengthCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText:
-                                  widget.strengthExercise!.reps.toString()),
+                              hintText: widget.exercise!.reps.toString()),
                         ),
                       ),
                       SizedBox(
@@ -136,7 +136,7 @@ class _StrengthCardState extends State<StrengthCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            widget.strengthExercise!.sets = int.parse(value);
+                            widget.exercise!.sets = int.parse(value);
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
@@ -145,8 +145,7 @@ class _StrengthCardState extends State<StrengthCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText:
-                                  widget.strengthExercise!.sets.toString()),
+                              hintText: widget.exercise!.sets.toString()),
                         ),
                       ),
                       SizedBox(
@@ -155,8 +154,7 @@ class _StrengthCardState extends State<StrengthCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            widget.strengthExercise!.weight =
-                                double.parse(value);
+                            widget.exercise!.weight = double.parse(value);
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
@@ -165,8 +163,7 @@ class _StrengthCardState extends State<StrengthCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText:
-                                  widget.strengthExercise!.weight.toString()),
+                              hintText: widget.exercise!.weight.toString()),
                         ),
                       ),
                       SizedBox(
@@ -175,7 +172,7 @@ class _StrengthCardState extends State<StrengthCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            widget.strengthExercise!.rest = double.parse(value);
+                            widget.exercise!.rest = double.parse(value);
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
@@ -184,8 +181,7 @@ class _StrengthCardState extends State<StrengthCard> {
                             focusedBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.white),
                             ),
-                            hintText:
-                                widget.strengthExercise!.weight.toString(),
+                            hintText: widget.exercise!.weight.toString(),
                           ),
                         ),
                       )

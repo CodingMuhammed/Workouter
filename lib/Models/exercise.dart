@@ -1,18 +1,21 @@
-class StrengthExercise {
+class Exercise {
   String name;
   String type;
-  int reps;
-  int sets;
-  double weight;
-  double rest;
+  int? caloriesBurnt;
+  double? time;
+  int? reps;
+  int? sets;
+  double? weight;
+  double? rest;
   String? id;
 
-  StrengthExercise(
-      this.reps, this.sets, this.weight, this.name, this.rest, this.type);
+  Exercise(this.reps, this.sets, this.weight, this.name, this.rest, this.type);
 
-  StrengthExercise.fromJson(Map<String, Object?> exercise)
+  Exercise.fromJson(Map<String, Object?> exercise)
       : name = exercise['name']! as String,
         type = exercise['type']! as String,
+        caloriesBurnt = exercise['calories_burnt']! as int,
+        time = exercise['type']! as double,
         reps = exercise['reps']! as int,
         sets = exercise['sets']! as int,
         weight = exercise['weight']! as double,
@@ -21,6 +24,8 @@ class StrengthExercise {
   Map<String, dynamic> toJson() => {
         'name': name,
         'type': type,
+        'calories_burnt': caloriesBurnt,
+        'time': time,
         'reps': reps,
         'sets': sets,
         'weight': weight,

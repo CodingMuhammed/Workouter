@@ -61,9 +61,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
         backgroundColor: Colors.cyan,
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ExercisePage(null, null)));
+              context, MaterialPageRoute(builder: (context) => ExercisePage(null)));
         },
         child: const Icon(
           Icons.add,

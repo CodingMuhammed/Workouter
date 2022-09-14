@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:workouter/Models/exercise.dart';
 import 'package:workouter/widgets/gradient_elevated_button.dart';
 
 TextEditingController exerciseNameController = TextEditingController();
 final uid = FirebaseAuth.instance.currentUser?.uid;
-Future<void> ExerciseNameDialog(BuildContext context, String exerciseType,
-    strength, cardiovascualar, firstLoad) {
+Future<void> ExerciseNameDialog(BuildContext context, strength, cardiovascualar,
+    firstLoad, exercise) {
   return showDialog(
       barrierDismissible: firstLoad ?? true,
       context: context,
@@ -25,7 +26,8 @@ Future<void> ExerciseNameDialog(BuildContext context, String exerciseType,
               child: GradientElevatedButton(
                   width: MediaQuery.of(context).size.width * 0.7,
                   onPressed: () async {
-                    _addExercise(context, cardiovascualar, exerciseType, strength);
+                    _addExercise(context, cardiovascualar, strength, exercise,
+                        );
                   },
                   child: const Text(
                     'ADD',
@@ -37,24 +39,28 @@ Future<void> ExerciseNameDialog(BuildContext context, String exerciseType,
       });
 }
 
-_addExercise(context, cardiovascualar, exerciseType, strength) {
-  if (exerciseType == strength && exerciseNameController.text.isNotEmpty) {
+_addExercise(
+    context, cardiovascualar, strength,Exercise? exercise) {
+  if (exercise!.type == strength && exerciseNameController.text.isNotEmpty) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
         .collection('workouts')
         .add({
       'name': exerciseNameController.text,
-      'reps': 0.toString(),
-      'sets': 0.toString(),
-      'weight': 0.0.toString(),
-      'rest': 0.0.toString(),
-      'type': exerciseType
+      'reps': 0,
+      'sets': 0,
+      'weight': 0.0,
+      'rest': 0.0,
+      'type': exercise.type
     });
+    // exercise = Exercise(exercise.reps, exercise.sets, exercise.weight,
+    //     exercise.name, exercise.rest, exercise.type);
+    // exerciseList.add(exercise);
     exerciseNameController.clear();
     Navigator.pop(context);
   } else {
-    if (exerciseType == cardiovascualar &&
+    if (exercise.type == cardiovascualar &&
         exerciseNameController.text.isNotEmpty) {
       FirebaseFirestore.instance
           .collection('users')
@@ -64,8 +70,11 @@ _addExercise(context, cardiovascualar, exerciseType, strength) {
         'name': exerciseNameController.text,
         'calories_burnt': 0,
         'time': 0.0,
-        'type': exerciseType
+        'type': exercise.type
       });
+      // exercise = Exercise(exercise.reps, exercise.sets, exercise.weight,
+      //     exercise.name, exercise.rest, exercise.type);
+      // exerciseList.add(exercise);
       exerciseNameController.clear();
       Navigator.pop(context);
     } else {

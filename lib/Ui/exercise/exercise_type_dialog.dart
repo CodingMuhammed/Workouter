@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:workouter/Models/exercise.dart';
 import 'package:workouter/Ui/exercise/exercise_name_dialog.dart';
 
 TextEditingController exerciseNameController = TextEditingController();
 final uid = FirebaseAuth.instance.currentUser?.uid;
-String? exerciseType;
-String? strength = 'Strength';
-String? cardiovascualar = 'Cardiovascular';
-Future<void> ExerciseTypeDialog(BuildContext context, firstLoad) {
+String strength = 'Strength';
+String cardiovascualar = 'Cardiovascular';
+Future<void> ExerciseTypeDialog(
+    BuildContext context, firstLoad, Exercise? exercise) {
   return showDialog(
       barrierDismissible: firstLoad ?? true,
       context: context,
@@ -20,32 +21,30 @@ Future<void> ExerciseTypeDialog(BuildContext context, firstLoad) {
           content: Column(mainAxisSize: MainAxisSize.min, children: [
             ListTile(
               onTap: () {
-                exerciseType = strength;
+                exercise!.type = strength;
                 Navigator.pop(context);
                 Future.delayed(
                     Duration.zero,
-                    () => ExerciseNameDialog(
-                        context, exerciseType!, strength, cardiovascualar, firstLoad));
+                    () => ExerciseNameDialog(context, strength, cardiovascualar,
+                        firstLoad, exercise));
               },
               title: Text(
-                strength!,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold),
+                strength,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
               onTap: () {
-                exerciseType = cardiovascualar;
+                exercise!.type = cardiovascualar;
                 Navigator.pop(context);
                 Future.delayed(
                     Duration.zero,
-                    () => ExerciseNameDialog(
-                        context, exerciseType!, strength, cardiovascualar, firstLoad));
+                    () => ExerciseNameDialog(context, strength, cardiovascualar,
+                        firstLoad, exercise));
               },
               title: Text(
-                cardiovascualar!,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold),
+                cardiovascualar,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             )
           ]),
