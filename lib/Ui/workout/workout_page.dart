@@ -52,7 +52,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
                   DialogInstance(context, signOutFunction, signOutText,
                       signOutDescription);
                 },
-                child: const Text('Sign out')),
+                child: const Text('Sign Out')),
           )
         ],
       ),

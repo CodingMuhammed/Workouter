@@ -12,7 +12,7 @@ Future<void> AddWorkoutDialog(BuildContext context, firstLoad) {
           backgroundColor: Colors.blueGrey,
           title: const Center(
               child:
-                  Text('Exercise type', style: TextStyle(color: Colors.white))),
+                  Text('Add Workout', style: TextStyle(color: Colors.white))),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
             ListTile(
               onTap: () {

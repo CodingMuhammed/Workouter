@@ -18,7 +18,7 @@ class ExercisePage extends StatefulWidget {
   State<ExercisePage> createState() => _ExercisePageState();
 }
 
-String signOutText = 'Sign out';
+String signOutText = 'Sign Out';
 String signOutDescription = 'you want to sign out?';
 bool firstLoad = false;
 
@@ -62,7 +62,7 @@ class _ExercisePageState extends State<ExercisePage> {
                   DialogInstance(context, _signOutFunction, signOutText,
                       signOutDescription);
                 },
-                child: const Text('Sign out')),
+                child: const Text('Sign Out')),
           )
         ],
       ),
@@ -111,12 +111,12 @@ class _ExerciseInformationState extends State<ExerciseInformation> {
             if (snapshot.hasError) {
               return const Center(child: Text('Something went wrong'));
             } else {
-              if (!snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
                 widget.firstLoad = false;
                 Future.delayed(Duration.zero,
                         () => ExerciseTypeDialog(context, widget.firstLoad, widget.exercise))
                     .then((_) => widget.firstLoad = true);
-                return const SizedBox(height: 0.0);
+                return Container(color: backgroundColor);
               } else {
                 exerciseList = snapshot.data!;
                 widget.firstLoad = true;
