@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:workouter/Ui/exercise/exercise_page.dart';
+import 'package:workouter/Ui/workout/add_workout_dialog.dart';
 import 'package:workouter/widgets/gradient_elevated_button.dart';
 import 'package:workouter/authentication/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/widgets/dialog_instance.dart';
 import 'package:workouter/Ui/global.dart';
+
+bool? _firstLoad;
 
 class WorkoutPage extends StatefulWidget {
   const WorkoutPage({Key? key}) : super(key: key);
@@ -19,6 +23,13 @@ const signOutDescription = 'you want to sign out?';
 
 class _WorkoutPageState extends State<WorkoutPage> {
   @override
+  void initState() {
+    _firstLoad = false;
+    print('init');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     void signOutFunction() {
       AuthService.signOutMethod();
@@ -28,6 +39,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(user.email!, style: const TextStyle(fontSize: 14)),
@@ -40,15 +52,16 @@ class _WorkoutPageState extends State<WorkoutPage> {
                   DialogInstance(context, signOutFunction, signOutText,
                       signOutDescription);
                 },
-                child: const Text('Sign out')),
+                child: const Text('Sign Out')),
           )
         ],
       ),
+      body: Column(children: const [WorkoutStream()]),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan,
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ExercisePage()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ExercisePage(null)));
         },
         child: const Icon(
           Icons.add,
@@ -56,5 +69,54 @@ class _WorkoutPageState extends State<WorkoutPage> {
         ),
       ),
     );
+  }
+}
+
+class WorkoutStream extends StatefulWidget {
+  const WorkoutStream({Key? key}) : super(key: key);
+
+  @override
+  State<WorkoutStream> createState() => _WorkoutStreamState();
+}
+
+class _WorkoutStreamState extends State<WorkoutStream> {
+  @override
+  Widget build(BuildContext context) {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    final workoutRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('workouts')
+        .orderBy('name', descending: true)
+        .snapshots();
+    return StreamBuilder<QuerySnapshot>(
+        stream: workoutRef,
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (snapshot.hasError) {
+              return const Center(child: Text('Something went wrong'));
+            } else {
+              if (!snapshot.hasData) {
+                _firstLoad = false;
+                Future.delayed(Duration.zero,
+                        () => AddWorkoutDialog(context, _firstLoad))
+                    .then((_) => _firstLoad = true);
+                return const SizedBox(height: 0.0);
+              } else {
+                _firstLoad = true;
+                return Expanded(
+                  child: ListView.builder(
+                      addAutomaticKeepAlives: true,
+                      itemCount: snapshot.data!.size,
+                      itemBuilder: (context, index) {
+                        return const Text('hello world');
+                      }),
+                );
+              }
+            }
+          }
+        });
   }
 }

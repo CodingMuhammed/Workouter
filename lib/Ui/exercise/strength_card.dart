@@ -2,37 +2,37 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:workouter/Models/exercise.dart';
 import 'package:workouter/widgets/dialog_instance.dart';
 
 class StrengthCard extends StatefulWidget {
-  AsyncSnapshot<QuerySnapshot> snapshot;
-  int index;
+  Exercise? exercise;
 
-  StrengthCard(this.snapshot, this.index, {Key? key}) : super(key: key);
+  StrengthCard(this.exercise, {Key? key}) : super(key: key);
 
   @override
   State<StrengthCard> createState() => _StrengthCardState();
 }
 
-String deleteExerciseText = 'Delete exercise';
+const deleteExerciseText = 'Delete exercise';
+const deleteExerciseDescription = 'you want to delete this exercise?';
+final uid = FirebaseAuth.instance.currentUser?.uid;
 TextEditingController _setsController = TextEditingController();
 TextEditingController _repsController = TextEditingController();
 TextEditingController _weightController = TextEditingController();
 TextEditingController _restController = TextEditingController();
 
 class _StrengthCardState extends State<StrengthCard> {
-
   @override
   Widget build(BuildContext context) {
-    String deleteExerciseDescription = 'you want to delete this exercise?';
-    final data = widget.snapshot.data;
-    final exerciseId = data!.docs[widget.index].reference.id;
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    void deleteExerciseFunction() {
+    void deleteExercise() {
       FirebaseFirestore.instance
-          .runTransaction((Transaction myTransaction) async {
-        myTransaction.delete(data.docs[widget.index].reference);
-      });
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .doc(widget.exercise!.id)
+          .delete();
+      Navigator.pop(context);
     }
 
     return Padding(
@@ -49,13 +49,19 @@ class _StrengthCardState extends State<StrengthCard> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      data.docs[widget.index]['exerciseName'],
+                      widget.exercise!.name,
                       style: const TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                   ),
                   const Divider(thickness: 1.0),
                 ],
+              ),
+              Divider(
+                thickness: 1,
+                color: Colors.white.withOpacity(0.2),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -84,7 +90,7 @@ class _StrengthCardState extends State<StrengthCard> {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        DialogInstance(context, deleteExerciseFunction,
+                        DialogInstance(context, deleteExercise,
                             deleteExerciseText, deleteExerciseDescription);
                       },
                       label: 'Delete',
@@ -103,15 +109,16 @@ class _StrengthCardState extends State<StrengthCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            FirebaseFirestore.instance.runTransaction(
-                                (Transaction myTransaction) async {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(uid)
-                                  .collection('workouts')
-                                  .doc(exerciseId)
-                                  .update({'reps': value});
-                            });
+                            widget.exercise!.reps = int.parse(value);
+                            // FirebaseFirestore.instance.runTransaction(
+                            //     (Transaction myTransaction) async {
+                            //   FirebaseFirestore.instance
+                            //       .collection('users')
+                            //       .doc(uid)
+                            //       .collection('workouts')
+                            //       .doc(exerciseId)
+                            //       .update({'reps': value});
+                            // });
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
@@ -120,8 +127,7 @@ class _StrengthCardState extends State<StrengthCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText:
-                                  data.docs[widget.index]['reps'].toString()),
+                              hintText: widget.exercise!.reps.toString()),
                         ),
                       ),
                       SizedBox(
@@ -130,15 +136,7 @@ class _StrengthCardState extends State<StrengthCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            FirebaseFirestore.instance.runTransaction(
-                                (Transaction myTransaction) async {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(uid)
-                                  .collection('workout')
-                                  .doc(exerciseId)
-                                  .update({'sets': value});
-                            });
+                            widget.exercise!.sets = int.parse(value);
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
@@ -147,8 +145,7 @@ class _StrengthCardState extends State<StrengthCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText:
-                                  data.docs[widget.index]['sets'].toString()),
+                              hintText: widget.exercise!.sets.toString()),
                         ),
                       ),
                       SizedBox(
@@ -157,15 +154,7 @@ class _StrengthCardState extends State<StrengthCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            FirebaseFirestore.instance.runTransaction(
-                                (Transaction myTransaction) async {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(uid)
-                                  .collection('workout')
-                                  .doc(exerciseId)
-                                  .update({'weight': value});
-                            });
+                            widget.exercise!.weight = double.parse(value);
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
@@ -174,8 +163,7 @@ class _StrengthCardState extends State<StrengthCard> {
                               focusedBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              hintText:
-                                  data.docs[widget.index]['weight'].toString()),
+                              hintText: widget.exercise!.weight.toString()),
                         ),
                       ),
                       SizedBox(
@@ -184,27 +172,19 @@ class _StrengthCardState extends State<StrengthCard> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           cursorColor: Colors.white,
                           onSubmitted: (value) async {
-                            FirebaseFirestore.instance.runTransaction(
-                                (Transaction myTransaction) async {
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(uid)
-                                  .collection('workout')
-                                  .doc(exerciseId)
-                                  .update({'rest': value});
-                            });
+                            widget.exercise!.rest = double.parse(value);
                           },
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
                           controller: _restController,
                           decoration: InputDecoration(
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              hintText:
-                                  data.docs[widget.index]['rest'].toString()),
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            hintText: widget.exercise!.weight.toString(),
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),

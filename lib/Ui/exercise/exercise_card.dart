@@ -1,13 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:workouter/Models/exercise.dart';
 import 'package:workouter/Ui/exercise/cardiovascular_card.dart';
 import 'package:workouter/Ui/exercise/strength_card.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/Ui/exercise/exercise_type_dialog.dart';
 
 class ExerciseCard extends StatefulWidget {
-  final AsyncSnapshot<QuerySnapshot> snapshot;
-  final int index;
-  const ExerciseCard(this.snapshot, this.index, {Key? key}) : super(key: key);
+  bool? firstLoad;
+  Exercise? exercise;
+  List exerciseList;
+
+  ExerciseCard(this.firstLoad, this.exercise, this.exerciseList, {Key? key})
+      : super(key: key);
 
   @override
   State<ExerciseCard> createState() => _ExerciseCardState();
@@ -16,14 +19,15 @@ class ExerciseCard extends StatefulWidget {
 class _ExerciseCardState extends State<ExerciseCard> {
   @override
   Widget build(BuildContext context) {
-    final data = widget.snapshot.data;
-
-    if (data!.docs[widget.index]['exerciseType'] == strength) {
-      return StrengthCard(widget.snapshot, widget.index);
-    } else if (data.docs[widget.index]['exerciseType'] == cardiovascualar) {
-      return CardiovascularCard(widget.snapshot, widget.index);
+    if (widget.exercise!.type == strength) {
+      return StrengthCard(widget.exercise);
+    } else if (widget.exercise!.type == cardiovascualar) {
+      return CardiovascularCard(widget.exercise);
     } else {
-      Future.delayed(Duration.zero, () => ExerciseTypeDialog(context));
+      Future.delayed(
+          Duration.zero,
+          () => ExerciseTypeDialog(
+              context, widget.firstLoad, widget.exercise));
       return const SizedBox(height: 0.0);
     }
   }

@@ -116,11 +116,9 @@ class _LogInPageState extends State<LogInPage> {
             const SizedBox(height: 20.0),
             Row(
               children: [
-                Expanded(
-                  child: Container(
-                    child: const Divider(
-                      thickness: 2,
-                    ),
+                const Expanded(
+                  child: Divider(
+                    thickness: 2,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -137,11 +135,9 @@ class _LogInPageState extends State<LogInPage> {
                       'Sign Up',
                       style: TextStyle(color: Colors.blue),
                     )),
-                Expanded(
-                  child: Container(
-                    child: const Divider(
-                      thickness: 2,
-                    ),
+                const Expanded(
+                  child: Divider(
+                    thickness: 2,
                   ),
                 )
               ],

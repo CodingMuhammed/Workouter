@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workouter/Ui/exercise/exercise_page.dart';
+import 'package:workouter/Models/exercise.dart';
 import 'package:workouter/widgets/gradient_elevated_button.dart';
 
 TextEditingController exerciseNameController = TextEditingController();
 final uid = FirebaseAuth.instance.currentUser?.uid;
-Future<void> ExerciseNameDialog(
-    BuildContext context, String exerciseType, strength, cardiovascualar) {
+Future<void> ExerciseNameDialog(BuildContext context, strength, cardiovascualar,
+    firstLoad, exercise) {
   return showDialog(
       barrierDismissible: firstLoad ?? true,
       context: context,
@@ -15,8 +15,8 @@ Future<void> ExerciseNameDialog(
         return AlertDialog(
           backgroundColor: Colors.blueGrey,
           title: const Center(
-              child: Text('Exercise Name',
-                  style: TextStyle(color: Colors.white))),
+              child:
+                  Text('Exercise Name', style: TextStyle(color: Colors.white))),
           content: TextField(
             controller: exerciseNameController,
           ),
@@ -24,47 +24,10 @@ Future<void> ExerciseNameDialog(
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: GradientElevatedButton(
-                width: MediaQuery.of(context).size.width * 0.7,
+                  width: MediaQuery.of(context).size.width * 0.7,
                   onPressed: () async {
-                    if (exerciseType == strength &&
-                        exerciseNameController.text.isNotEmpty) {
-                      print(exerciseType);
-                      await FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(uid)
-                          .collection('workout')
-                          .add({
-                        'exerciseName': exerciseNameController.text,
-                        'reps': 0.toString(),
-                        'sets': 0.toString(),
-                        'weight': 0.0.toString(),
-                        'rest': 0.0.toString(),
-                        'exerciseType': exerciseType
-                      });
-                      exerciseNameController.clear();
-                      Navigator.pop(context);
-                    } else {
-                      if (exerciseType == cardiovascualar &&
-                          exerciseNameController.text.isNotEmpty) {
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(uid)
-                            .collection('workout')
-                            .add({
-                          'exerciseName': exerciseNameController.text,
-                          'caloriesBurnt': 0,
-                          'time': 0.0,
-                          'exerciseType': exerciseType
-                        });
-                        exerciseNameController.clear();
-                        Navigator.pop(context);
-                      } else {
-                        SnackBar _snackBar = const SnackBar(
-                          content: Text("Text field can't be empty"),
+                    _addExercise(context, cardiovascualar, strength, exercise,
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(_snackBar);
-                      }
-                    }
                   },
                   child: const Text(
                     'ADD',
@@ -74,4 +37,51 @@ Future<void> ExerciseNameDialog(
           ],
         );
       });
+}
+
+_addExercise(
+    context, cardiovascualar, strength,Exercise? exercise) {
+  if (exercise!.type == strength && exerciseNameController.text.isNotEmpty) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('workouts')
+        .add({
+      'name': exerciseNameController.text,
+      'reps': 0,
+      'sets': 0,
+      'weight': 0.0,
+      'rest': 0.0,
+      'type': exercise.type
+    });
+    // exercise = Exercise(exercise.reps, exercise.sets, exercise.weight,
+    //     exercise.name, exercise.rest, exercise.type);
+    // exerciseList.add(exercise);
+    exerciseNameController.clear();
+    Navigator.pop(context);
+  } else {
+    if (exercise.type == cardiovascualar &&
+        exerciseNameController.text.isNotEmpty) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('workouts')
+          .add({
+        'name': exerciseNameController.text,
+        'calories_burnt': 0,
+        'time': 0.0,
+        'type': exercise.type
+      });
+      // exercise = Exercise(exercise.reps, exercise.sets, exercise.weight,
+      //     exercise.name, exercise.rest, exercise.type);
+      // exerciseList.add(exercise);
+      exerciseNameController.clear();
+      Navigator.pop(context);
+    } else {
+      SnackBar snackBar = const SnackBar(
+        content: Text("Text field can't be empty"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
 }
