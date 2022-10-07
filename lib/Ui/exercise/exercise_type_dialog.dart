@@ -14,7 +14,6 @@ Future<void> ExerciseTypeDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.blueGrey,
           title: const Center(
               child:
                   Text('Exercise type', style: TextStyle(color: Colors.white))),

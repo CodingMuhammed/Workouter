@@ -6,7 +6,6 @@ Future<void> DialogInstance(BuildContext context, void Function()? function,
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.blueGrey,
           title: Text(
             name,
             style: const TextStyle(color: Colors.white),

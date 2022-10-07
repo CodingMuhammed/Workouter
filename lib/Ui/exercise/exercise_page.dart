@@ -53,7 +53,6 @@ class _ExercisePageState extends State<ExercisePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: backgroundColor,
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -66,7 +65,6 @@ class _ExercisePageState extends State<ExercisePage> {
           )
         ],
       ),
-      backgroundColor: backgroundColor,
       body: Column(
         children: [ExerciseInformation(null, firstLoad, null)],
       ),
@@ -116,7 +114,7 @@ class _ExerciseInformationState extends State<ExerciseInformation> {
                 Future.delayed(Duration.zero,
                         () => ExerciseTypeDialog(context, widget.firstLoad, widget.exercise))
                     .then((_) => widget.firstLoad = true);
-                return Container(color: backgroundColor);
+                return Container(color: lightBlueColor);
               } else {
                 exerciseList = snapshot.data!;
                 widget.firstLoad = true;

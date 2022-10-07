@@ -9,7 +9,6 @@ Future<void> AddWorkoutDialog(BuildContext context, firstLoad) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.blueGrey,
           title: const Center(
               child:
                   Text('Add Workout', style: TextStyle(color: Colors.white))),

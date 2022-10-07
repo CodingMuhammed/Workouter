@@ -13,7 +13,6 @@ Future<void> ExerciseNameDialog(BuildContext context, strength, cardiovascualar,
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.blueGrey,
           title: const Center(
               child:
                   Text('Exercise Name', style: TextStyle(color: Colors.white))),

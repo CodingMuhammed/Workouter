@@ -1,3 +1,4 @@
+import 'package:workouter/Ui/global.dart';
 import 'package:workouter/Ui/workout/workout_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,6 +21,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'workouter',
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          scaffoldBackgroundColor: lightBlueColor,
+          dialogBackgroundColor: lightBlueColor,
+          appBarTheme:
+              AppBarTheme(backgroundColor: lightBlueColor.withOpacity(0.75)),
+        ),
         routes: {
           '/': (context) => const AuthenticationWrapper(),
           '/workout': (context) => const WorkoutPage(),

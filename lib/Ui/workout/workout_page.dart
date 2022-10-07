@@ -38,12 +38,10 @@ class _WorkoutPageState extends State<WorkoutPage> {
     }
 
     return Scaffold(
-      backgroundColor: backgroundColor,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(user.email!, style: const TextStyle(fontSize: 14)),
-        backgroundColor: backgroundColor,
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
