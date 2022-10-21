@@ -1,3 +1,4 @@
+import 'package:workouter/Ui/global.dart';
 import 'package:workouter/Ui/workout/workout_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,19 +19,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'workouter',
+        title: 'Workouter',
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          scaffoldBackgroundColor: lightBlueColor,
+          dialogBackgroundColor: lightBlueColor,
+          appBarTheme:
+              AppBarTheme(backgroundColor: lightBlueColor.withOpacity(0.75)),
+        ),
         routes: {
           '/': (context) => const AuthenticationWrapper(),
           '/workout': (context) => const WorkoutPage(),
           '/login': (context) => const LogInPage(),
           '/signup': (context) => const SignUpPage(),
-          '/home': (context) => const ExercisePage()
+          '/home': (context) => ExercisePage(null)
         });
   }
 }
 
 // page decider
+
 class AuthenticationWrapper extends StatelessWidget {
   const AuthenticationWrapper({Key? key}) : super(key: key);
 
