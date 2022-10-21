@@ -6,7 +6,6 @@ import 'package:workouter/authentication/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/widgets/dialog_instance.dart';
-import 'package:workouter/Ui/global.dart';
 
 bool? _firstLoad;
 
