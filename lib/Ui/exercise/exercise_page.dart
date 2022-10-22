@@ -1,14 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:workouter/Models/exercise.dart';
-import 'package:workouter/Ui/exercise/exercise_card.dart';
-import 'package:workouter/Ui/exercise/exercise_type_dialog.dart';
-import 'package:workouter/authentication/authService.dart';
+import 'package:workouter/model/exercise.dart';
+import 'package:workouter/ui/exercise/exercise_card.dart';
+import 'package:workouter/ui/exercise/exercise_type_dialog.dart';
+import 'package:workouter/service/auth/authService.dart';
 import 'package:flutter/material.dart';
-import 'package:workouter/widgets/dialog_instance.dart';
-
+import 'package:workouter/service/widgets/dialog_instance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workouter/Ui/global.dart';
-import 'package:workouter/widgets/gradient_elevated_button.dart';
+import 'package:workouter/util/color_util.dart';
+import 'package:workouter/service/widgets/gradient_elevated_button.dart';
 
 class ExercisePage extends StatefulWidget {
   ExercisePage(this.exercise, {Key? key}) : super(key: key);
@@ -114,7 +113,7 @@ class _ExerciseInformationState extends State<ExerciseInformation> {
                 Future.delayed(Duration.zero,
                         () => ExerciseTypeDialog(context, widget.firstLoad, widget.exercise))
                     .then((_) => widget.firstLoad = true);
-                return Container(color: lightBlueColor);
+                return Container(color: ColorUtil.lightBlueColor);
               } else {
                 exerciseList = snapshot.data!;
                 widget.firstLoad = true;

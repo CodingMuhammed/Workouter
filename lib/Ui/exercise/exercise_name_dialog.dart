@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workouter/Models/exercise.dart';
-import 'package:workouter/widgets/gradient_elevated_button.dart';
+import 'package:workouter/model/exercise.dart';
+import 'package:workouter/service/widgets/gradient_elevated_button.dart';
 
 TextEditingController exerciseNameController = TextEditingController();
 final uid = FirebaseAuth.instance.currentUser?.uid;

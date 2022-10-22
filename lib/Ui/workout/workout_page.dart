@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workouter/Ui/exercise/exercise_page.dart';
-import 'package:workouter/Ui/workout/add_workout_dialog.dart';
-import 'package:workouter/widgets/gradient_elevated_button.dart';
-import 'package:workouter/authentication/authService.dart';
+import 'package:workouter/ui/exercise/exercise_page.dart';
+import 'package:workouter/ui/workout/add_workout_dialog.dart';
+import 'package:workouter/service/widgets/gradient_elevated_button.dart';
+import 'package:workouter/service/auth/authService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workouter/widgets/dialog_instance.dart';
+import 'package:workouter/service/widgets/dialog_instance.dart';
 
 bool? _firstLoad;
 

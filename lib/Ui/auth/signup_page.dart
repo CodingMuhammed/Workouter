@@ -1,8 +1,9 @@
-import 'package:workouter/authentication/login_page.dart';
-import 'package:workouter/widgets/gradient_elevated_button.dart';
+import 'package:workouter/ui/auth/login_page.dart';
+import 'package:workouter/service/widgets/gradient_elevated_button.dart';
 import 'package:flutter/material.dart';
-import 'package:workouter/Ui/global.dart';
-import 'package:workouter/authentication/authService.dart';
+import 'package:workouter/util/asset_util.dart';
+import 'package:workouter/util/color_util.dart';
+import 'package:workouter/service/auth/authService.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -41,7 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(appLogo, width: 75, height: 75),
+              Image.asset(AssetUtil.appLogo, width: 75, height: 75),
             ],
           ),
           Stack(children: [
@@ -51,7 +52,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   top: 60, bottom: 20, right: 20, left: 20),
                   constraints: BoxConstraints.expand(height: MediaQuery.of(context).size.height - 219),
               decoration: const BoxDecoration(
-                color: darkBlueColor,
+                color: ColorUtil.darkBlueColor,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30)),

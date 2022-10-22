@@ -1,8 +1,8 @@
-import 'package:workouter/Models/exercise.dart';
-import 'package:workouter/Ui/exercise/cardiovascular_card.dart';
-import 'package:workouter/Ui/exercise/strength_card.dart';
+import 'package:workouter/model/exercise.dart';
+import 'package:workouter/ui/exercise/cardiovascular_card.dart';
+import 'package:workouter/ui/exercise/strength_card.dart';
 import 'package:flutter/material.dart';
-import 'package:workouter/Ui/exercise/exercise_type_dialog.dart';
+import 'package:workouter/ui/exercise/exercise_type_dialog.dart';
 
 class ExerciseCard extends StatefulWidget {
   bool? firstLoad;

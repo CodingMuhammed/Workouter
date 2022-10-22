@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:workouter/Models/exercise.dart';
-import 'package:workouter/Ui/global.dart';
-import 'package:workouter/widgets/dialog_instance.dart';
+import 'package:workouter/model/exercise.dart';
+import 'package:workouter/util/color_util.dart';
+import 'package:workouter/service/widgets/dialog_instance.dart';
 
 class StrengthCard extends StatefulWidget {
   Exercise? exercise;
@@ -47,7 +47,7 @@ class _StrengthCardState extends State<StrengthCard> {
             )]
           ),
           child: Card(
-            color: darkBlueColor,
+            color: ColorUtil.darkBlueColor,
             child: Column(
               children: [
                 Row(

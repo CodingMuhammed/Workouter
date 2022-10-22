@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workouter/Models/exercise.dart';
-import 'package:workouter/Ui/exercise/exercise_name_dialog.dart';
+import 'package:workouter/model/exercise.dart';
+import 'package:workouter/ui/exercise/exercise_name_dialog.dart';
 
 TextEditingController exerciseNameController = TextEditingController();
 final uid = FirebaseAuth.instance.currentUser?.uid;

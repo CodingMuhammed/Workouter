@@ -1,11 +1,11 @@
-import 'package:workouter/Ui/global.dart';
-import 'package:workouter/Ui/workout/workout_page.dart';
+import 'package:workouter/util/color_util.dart';
+import 'package:workouter/ui/workout/workout_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:workouter/authentication/login_page.dart';
-import 'package:workouter/Ui/exercise/exercise_page.dart';
+import 'package:workouter/ui/auth/login_page.dart';
+import 'package:workouter/ui/exercise/exercise_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:workouter/authentication/signup_page.dart';
+import 'package:workouter/ui/auth/signup_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,10 +22,10 @@ class MyApp extends StatelessWidget {
         title: 'Workouter',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          scaffoldBackgroundColor: lightBlueColor,
-          dialogBackgroundColor: lightBlueColor,
+          scaffoldBackgroundColor: ColorUtil.lightBlueColor,
+          dialogBackgroundColor: ColorUtil.lightBlueColor,
           appBarTheme:
-              AppBarTheme(backgroundColor: lightBlueColor.withOpacity(0.75)),
+              AppBarTheme(backgroundColor: ColorUtil.lightBlueColor.withOpacity(0.75)),
         ),
         routes: {
           '/': (context) => const AuthenticationWrapper(),
