@@ -1,11 +1,12 @@
 # Workouter
 
-Workouter is a simple and easy-to-use workout journaling app, made with flutter and firebase.
+### A workout app
 
-Create workout programs and keep track of your exercises, reps, sets, weights, and rest times.
+<p align="center">
+  <img width="200" src="/assets/workouter-app-logo.png">
+</p>
 
-The app still needs more features to add.
+A simple and easy-to-use workout journaling app designed to log your favorite exercises(strength or cardiovascular)
+and keep track of the reps, sets, weights, and rest times.
 
-# Authors
-
-[@MuhammedHazem](https://github.com/MuhammedHazem)
+Made with Firebase & Flutter.
