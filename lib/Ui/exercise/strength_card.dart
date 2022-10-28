@@ -47,6 +47,7 @@ class _StrengthCardState extends State<StrengthCard> {
             )]
           ),
           child: Card(
+            
             color: ColorUtil.darkBlueColor,
             child: Column(
               children: [

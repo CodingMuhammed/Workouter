@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:workouter/model/exercise.dart';
 import 'package:workouter/ui/exercise/exercise_card.dart';
 import 'package:workouter/ui/exercise/exercise_type_dialog.dart';
-import 'package:workouter/service/auth/authService.dart';
+import 'package:workouter/service/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/service/widgets/dialog_instance.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,7 +46,7 @@ class _ExercisePageState extends State<ExercisePage> {
   @override
   Widget build(BuildContext context) {
     void _signOutFunction() {
-      AuthService.signOutMethod();
+      Provider.of<AuthService>(context).signOut();
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     }

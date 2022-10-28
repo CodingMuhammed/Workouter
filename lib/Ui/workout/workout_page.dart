@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'package:workouter/ui/exercise/exercise_page.dart';
 import 'package:workouter/ui/workout/add_workout_dialog.dart';
 import 'package:workouter/service/widgets/gradient_elevated_button.dart';
-import 'package:workouter/service/auth/authService.dart';
+import 'package:workouter/service/auth/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/service/widgets/dialog_instance.dart';
@@ -31,7 +32,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
   @override
   Widget build(BuildContext context) {
     void signOutFunction() {
-      AuthService.signOutMethod();
+      Provider.of<AuthService>(context).signOut();
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
     }

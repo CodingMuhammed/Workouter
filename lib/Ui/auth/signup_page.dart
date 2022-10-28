@@ -1,9 +1,10 @@
+import 'package:provider/provider.dart';
 import 'package:workouter/ui/auth/login_page.dart';
 import 'package:workouter/service/widgets/gradient_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/util/asset_util.dart';
 import 'package:workouter/util/color_util.dart';
-import 'package:workouter/service/auth/authService.dart';
+import 'package:workouter/service/auth/auth_service.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -155,7 +156,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: GradientElevatedButton(
                               // width: MediaQuery.of(context).size.width * 0.95,
                               onPressed: () {
-                                AuthService.signUpMethod(
+                                Provider.of<AuthService>(context).signUp(
                                     email: _emailController.text,
                                     password: _passwordController.text,
                                     confirm: _confirmPasswordController.text,

@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+import 'package:workouter/service/auth/auth_service.dart';
 import 'package:workouter/util/color_util.dart';
 import 'package:workouter/ui/workout/workout_page.dart';
 import 'package:flutter/material.dart';
@@ -18,22 +20,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Workouter',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          scaffoldBackgroundColor: ColorUtil.lightBlueColor,
-          dialogBackgroundColor: ColorUtil.lightBlueColor,
-          appBarTheme:
-              AppBarTheme(backgroundColor: ColorUtil.lightBlueColor.withOpacity(0.75)),
-        ),
-        routes: {
-          '/': (context) => const AuthenticationWrapper(),
-          '/workout': (context) => const WorkoutPage(),
-          '/login': (context) => const LogInPage(),
-          '/signup': (context) => const SignUpPage(),
-          '/home': (context) => ExercisePage(null)
-        });
+    return MultiProvider(
+      providers: [
+        Provider<AuthService>(create: (_) => AuthService())
+      ],
+      child: MaterialApp(
+          title: 'Workouter',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            scaffoldBackgroundColor: ColorUtil.lightBlueColor,
+            dialogBackgroundColor: ColorUtil.lightBlueColor,
+            appBarTheme:
+                AppBarTheme(backgroundColor: ColorUtil.lightBlueColor.withOpacity(0.75)),
+          ),
+          routes: {
+            '/': (context) => const AuthenticationWrapper(),
+            '/workout': (context) => const WorkoutPage(),
+            '/login': (context) => const LogInPage(),
+            '/signup': (context) => const SignUpPage(),
+            '/home': (context) => ExercisePage(null)
+          }),
+    );
   }
 }
 

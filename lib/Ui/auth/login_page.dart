@@ -1,9 +1,10 @@
+import 'package:provider/provider.dart';
 import 'package:workouter/ui/auth/signup_page.dart';
 import 'package:workouter/service/widgets/gradient_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:workouter/util/asset_util.dart';
 import 'package:workouter/util/color_util.dart';
-import 'package:workouter/service/auth/authService.dart';
+import 'package:workouter/service/auth/auth_service.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
@@ -48,19 +49,14 @@ class _LogInPageState extends State<LogInPage> {
               margin: const EdgeInsets.only(top: 74),
               padding: const EdgeInsets.only(
                   top: 60, bottom: 20, right: 20, left: 20),
-                  constraints: BoxConstraints.expand(height: MediaQuery.of(context).size.height - 219),
+              constraints: BoxConstraints.expand(
+                  height: MediaQuery.of(context).size.height - 219),
               decoration: const BoxDecoration(
-                color: ColorUtil.darkBlueColor,
+                  color: ColorUtil.darkBlueColor,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.blue,
-                      blurRadius: 20
-                    )
-                  ]
-                  ),
+                  boxShadow: [BoxShadow(color: Colors.blue, blurRadius: 20)]),
               child: Form(
                 key: _loginFormKey,
                 child: Column(
@@ -131,7 +127,7 @@ class _LogInPageState extends State<LogInPage> {
                           child: GradientElevatedButton(
                               // width: MediaQuery.of(context).size.width * 0.95,
                               onPressed: () {
-                                AuthService.signInMethod(
+                                Provider.of<AuthService>(context).logIn(
                                     email: _emailController.text,
                                     password: _passwordController.text,
                                     context: context);
